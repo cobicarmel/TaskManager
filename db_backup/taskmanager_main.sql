@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 12, 2014 at 09:52 PM
+-- Generation Time: Mar 13, 2014 at 01:59 AM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.9
 
@@ -33,14 +33,15 @@ CREATE TABLE IF NOT EXISTS `agenda` (
   `endtime` time NOT NULL,
   `tasktype` tinyint(2) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `agenda`
 --
 
 INSERT INTO `agenda` (`id`, `day`, `starttime`, `endtime`, `tasktype`) VALUES
-(1, '3', '17:00:00', '23:00:00', 1);
+(1, '3', '17:00:00', '23:00:00', 1),
+(2, '4', '13:00:00', '15:00:00', 2);
 
 -- --------------------------------------------------------
 
@@ -77,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `config` (
   `value` tinytext NOT NULL,
   PRIMARY KEY (`id`),
   KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `config`
@@ -85,7 +86,8 @@ CREATE TABLE IF NOT EXISTS `config` (
 
 INSERT INTO `config` (`id`, `name`, `value`) VALUES
 (1, 'payment_limit', '8'),
-(2, 'meeting_duration', '30');
+(2, 'meeting_duration', '30'),
+(3, 'soon_mount', '3');
 
 -- --------------------------------------------------------
 
@@ -161,7 +163,7 @@ CREATE TABLE IF NOT EXISTS `special` (
 --
 
 INSERT INTO `special` (`starttime`, `endtime`, `date`, `original`) VALUES
-('16:50:00', '23:15:00', '2014-03-12', 1);
+('13:00:00', '14:25:00', '2014-03-13', 2);
 
 -- --------------------------------------------------------
 
@@ -178,7 +180,7 @@ CREATE TABLE IF NOT EXISTS `tasks` (
   `endtime` datetime NOT NULL,
   `client_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `tasks`
@@ -199,14 +201,15 @@ CREATE TABLE IF NOT EXISTS `tasktypes` (
   `place` tinytext NOT NULL,
   `duration` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `tasktypes`
 --
 
 INSERT INTO `tasktypes` (`id`, `title`, `place`, `duration`) VALUES
-(1, 'קבלת קהל', 'לב שומע', 40);
+(1, 'קבלת קהל', 'לב שומע', 40),
+(2, 'נסיעה לצפת', 'צפת', 50);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

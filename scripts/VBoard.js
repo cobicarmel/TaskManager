@@ -53,6 +53,17 @@ var VBoard = {
 		return VBoard.days[strDate][strTime];
 	},
 
+	getRangeTime: function(start, end){
+
+		var stack = {};
+
+		VBoard.each(start, end, function(n, strTime){
+			stack[strTime] = VBoard.getTime(this);
+		})
+
+		return stack;
+	},
+
 	hasDate: function(date){
 		try{
 			VBoard.getTime(date);

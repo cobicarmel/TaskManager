@@ -315,3 +315,57 @@ $.fn.selectOption = function(type, value){
 
 	return this;
 }
+
+$.fn.multiCheck = function(selector){
+
+	var isMethod = typeof selector == 'boolean',
+		elem = this,
+		data = elem.data('multi-check');
+
+	if(isMethod){
+		if(! data)
+			throw new Error('this object has not been set to multiCheck');
+
+		return data.triggerCheck(selector);
+	}
+
+	var methods = {
+
+		addEvents: function(){
+			methods.getOthers().off('change').on('change', function(){
+				if(! this.checked)
+					methods.checkMe(true);
+			})
+		},
+
+		checkAll: function(){
+			var checked = elem[0].checked;
+
+			methods.addEvents();
+
+			methods.getOthers().each(function(){
+				this.checked = checked;
+			})
+		},
+
+		checkMe: function(val){
+			elem[0].checked = val;
+		},
+
+		getOthers: function(){
+			return $(selector);
+		},
+
+		triggerCheck: function(val){
+			methods.checkMe(val);
+			methods.checkAll();
+		}
+	}
+
+	elem
+		.data('multi-check', methods)
+		.off('change')
+		.on('change', methods.checkAll);
+
+	methods.addEvents();
+}

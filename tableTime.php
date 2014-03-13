@@ -66,6 +66,23 @@
 				</tr>
 			</table>
 		</form>
+		<div id="filter-meets" class="abs-form">
+			<div class="f-close ui-icon ui-icon-close" title="<?=$LOCAL[14]?>"></div>
+			<div id="fm-caption"></div>
+			<table class="data-table">
+				<thead>
+					<tr>
+						<th style="width: 8%">
+							<input id="fm-multi-check" type="checkbox" class="auto-center">
+						</th>
+						<th style="width: 28%"><?=$LOCAL[7]?></th>
+						<th><?=$LOCAL[68]?></th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+			<button class="ui-state-default"><?=$LOCAL[69]?></button>
+		</div>
 	</div>
 </div>
 <div id="tt-templates" class="templates">
@@ -105,4 +122,13 @@
 		<label for="mm-input"><?=$LOCAL[38]?>:</label>
 		<input id="mm-input">
 	</div>
+	<table id="fm-tr">
+		<tr>
+			<td>
+				<input type="checkbox" class="auto-center">
+			</td>
+			<td class="fm-time"></td>
+			<td class="fm-title"></td>
+		</tr>
+	</table>
 </div>

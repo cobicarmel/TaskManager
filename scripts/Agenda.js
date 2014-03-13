@@ -87,7 +87,9 @@ var Agenda = {
 			return popup('error', 15);
 		}
 
-		params.date = tableTime.date.toLocaleDateString();
+		var copy = $.extend({}, params);
+
+		params.date = tableTime.strDate;
 		params.original = data.id;
 		params.starttime = params.starttime.toRealTime();
 		params.endtime = params.endtime.toRealTime();
@@ -103,10 +105,24 @@ var Agenda = {
 			popup('loading', 12);
 
 			Api.send('Agenda', data.special ? 'updatespecial' : 'addspecial', params, function(res){
-				popup('success', 13);
+
 				Config.agenda.special[params.date] = res[0][params.date];
 				Agenda.writeData();
 				Agenda.applyChanges();
+
+				var misses = Agenda.checkMissMeet(data, copy);
+
+				if(! misses.length)
+					return popup('success', 13);
+
+				popup();
+
+				Task.filterMeets(misses, LOCAL[74], function(ids){
+					if(ids.length)
+						Task.removeTask(ids);
+				})
+
+				$('#fm-multi-check').multiCheck(true);
 			})
 		}, function(){
 			Agenda.resetPos.call(elem, type);
@@ -143,6 +159,27 @@ var Agenda = {
 		VBoard.setRangeData(data.starttime, data.endtime, {agenda: {tasktype: data.tasktype, index: data.index}});
 		VBoard.setRangeData(blockStart, data.starttime, {agenda: {blockbefore: data.tasktype}});
 		VBoard.setRangeData(data.endtime, blockEnd, {agenda: {blockafter: data.tasktype}});
+	},
+
+	checkMissMeet: function(before, after){
+
+		var beforeRange = VBoard.getRangeTime(before.starttime, before.endtime),
+			afterRange = VBoard.getRangeTime(after.starttime, after.endtime);
+
+		var misses = [];
+
+		for(var timePart in beforeRange){
+
+			if(afterRange[timePart] || ! beforeRange[timePart].meeting)
+				continue;
+
+			var id = beforeRange[timePart].meeting.id
+
+			if(! (misses.indexOf(id) + 1))
+				misses.push(id);
+		}
+
+		return misses;
 	},
 
 	getAll: function(callback){
@@ -184,7 +221,7 @@ var Agenda = {
 	},
 
 	getSpecial: function(callback){
-		var strDate = tableTime.date.toLocaleDateString();
+		var strDate = tableTime.strDate;
 
 		Api.send('Agenda', 'getspecial', {date: strDate}, function(res){
 			Config.agenda.special[strDate] = res[0][strDate];

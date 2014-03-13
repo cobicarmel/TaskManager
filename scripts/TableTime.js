@@ -67,8 +67,6 @@ var tableTime = {
 
 		$('#tt-body-overlay .tt-meeting').remove();
 
-		VBoard.reset(date, 'meeting');
-
 		for(var m in meetings)
 			meetings[m].addToTable();
 	},
@@ -307,10 +305,12 @@ var tableTime = {
 		else
 			tableTime.date = new Date();
 
+		tableTime.strDate = tableTime.date.toLocaleDateString();
+
 		if(stay && VBoard.hasDate(date))
 			return goReady && ready();
 
-		VBoard.addDay(tableTime.date.toLocaleDateString());
+		VBoard.addDay(tableTime.strDate);
 
 		tableTime.onReady = function(){
 			console.log('TableTime updated');
@@ -391,7 +391,8 @@ var tableTime = {
 
 	templates: {
 		smMessage: $('#sm-message'),
-		mmPicker: $('#mm-picker')
+		mmPicker: $('#mm-picker'),
+		fmTr: $('#fm-tr').find('tr')
 	},
 
 	typeCare: function(type, fn){

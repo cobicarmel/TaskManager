@@ -94,6 +94,7 @@ form tr {
 	box-shadow: 1px 2px 10px rgba(0,0,0, .2);
 	padding: 0 10px;
 	position: absolute;
+	z-index: 1;
 }
 .f-close{
 	position: absolute;
@@ -120,7 +121,7 @@ form tr {
 	position: relative;
 }
 .auto-center{
-	position: absolute;
+	position: absolute !important;
 	top: 0;
 	bottom: 0;
 	right: 0;
@@ -325,14 +326,27 @@ form tr {
 	height: 60px;
 	font-family: alef;
 }
-#client_id {
+#filter-meets{
+	width: 60%;
+}
+#fm-caption{
+	margin: 15px 0 10px;
+	text-align: right;
+}
+#filter-meets tr :first-child {
+	position: relative;
+}
+#filter-meets button{
+	margin: 10px 0 5px;
+}
+#client_id{
 	padding-right: 20px;
 }
 #nm-add-client {
 	position: absolute;
 	margin: 6px 3px;
 }
-#clients {
+#clients{
 	height: 100%;
 }
 #clients h4{

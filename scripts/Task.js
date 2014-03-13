@@ -17,9 +17,11 @@ var Task =  {
 
 	addDate: function(data){
 
-		var strDate = tableTime.date.toLocaleDateString();
+		var strDate = tableTime.strDate;
 
 		Task.meetings[strDate] = {};
+
+		VBoard.reset(tableTime.date, 'meeting');
 
 		if(! data)
 			return;
@@ -33,7 +35,7 @@ var Task =  {
 
 	changeTime: function(meetings){
 
-		var strDate = tableTime.date.toLocaleDateString(),
+		var strDate = tableTime.strDate,
 			ids = Object.keys(meetings),
 			isMulti = Object.keys(meetings).length > 1,
 			data = {
@@ -78,7 +80,7 @@ var Task =  {
 	},
 
 	changeMultiTime: function(ids, range){
-		var strDate = tableTime.date.toLocaleDateString(),
+		var strDate = tableTime.strDate,
 			all = Task.meetings[strDate],
 			arr = {};
 
@@ -114,7 +116,7 @@ var Task =  {
 					Task.createMeeting.call(form);
 				});
 
-			param.date = tableTime.date.toLocaleDateString();
+			param.date = tableTime.strDate;
 			param.endtime = endtime.toLocaleString();
 			param.starttime = starttime.toLocaleString();
 			param.id = id;
@@ -126,6 +128,45 @@ var Task =  {
 				Task.addDate(res);
 				tableTime.applyChanges();
 			})
+		})
+	},
+
+	filterMeets: function(ids, title, fn){
+
+		var strDate = tableTime.strDate,
+			elem = $('#filter-meets'),
+			tbody = elem.find('tbody').empty();
+
+		ids = ids.map(Number);
+
+		for(var m in Task.meetings[strDate]){
+
+			if(! (ids.indexOf(+m) + 1))
+				continue;
+
+			var meeting = Task.meetings[strDate][m],
+				trTemp = tableTime.templates.fmTr;
+
+			trTemp.find('input').data('id', m);
+			trTemp.children('.fm-time').text([meeting.start.strTime, meeting.end.strTime].join(' - '));
+			trTemp.children('.fm-title').text(meeting.title);
+
+			tbody.append(trTemp);
+		}
+
+		$('#fm-caption').html(title);
+
+		elem.show().position({of: '#appcenter'});
+
+		elem.find('button').off().on('click', function(){
+
+			elem.hide();
+
+			var selected = $.map(tbody.find(':checked'), function(input){
+				return $(input).data('id');
+			})
+
+			fn && fn(selected);
 		})
 	},
 
@@ -328,7 +369,7 @@ var Task =  {
 	removeTask: function(ids){
 
 		var multi = $.isArray(ids),
-			strDate = tableTime.date.toLocaleDateString();
+			strDate = tableTime.strDate;
 
 		if(multi)
 			ids = ids.join(',');

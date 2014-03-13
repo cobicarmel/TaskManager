@@ -52,6 +52,8 @@ $(function(){
 
 	$('.p-date, #cdp-reports input').datepicker();
 
+	$('#fm-multi-check').multiCheck('#filter-meets tbody input');
+
 	$('form').on('submit', function(e){
 
 		e.preventDefault();
