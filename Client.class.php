@@ -103,11 +103,6 @@ class Client{
 	}
 
 	private function toClient(){
-
-		$this -> query = Database::groupArray('id', $this -> query);
-
-		$this -> getMultiData();
-
 		Database::addResponse($this -> query);
 	}
 
@@ -163,7 +158,7 @@ class Client{
 			$this -> addMultiItem($v['table'], $v['column'], $v['values'][0]);
 		}
 
-		$this -> getClient();
+		$this -> getAll($this -> client_id);
 	}
 
 	function edit(){
@@ -174,28 +169,30 @@ class Client{
 
 		$this -> updateMultiData();
 
-		$this -> getClient();
+		$this -> getAll($this -> client_id);
 	}
 
-	function getAll($id = null){
+	function getClient($id = null){
 
 		$query = 'select * from Clients';
 
 		if($id)
-			$query .= " where id = $id";
+			$query .= ' ' . Database::parseMultiWhere('id', $id);
 
 		$query .= ' order by last_name, first_name';
 
-		$this -> query = $this -> output -> query($query);
+		$this -> query = Database::groupArray('id', $this -> output -> query($query));
 
-		$this -> toClient();
+		$this -> getMultiData();
+
+		return $this -> query;
 	}
 
-	function getClient(){
+	function getAll($id = null){
 
-		$id = isset($_POST['id']) ? $_POST['id'] : $this -> client_id;
+		$this -> getClient($id);
 
-		$this -> getAll($id);
+		$this -> toClient();
 	}
 
 	function newClient(){
@@ -208,13 +205,11 @@ class Client{
 
 		$this -> insertMultiData();
 
-		$this -> getClient();
+		$this -> getAll($this -> client_id);
 	}
 
 	function remove(){
-
 		$this -> input -> query('remove', 'clients', null, "where id = $_POST[id]");
-
 	}
 
 	function search(){

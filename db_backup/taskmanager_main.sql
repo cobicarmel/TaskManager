@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 13, 2014 at 01:59 AM
+-- Generation Time: Mar 13, 2014 at 10:44 AM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.9
 
@@ -113,6 +113,27 @@ INSERT INTO `email` (`id`, `email_address`, `client_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `mail_messages`
+--
+
+CREATE TABLE IF NOT EXISTS `mail_messages` (
+  `id` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `title` tinytext NOT NULL,
+  `subject` tinytext NOT NULL,
+  `message` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `mail_messages`
+--
+
+INSERT INTO `mail_messages` (`id`, `title`, `subject`, `message`) VALUES
+(1, 'ביטול פגישה', 'ביטול פגישה', '<div dir="rtl"> <b>שלום %recipient%,</b> <p style="margin-right: 10px"> לצערי הפגישה שנקבעה לנו לא תוכל להתקיים במועדה. תוכל ליצור קשר לקביעת מועד חדש. </p> <div>בברכה,</div> <div style="margin-right: 10px; font-weight: bold"> %company_name% </div> </div>');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `payments`
 --
 
@@ -136,14 +157,17 @@ CREATE TABLE IF NOT EXISTS `phone_numbers` (
   `phone_number` tinytext NOT NULL,
   `client_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `phone_numbers`
 --
 
 INSERT INTO `phone_numbers` (`id`, `phone_number`, `client_id`) VALUES
-(1, '052-7139161', 1);
+(1, '052-7139161', 1),
+(2, '052-7365421', 1),
+(3, '050-502242', 1),
+(4, '050-502242', 1);
 
 -- --------------------------------------------------------
 
@@ -163,7 +187,7 @@ CREATE TABLE IF NOT EXISTS `special` (
 --
 
 INSERT INTO `special` (`starttime`, `endtime`, `date`, `original`) VALUES
-('13:00:00', '14:25:00', '2014-03-13', 2);
+('12:25:00', '13:50:00', '2014-03-13', 2);
 
 -- --------------------------------------------------------
 
@@ -180,7 +204,7 @@ CREATE TABLE IF NOT EXISTS `tasks` (
   `endtime` datetime NOT NULL,
   `client_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `tasks`

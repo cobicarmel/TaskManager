@@ -11,3 +11,5 @@ define('LANG', detectLang());
 define('DATE_FORMAT', 'd/m/Y');
 
 define('TIME_FORMAT', 'H:i:s');
+
+define('COMPANY_NAME', 'TaskManager');
