@@ -29,6 +29,8 @@ var tableTime = {
 
 		$('.tt-content-part.now').removeClass('now');
 
+		$('#new-meeting').hide();
+
 		if(tableTime.isToDay())
 			tableTime.scrollToNow();
 	},

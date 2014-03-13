@@ -33,6 +33,41 @@ var Task =  {
 		}
 	},
 
+	cancelMail: function(ids){
+
+		ids = ids.split(',');
+
+		var sendSet = Config.default.meet_cancel_mail,
+			clients = $.map(Task.meetings[tableTime.strDate], function(data, key){
+				return ids.indexOf(key) + 1 && data.client_id ? data.client_id : null;
+			})
+
+		if(sendSet == '0' || ! clients.length)
+			return;
+
+		var params = {
+			msgtype: 1,
+			id: clients
+		}
+
+		var send = function(){
+
+			popup('loading', 76);
+
+			Api.send('sendMail', 'send', params, function(res){
+				popup('success', LOCAL[77].replace('%1', res[0].success));
+			})
+		}
+
+		switch(sendSet){
+			case 'ask':
+				Api.confirm(null, 75, send);
+				break;
+			case '1':
+				send();
+		}
+	},
+
 	changeTime: function(meetings){
 
 		var strDate = tableTime.strDate,
@@ -380,6 +415,7 @@ var Task =  {
 
 			Api.send('Task', 'removetask', {id: ids, date: strDate}, function(res){
 				popup('success', multi ? 39 : 38);
+				Task.cancelMail(ids);
 				Task.addDate(res);
 				tableTime.applyChanges();
 			})

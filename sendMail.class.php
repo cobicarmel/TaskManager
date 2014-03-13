@@ -36,6 +36,13 @@ class sendMail{
 
 	private function setClients(){
 
+		$requires = [
+			'id' => 1,
+			'msgtype' => 2
+		];
+
+		Database::checkRequires($requires, $_POST);
+
 		require 'Client.class.php';
 
 		$this -> clients = (new Client) -> getClient($_POST['id']);

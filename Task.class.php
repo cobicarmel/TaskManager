@@ -23,8 +23,7 @@ class Task{
 			'endtime' => 4
 		];
 
-		if(! Database::checkRequires($requires, $_POST))
-			return;
+		Database::checkRequires($requires, $_POST);
 
 		$this -> currentDate = $_POST['date'];
 
@@ -131,7 +130,6 @@ class Task{
 		$this -> input -> query('remove', 'tasks', null, $where);
 
 		$this -> getDay();
-
 	}
 
 }

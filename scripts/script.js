@@ -1,5 +1,7 @@
 $(function(){
 
+	/** Scripts that starting after the page has been loaded **/
+
 	setInterval(showDateTime, 200);
 
 	changeTab.apply($('.menu-tab')[0]);
@@ -54,6 +56,8 @@ $(function(){
 
 	$('#fm-multi-check').multiCheck('#filter-meets tbody input');
 
+	/** Attaching Events **/
+
 	$('form').on('submit', function(e){
 
 		e.preventDefault();
@@ -66,8 +70,6 @@ $(function(){
 		else if(typeof valid == 'object')
 			Api.validate.error(valid);
 	})
-
-	Client.copyForm = $('#edit-client').clone(true);
 
 	$('.number').on('keydown', function(event){
 		return Api.validate.isDigit(event);
@@ -134,7 +136,19 @@ $(function(){
 		$(clients).accordion('option', 'active', 0);
 	})
 
+	/** Live events **/
+
 	$('#cd-basic tbody').on('click', 'tr', Client.details);
 
 	$(document).on('click', '.ui-dialog-buttonset button', dialog.close);
+
+	$('form').on('keyup', '.area-phone', function(){
+		if(this.value.length == 3 || this.value.length == 2 && /^0[2-4,8-9]$/.test(this.value))
+			$(this).siblings('.phone').focus();
+	})
+
+	/** Scripts that must run after events attached **/
+
+	Client.copyForm = $('#edit-client').clone(true);
+
 })

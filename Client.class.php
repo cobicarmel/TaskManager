@@ -127,8 +127,13 @@ class Client{
 
 			$data = $v['values'];
 
-			if(gettype($data) != 'array')
-				return $data ? $this -> addMultiItem($v['table'], $v['column'], $data): null;
+			if(gettype($data) != 'array'){
+
+				if($data)
+					$this -> addMultiItem($v['table'], $v['column'], $data);
+
+				continue;
+			}
 
 			$keys = array_keys($data);
 
@@ -137,9 +142,9 @@ class Client{
 				$param = [$v['column'] => $data[$key]];
 
 				if(! $data[$key])
-					return $this -> input -> query('remove', $v['table'], null, "where id = $key");
-
-				$this -> input -> query('update', $v['table'], $param, "where id = $key");
+					$this -> input -> query('remove', $v['table'], null, "where id = $key");
+				else
+					$this -> input -> query('update', $v['table'], $param, "where id = $key");
 			}
 		}
 	}

@@ -41,7 +41,8 @@ abstract class Database{
 				$errors++;
 			}
 
-		return $errors ? false : true;
+		if($errors)
+			self::escape();
 	}
 
 	static function escape(){

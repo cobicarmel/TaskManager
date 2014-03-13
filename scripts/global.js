@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 function showDateTime(){
 
@@ -57,12 +57,14 @@ function popup(type, text){
 	if(! type)
 		return elem.hide();
 
-	text = LOCAL[text];
+	elem.stop(true);
+
+	text = LOCAL[text] || text;
 
 	if(type == 'loading')
 		text += '...';
 
-	elem.removeClass().addClass(type).show().position({of: '#appcenter', at: 'center center-100'});
+	elem.removeClass().addClass(type).show().position({of: '#appcenter', at: 'center top+100'});
 
 	$('#popup-title').text(text);
 

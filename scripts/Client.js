@@ -211,7 +211,7 @@ var Client = {
 			if(data)
 				data = data[0];
 
-			var values = [];
+			var values = {};
 
 			for(var date in data){
 
@@ -225,9 +225,7 @@ var Client = {
 						end: new Date(meets[meet].endtime.replace(/-/g, '/'))
 					}
 
-					$.extend(meets[meet], obj);
-
-					values.push(meets[meet]);
+					values[meet] = $.extend(meets[meet], obj);
 				}
 			}
 
@@ -263,7 +261,7 @@ var Client = {
 						$('<td>').text(values.date),
 						$('<td>').text(values.start.toRealTime() + ' - ' + values.end.toRealTime()),
 						$('<td>').text(values.title)
-					)
+					).click(Task.meetings[tableTime.strDate][meet].edit)
 
 					tbody.prepend(tr);
 
@@ -318,6 +316,7 @@ var Client = {
 			if(form.data('new-meet')){
 				$('#client_id').selectOption('val', id);
 				return changeTab.apply($('[tab=table-time]'));
+				$('#new-meeting').show();
 			}
 
 			$(clients).accordion('option', 'active', 3);
