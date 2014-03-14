@@ -80,7 +80,7 @@ $(function(){
 			return Api.validate.decValue.call(this, event);
 		},
 		change: function(){
-			var val = + this.value;
+			var val = + this.value || 0;
 			$(this).val(val.toFixed(2))
 		}
 	})

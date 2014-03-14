@@ -39,6 +39,9 @@ var Agenda = {
 
 		part.css('position', 'absolute');
 
+		if(data.isStatic)
+			part.addClass('agenda-static');
+
 		$('#agenda-bar').append(part);
 	},
 
@@ -67,9 +70,6 @@ var Agenda = {
 			nextData = elem.next().data(),
 			isFree = true;
 
-		if(params.starttime == data.starttime && params.endtime == data.endtime)
-			return;
-
 		if(prevData){
 			var prevend = getMultiObj(prevData, ['meeting', 'endtime']);
 			if(params.starttime < prevend)
@@ -93,6 +93,9 @@ var Agenda = {
 		params.original = data.id;
 		params.starttime = params.starttime.toRealTime();
 		params.endtime = params.endtime.toRealTime();
+
+		if(params.starttime == data.starttime.toRealTime() && params.endtime == data.endtime.toRealTime())
+			return;
 
 		var message = $('<div>').append(
 			$('<div>').text(LOCAL[62].replace('%1', title)),
@@ -156,7 +159,7 @@ var Agenda = {
 		blockStart.setMinutes(blockStart.getMinutes() + - data.blockbefore);
 		blockEnd.setMinutes(blockEnd.getMinutes() + + data.blockafter);
 
-		VBoard.setRangeData(data.starttime, data.endtime, {agenda: {tasktype: data.tasktype, index: data.index}});
+		VBoard.setRangeData(data.starttime, data.endtime, {agenda: {tasktype: data.tasktype, index: data.index, isStatic: data.isStatic}});
 		VBoard.setRangeData(blockStart, data.starttime, {agenda: {blockbefore: data.tasktype}});
 		VBoard.setRangeData(data.endtime, blockEnd, {agenda: {blockafter: data.tasktype}});
 	},
@@ -240,6 +243,7 @@ var Agenda = {
 			endtime.setDate(endtime.getDate() + 1);
 
 		var data = {
+			isStatic: !! +agendaPart.static,
 			starttime: starttime,
 			endtime: endtime,
 			title: title

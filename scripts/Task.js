@@ -102,7 +102,7 @@ var Task =  {
 				return tableTime[isMulti ? 'typeCareGroup' : 'typeCare'](isFree, callback);
 			}
 
-			Api.validate.confirm.taskTime = {};
+			Api.validate.confirm.taskTime = null;
 
 			popup('loading', 12);
 
@@ -131,6 +131,37 @@ var Task =  {
 		}
 
 		Task.changeTime(arr);
+	},
+
+	confirmCreate: function(type, fn){
+
+		var content,
+			confirmer = /^s/.test(type) ? 'static' : 'notset',
+			title = LOCAL[40];
+
+		switch(type){
+			case 'static':
+				content = 78;
+				break;
+			case 'staticgroup':
+				content = 79;
+				break;
+			case 'undefined':
+				content = 35;
+				break;
+			case 'undefinedgroup':
+				content = 49;
+				break;
+		}
+
+		Api.confirm(title, LOCAL[content], function(){
+			Api.validate.confirm.taskTime = confirmer;
+			fn();
+		},
+		function(){
+			Api.validate.confirm.taskTime = null;
+		})
+		
 	},
 
 	createMeeting: function(){
@@ -235,7 +266,7 @@ var Task =  {
 			elem.find('.ttm-title').text(self.title);
 			elem.find('.ttm-close').click(self.remove);
 
-			if(self.client_id > 0){
+			if(self.client_id > 0 && Client.getClient(self.client_id)){
 				var link = Client.createLink(self.client_id);
 
 				elem
@@ -446,19 +477,22 @@ var Task =  {
 
 		for(var i in soon){
 
-			var start = soon[i].start.strTime;
+			var meet = soon[i],
+				start = meet.start.strTime;
 
 			var tr = $('<tr>').append(
 				$('<td>').html($('<span>', {'class': 'ui-icon ui-icon-clock'})).width(16),
 				$('<td>').text(start).width('23%'),
 				$('<td>').html($('<span>', {'class': 'ui-icon ui-icon-arrowthick-1-w'})).width(20),
-				$('<td>', {'class': 'td-title'}).text(soon[i].title)
+				$('<td>', {'class': 'td-title'}).text(meet.title)
 			)
 
-			tr.click(function(){
-				soon[i].edit();
-				tableTime.scrollToTime(soon[i].start.date);
-			});
+			tr.click(function(meet){
+				return function(){
+					meet.edit();
+					tableTime.scrollToTime(meet.start.date);
+				}
+			}(meet))
 
 			elem.append(tr);
 		}

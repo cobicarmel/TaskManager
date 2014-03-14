@@ -107,10 +107,10 @@ var tableTime = {
 		return Isection * hourHeight + Ipart * partHeight;
 	},
 
-	getPartsRange: function(dateStart, dateEnd){
+	getPartsRange: function(start, end){
 		var parts = $('.tt-content-part'),
-			Istart = tableTime.getHourPart(dateStart).index('.tt-content-part'),
-			Iend = tableTime.getHourPart(dateEnd).index('.tt-content-part'),
+			Istart = tableTime.getHourPart(start).index('.tt-content-part'),
+			Iend = tableTime.getHourPart(end).index('.tt-content-part'),
 			stack = $([]);
 
 		if(Iend < Istart)
@@ -181,7 +181,7 @@ var tableTime = {
 				if(data.agenda.blockbefore || data.agenda.blockafter)
 					type = 'blocked';
 				else
-					type = 'free';
+					type = data.agenda.isStatic ? 'static' : 'free';
 			}
 		}
 
@@ -399,54 +399,48 @@ var tableTime = {
 
 	typeCare: function(type, fn){
 
-		var options;
+		var options = {
+			title: LOCAL[28]
+		}
 
 		switch(type){
 			case 'different':
-				options = {title: LOCAL[28], content: LOCAL[36]};
+				options.content = LOCAL[36];
 				break;
 			case 'reserved':
-				options = {title: LOCAL[28], content: LOCAL[29]};
+				options.content = LOCAL[29];
 				break;
 			case 'blocked':
-				options = {title: LOCAL[28], content: LOCAL[33]};
+				options.content = LOCAL[33];
 				break;
 			case 'free':
 				return fn();
 			default:
-				return Api.confirm(34, 35, function(){
-					addMultiObj(Api.validate.confirm, ['taskTime', 'notset'], true);
-					fn();
-				},
-				function(){
-					Api.validate.confirm.taskTime = {};
-				})
+				return Task.confirmCreate(type ? 'static' : 'undefined', fn);
 		}
 
 		return dialog.show(options);
 	},
 
 	typeCareGroup: function(type, fn){
-		var options;
+
+		var options = {
+			title: LOCAL[44],
+			content: LOCAL[45]
+		}
 
 		switch(type){
 			case 'different':
-				options = {title: LOCAL[44], content: LOCAL[45] + LOCAL[46]};
+				options.content += LOCAL[46];
 				break;
 			case 'reserved':
-				options = {title: LOCAL[44], content: LOCAL[45] + LOCAL[47]};
+				options.content += LOCAL[47];
 				break;
 			case 'blocked':
-				options = {title: LOCAL[44], content: LOCAL[45] + LOCAL[48]};
+				options.content += LOCAL[48];
 				break;
 			default:
-				return Api.confirm(40, 49, function(){
-					addMultiObj(Api.validate.confirm, ['taskTime', 'notset'], true);
-					fn();
-				},
-				function(){
-					Api.validate.confirm.taskTime = {};
-				})
+				return Task.confirmCreate(type ? 'staticgroup' : 'undefinedgroup', fn);
 		}
 
 		return dialog.show(options);
@@ -479,7 +473,7 @@ var tableTime = {
 
 			tableTime.typeOfTime(end, function(){
 
-				var notset = getMultiObj(Api.validate.confirm, ['taskTime', 'notset']),
+				var confirmed = Api.validate.confirm.taskTime,
 					tasktype;
 
 				VBoard.each(start, end, function(){
@@ -498,8 +492,13 @@ var tableTime = {
 					if(type.type != 'free'){
 						var otherId = getMultiObj(type.data, ['meeting', 'id']);
 
-						if(otherId == objDate[o].id || (group && group.indexOf(otherId) + 1) || (type.type == undefined && notset))
-							return;
+						if(
+							otherId == objDate[o].id ||
+							(group && group.indexOf(otherId) + 1) ||
+							(type.type == undefined && confirmed == 'notset') ||
+							(type.type == 'static' && confirmed == 'static')
+						)
+						return;
 
 						return isFree = false;
 					}

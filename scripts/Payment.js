@@ -46,7 +46,8 @@ var Payment = function(CLIENT){
 
 	this.addPayment = function(){
 
-		var params = this.serializeObject();
+		var form = this,
+			params = this.serializeObject();
 
 		params.client = CLIENT;
 
@@ -54,6 +55,7 @@ var Payment = function(CLIENT){
 
 		Api.send('Payment', 'addpayment', params, function(){
 			popup('success', 67);
+			form[0].reset();
 			self.reset();
 			self.payments = [];
 			self.getPayments();

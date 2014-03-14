@@ -190,7 +190,7 @@ var Client = {
 		})
 	},
 
-	getClient: function(id, fn){
+	getClient: function(id){
 		return Client.all[id];
 	},
 

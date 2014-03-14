@@ -136,11 +136,17 @@ var Api = {
 		confirm: {},
 
 		decValue: function(event){
+
+			this.setRangeText('');
+
 			var code = event.keyCode || event.which,
 				val = this.value;
 
 			if(code == 110 || code == 190)
 				return val ? ! (val.indexOf('.') + 1) : $(this).val(0);
+
+			if(code == 109 || code == 189)
+				return ! val;
 
 			return Api.validate.isDigit(event);
 		},

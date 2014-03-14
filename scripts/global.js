@@ -90,14 +90,14 @@ function addMultiObj(obj, keys, value){
 	return obj;
 }
 
-function getMultiObj(obj, keys){
+function getMultiObj(obj, keys, wanted){
 
 	var firstKey = keys.splice(0, 1);
 
 	if(typeof obj[firstKey] == 'object' && keys.length)
-		return getMultiObj(obj[firstKey], keys);
+		return getMultiObj(obj[firstKey], keys, wanted || firstKey);
 	else
-		return obj[firstKey];
+		return firstKey == wanted ? obj[firstKey] : null;
 }
 
 var dialog = {
