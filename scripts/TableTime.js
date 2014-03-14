@@ -29,8 +29,6 @@ var tableTime = {
 
 		$('.tt-content-part.now').removeClass('now');
 
-		$('#new-meeting').hide();
-
 		if(tableTime.isToDay())
 			tableTime.scrollToNow();
 	},
@@ -493,12 +491,12 @@ var tableTime = {
 						var otherId = getMultiObj(type.data, ['meeting', 'id']);
 
 						if(
-							otherId == objDate[o].id ||
+							otherId === objDate[o].id ||
 							(group && group.indexOf(otherId) + 1) ||
 							(type.type == undefined && confirmed == 'notset') ||
 							(type.type == 'static' && confirmed == 'static')
 						)
-						return;
+							return;
 
 						return isFree = false;
 					}

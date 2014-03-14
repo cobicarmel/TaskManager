@@ -407,8 +407,11 @@ var Task =  {
 
 		this.setTime = function(){
 
-			var startDate = new Date(self.starttime.replace(/-/g, '/')),
-				endDate = new Date(self.endtime.replace(/-/g, '/'));
+			self.starttime = self.starttime.replace(/-/g, '/');
+			self.endtime = self.endtime.replace(/-/g, '/');
+
+			var startDate = new Date(self.starttime),
+				endDate = new Date(self.endtime);
 
 			self.start = {
 				date: startDate,

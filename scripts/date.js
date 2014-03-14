@@ -45,7 +45,7 @@ Date.prototype.toLocaleString = function(){
 String.prototype.toDate = function(strTime, relative){
 
 	var parts = this.split('/'),
-		date = parts.length == 3 ? new Date(parts.reverse().join('-')) : new Date(),
+		date = parts.length == 3 ? new Date(parts.reverse().join('/')) : new Date(),
 		strTime = strTime || (parts.length != 3 ? this : null);
 
 	if(strTime){

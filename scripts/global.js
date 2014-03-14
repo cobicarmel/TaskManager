@@ -92,10 +92,10 @@ function addMultiObj(obj, keys, value){
 
 function getMultiObj(obj, keys, wanted){
 
-	var firstKey = keys.splice(0, 1);
+	var firstKey = keys.shift();
 
 	if(typeof obj[firstKey] == 'object' && keys.length)
-		return getMultiObj(obj[firstKey], keys, wanted || firstKey);
+		return getMultiObj(obj[firstKey], keys, wanted || keys.slice(keys.length - 1));
 	else
 		return firstKey == wanted ? obj[firstKey] : null;
 }
