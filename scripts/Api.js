@@ -16,12 +16,12 @@ var Api = {
 			buttons: buttons
 		}
 
-		dialog.show(options);
+		TM.dialog.show(options);
 	},
 
 	error: function(content){
-		popup();
-		dialog.show({title: LOCAL[23], content: LOCAL[content]});
+		TM.popup();
+		TM.dialog.show({title: LOCAL[23], content: LOCAL[content]});
 	},
 
 	isAllowed: function(subject, action){
@@ -35,17 +35,6 @@ var Api = {
 			}
 
 		return allowed;
-	},
-
-	perform: {
-		'new-meeting': Task.createMeeting,
-		'new-client': Client.newClient,
-		'search-client': Client.search,
-		'edit-client': Client.saveEdit,
-		'cai-form': Client.saveItem,
-		'new-payment': Client.newPayment,
-		'edit-payment': Client.editPayment,
-		'cdp-reports': Client.expReport
 	},
 
 	send: function(subject, action, params, success){

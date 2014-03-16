@@ -1,27 +1,29 @@
 'use strict';
 
-var Task =  {
+var Task =  function(TABLE_TIME){
 
-	addMeeting: function(date, id, meeting){
+	var Mself = this;
 
-		if(! Task.meetings[date])
-			Task.meetings[date] = {};
+	this.addMeeting = function(date, id, meeting){
+
+		if(! Mself.meetings[date])
+			Mself.meetings[date] = {};
 
 		meeting.date = date;
 		meeting.id = id;
 
-		var newMeet = new Task.meeting().construct(meeting);
+		var newMeet = new Mself.meeting().construct(meeting);
 
-		Task.meetings[date][id] = newMeet;
-	},
+		Mself.meetings[date][id] = newMeet;
+	}
 
-	addDate: function(data){
+	this.addDate = function(data){
 
-		var strDate = tableTime.strDate;
+		var strDate = TABLE_TIME.strDate;
 
-		Task.meetings[strDate] = {};
+		Mself.meetings[strDate] = {};
 
-		VBoard.reset(tableTime.date, 'meeting');
+		TABLE_TIME.VBoard.reset(TABLE_TIME.date, 'meeting');
 
 		if(! data)
 			return;
@@ -29,16 +31,16 @@ var Task =  {
 		for(var day in data[0]){
 			var meets = data[0][day];
 			for(var meet in meets)
-				Task.addMeeting(strDate, meet, meets[meet]);
+				Mself.addMeeting(strDate, meet, meets[meet]);
 		}
-	},
+	}
 
-	cancelMail: function(ids){
+	this.cancelMail = function(ids){
 
 		ids = ids.split(',');
 
 		var sendSet = Config.default.meet_cancel_mail,
-			clients = $.map(Task.meetings[tableTime.strDate], function(data, key){
+			clients = $.map(Mself.meetings[TABLE_TIME.strDate], function(data, key){
 				return ids.indexOf(key) + 1 && data.client_id ? data.client_id : null;
 			})
 
@@ -52,10 +54,10 @@ var Task =  {
 
 		var send = function(){
 
-			popup('loading', 76);
+			TM.popup('loading', 76);
 
-			Api.send('sendMail', 'send', params, function(res){
-				popup('success', LOCAL[77].replace('%1', res[0].success));
+			TABLE_TIME.apiRequest('sendMail', 'send', params, function(res){
+				TM.popup('success', LOCAL[77].replace('%1', res[0].success));
 			})
 		}
 
@@ -66,11 +68,11 @@ var Task =  {
 			case '1':
 				send();
 		}
-	},
+	}
 
-	changeTime: function(meetings){
+	this.changeTime = function(meetings){
 
-		var strDate = tableTime.strDate,
+		var strDate = TABLE_TIME.strDate,
 			ids = Object.keys(meetings),
 			isMulti = Object.keys(meetings).length > 1,
 			data = {
@@ -79,7 +81,7 @@ var Task =  {
 			},
 			stack = [],
 			callback = function(){
-				Task.changeTime(meetings);
+				Mself.changeTime(meetings);
 			};
 
 		for(var m in meetings){
@@ -93,47 +95,47 @@ var Task =  {
 			data.data[m].endtime = endtime.toLocaleString();
 		}
 
-		tableTime.validateTime(stack, ids, function(isFree){
+		TABLE_TIME.validateTime(stack, ids, function(isFree){
 	
 			if(isFree != true){
 				if(! isMulti)
-					Task.meetings[strDate][ids[0]].reset();
+					Mself.meetings[strDate][ids[0]].reset();
 
-				return tableTime[isMulti ? 'typeCareGroup' : 'typeCare'](isFree, callback);
+				return TABLE_TIME[isMulti ? 'typeCareGroup' : 'typeCare'](isFree, callback);
 			}
 
 			Api.validate.confirm.taskTime = null;
 
-			popup('loading', 12);
+			TM.popup('loading', 12);
 
-			Api.send('Task', 'changetime', data, function(res){
-				popup('success', 13);
-				Task.addDate(res);
-				tableTime.applyChanges();
+			TABLE_TIME.apiRequest('Task', 'changetime', data, function(res){
+				TM.popup('success', 13);
+				Mself.addDate(res);
+				TABLE_TIME.applyChanges();
 			})
 		})
-	},
+	}
 
-	changeMultiTime: function(ids, range){
-		var strDate = tableTime.strDate,
-			all = Task.meetings[strDate],
+	this.changeMultiTime = function(ids, range){
+		var strDate = TABLE_TIME.strDate,
+			all = Mself.meetings[strDate],
 			arr = {};
 
 		for(var id in ids){
 			var key = ids[id],
 				meet = all[key],
 				param = {
-					starttime: tableTime.getRangeTime(meet.starttime, range),
-					endtime: tableTime.getRangeTime(meet.endtime, range)
+					starttime: TABLE_TIME.getRangeTime(meet.starttime, range),
+					endtime: TABLE_TIME.getRangeTime(meet.endtime, range)
 				};
 
 			arr[key] = param;
 		}
 
-		Task.changeTime(arr);
-	},
+		Mself.changeTime(arr);
+	}
 
-	confirmCreate: function(type, fn){
+	this.confirmCreate = function(type, fn){
 
 		var content,
 			confirmer = /^s/.test(type) ? 'static' : 'notset',
@@ -162,9 +164,9 @@ var Task =  {
 			Api.validate.confirm.taskTime = null;
 		})
 		
-	},
+	}
 
-	createMeeting: function(){
+	this.createMeeting = function(){
 
 		var form = this,
 			param = this.serializeObject(),
@@ -175,43 +177,43 @@ var Task =  {
 
 		delete(param.strdate);
 
-		tableTime.validateTime([{start: starttime, end: endtime, id: id}], null, function(isFree){
+		TABLE_TIME.validateTime([{start: starttime, end: endtime, id: id}], null, function(isFree){
 
 			if(isFree != true)
-				return tableTime.typeCare(isFree, function(){
-					Task.createMeeting.call(form);
+				return TABLE_TIME.typeCare(isFree, function(){
+					Mself.createMeeting.call(form);
 				});
 
-			param.date = tableTime.strDate;
+			param.date = TABLE_TIME.strDate;
 			param.endtime = endtime.toLocaleString();
 			param.starttime = starttime.toLocaleString();
 			param.id = id;
 
-			popup('loading', id ? 12 : 10);
-			Api.send('Task', id ? 'edittask' : 'createtask', param, function(res){
-				popup('success', id ? 13 : 11);
+			TM.popup('loading', id ? 12 : 10);
+			TABLE_TIME.apiRequest('Task', id ? 'edittask' : 'createtask', param, function(res){
+				TM.popup('success', id ? 13 : 11);
 				form.hide()[0].reset();
-				Task.addDate(res);
-				tableTime.applyChanges();
+				Mself.addDate(res);
+				TABLE_TIME.applyChanges();
 			})
 		})
-	},
+	}
 
-	filterMeets: function(ids, title, fn){
+	this.filterMeets = function(ids, title, fn){
 
-		var strDate = tableTime.strDate,
-			elem = $('#filter-meets'),
+		var strDate = TABLE_TIME.strDate,
+			elem = TABLE_TIME.ELEM.find('#filter-meets'),
 			tbody = elem.find('tbody').empty();
 
 		ids = ids.map(Number);
 
-		for(var m in Task.meetings[strDate]){
+		for(var m in Mself.meetings[strDate]){
 
 			if(! (ids.indexOf(+m) + 1))
 				continue;
 
-			var meeting = Task.meetings[strDate][m],
-				trTemp = tableTime.templates.fmTr;
+			var meeting = Mself.meetings[strDate][m],
+				trTemp = TABLE_TIME.templates.fmTr;
 
 			trTemp.find('input').data('id', m);
 			trTemp.children('.fm-time').text([meeting.start.strTime, meeting.end.strTime].join(' - '));
@@ -236,21 +238,38 @@ var Task =  {
 		})
 	},
 
-	getDay: function(date){
+	this.getDay = function(date){
 		var strDate = date.toLocaleDateString();
-		Api.send('Task', 'getday', {date: strDate}, function(res){
-			Task.addDate(res);
-			tableTime.advanceReady();
+		TABLE_TIME.apiRequest('Task', 'getday', {date: strDate}, function(res){
+			Mself.addDate(res);
+			TABLE_TIME.advanceReady();
 		})
 	},
 
-	meeting: function(){
+	this.getMeeting = function(strDate, id, fn){
+	
+		var meet = TM.getMultiObj(Mself.meetings, [strDate, id]);
+
+		if(meet || strDate == TABLE_TIME.strDate)
+			return fn.call(meet);
+
+		var current = new Date(TABLE_TIME.date);
+
+		TABLE_TIME.setDay(strDate, function(){
+
+			TABLE_TIME.setDay(current, null, true, true);
+
+			fn.call(Mself.meetings[strDate][id]);
+		}, true)
+	},
+
+	this.meeting = function(){
 
 		var self = this;
 
 		this.addToTable = function(){
-			var startTop = tableTime.getPartTop(self.start.date),
-				endTop = tableTime.getPartTop(self.end.date, self.start.date),
+			var startTop = TABLE_TIME.getPartTop(self.start.date),
+				endTop = TABLE_TIME.getPartTop(self.end.date, self.start.date),
 				height = endTop - startTop,
 				elem = self.elem;
 
@@ -275,7 +294,7 @@ var Task =  {
 					.append(link);
 			}
 
-			elem.appendTo($('#tt-body-overlay'));
+			elem.appendTo(TABLE_TIME.ELEM.find('#tt-body-overlay'));
 
 			if(self.start.strDate != self.end.strDate)
 				return;
@@ -302,7 +321,7 @@ var Task =  {
 				endtime: endtime
 			}
 
-			Task.changeTime(obj);
+			Mself.changeTime(obj);
 		}
 
 		this.draggable = function(){
@@ -310,7 +329,7 @@ var Task =  {
 			var options = {
 				cursorAt: 'top',
 				snap: '.tt-content-part',
-				timeRange: tableTime.getTimeByPosition
+				timeRange: TABLE_TIME.getTimeByPosition
 			}
 
 			self.elem.draggable($.extend(options, self.interaction));
@@ -322,7 +341,7 @@ var Task =  {
 			if($(this).data('interaction') || (e && $(e.target).is('.client-link, .ttm-close')))
 				return;
 
-			changeTab.apply($('.menu-tab[tab=table-time]'));
+			TM.changeTab.apply(TABLE_TIME.menuTab);
 
 			var param = {
 				button: 9,
@@ -337,7 +356,7 @@ var Task =  {
 				date: self.start.date
 			}
 
-			tableTime.meetingForm(param);
+			TABLE_TIME.meetingForm(param);
 		}
 
 		this.elem = $('#tt-templates .tt-meeting').clone();
@@ -374,17 +393,17 @@ var Task =  {
 		}
 
 		this.markReservedTime = function(){
-			VBoard.setRangeData(self.start.date, self.end.date, {meeting: {id: self.id}});
+			TABLE_TIME.VBoard.setRangeData(self.start.date, self.end.date, {meeting: {id: self.id}});
 		}
 
 		this.remove = function(){
-			Task.removeTask(self.id);
+			Mself.removeTask(self.id);
 		}
 
 		this.reset = function(){
 			var data = self.elem.data(),
-				topChanged = getMultiObj(data, ['ui-draggable', 'originalPosition']) || getMultiObj(data, ['ui-resizable', 'originalPosition']),
-				heightChanged = getMultiObj(data, ['ui-resizable', 'originalSize']);
+				topChanged = TM.getMultiObj(data, ['ui-draggable', 'originalPosition']) || TM.getMultiObj(data, ['ui-resizable', 'originalPosition']),
+				heightChanged = TM.getMultiObj(data, ['ui-resizable', 'originalSize']);
 
 			if(topChanged)
 				self.elem.css('top', topChanged.top);
@@ -397,9 +416,9 @@ var Task =  {
 		this.resizable = function(){
 
 			var options = {
-				grid: tableTime.pHeight,
+				grid: TABLE_TIME.pHeight,
 				handles: 'n, s',
-				timeRange: tableTime.getTimeBySize
+				timeRange: TABLE_TIME.getTimeBySize
 			}
 
 			self.elem.resizable($.extend(options, self.interaction));
@@ -431,75 +450,28 @@ var Task =  {
 		}
 
 		return this;
-	},
+	}
 
-	meetings: {},
+	this.meetings = {};
 
-	removeTask: function(ids){
+	this.removeTask = function(ids){
 
 		var multi = $.isArray(ids),
-			strDate = tableTime.strDate;
+			strDate = TABLE_TIME.strDate;
 
 		if(multi)
 			ids = ids.join(',');
 
 		Api.confirm(40, multi ? 42 : 41, function(){
 
-			popup('loading', 37);
+			TM.popup('loading', 37);
 
-			Api.send('Task', 'removetask', {id: ids, date: strDate}, function(res){
-				popup('success', multi ? 39 : 38);
-				Task.cancelMail(ids);
-				Task.addDate(res);
-				tableTime.applyChanges();
+			TABLE_TIME.apiRequest('Task', 'removetask', {id: ids, date: strDate}, function(res){
+				TM.popup('success', multi ? 39 : 38);
+				Mself.cancelMail(ids);
+				Mself.addDate(res);
+				TABLE_TIME.applyChanges();
 			})
 		})
-	},
-
-	showSoonMeetings: function(){
-		var elem = $('#soon').empty().clear(LOCAL[19]),
-			now = new Date(),
-			strDate = now.toLocaleDateString(),
-			tasks = Task.meetings[strDate];
-
-		if(! tasks)
-			return;
-
-		var soon = $.map(tasks, function(task){
-			var start = + task.start.date,
-				msDuration = task.duration * 60000;
-
-			return now.getTime() < start + msDuration ? task : null;
-		})
-
-		if(soon[0])
-			elem.unClear();
-
-		soon.splice(Config.default.soon_mount);
-		sortObjects(soon, 'start');
-
-		for(var i in soon){
-
-			var meet = soon[i],
-				start = meet.start.strTime;
-
-			var tr = $('<tr>').append(
-				$('<td>').html($('<span>', {'class': 'ui-icon ui-icon-clock'})).width(16),
-				$('<td>').text(start).width('23%'),
-				$('<td>').html($('<span>', {'class': 'ui-icon ui-icon-arrowthick-1-w'})).width(20),
-				$('<td>', {'class': 'td-title'}).text(meet.title)
-			)
-
-			tr.click(function(meet){
-				return function(){
-					meet.edit();
-					tableTime.scrollToTime(meet.start.date);
-				}
-			}(meet))
-
-			elem.append(tr);
-		}
-
-		return soon;
 	}
 }

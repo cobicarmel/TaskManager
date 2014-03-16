@@ -1,39 +1,120 @@
 'use strict';
 
-var tableTime = {
+var tableTime = function(ELEM, INDEX){
 
-	onReady: null,
+	this.onReady = null;
 
-	readyState: 0,
+	this.readyState = 0;
 
-	readyTotal: 2,
+	this.readyTotal = 2;
 
-	advanceReady: function(){
+	var TABLE_TIME = this;
 
-		tableTime.readyState++;
+	/** Construction **/
 
-		if(tableTime.readyState == tableTime.readyTotal){
-			tableTime.onReady && tableTime.onReady();
+	this.init = function(){
 
-			tableTime.readyState = 0;
+		TABLE_TIME.Agenda = new Agenda(TABLE_TIME);
+
+		TABLE_TIME.Task = new Task(TABLE_TIME);
+
+		TABLE_TIME.VBoard = new VBoard(TABLE_TIME);
+
+		TABLE_TIME.ELEM = ELEM;
+
+		TABLE_TIME.menuTab = $('.menu-tab[tab=' + ELEM.parent().attr('tab') + ']');
+
+		TABLE_TIME.Agenda.getAll(TABLE_TIME.setDay);
+
+		TABLE_TIME.createTable();
+
+		TABLE_TIME.addEvents();
+
+		return TABLE_TIME;
+	}
+
+	this.addEvents = function(){
+
+		ELEM.find('#tt-body').selectable({
+			filter: '.tt-meeting',
+			delay: 100,
+			stop: TABLE_TIME.selectedMeets
+		})
+
+		ELEM.find('#nm-date input').datepicker({onSelect: TABLE_TIME.setDay});
+
+		ELEM.find('.tt-content-part').click(TABLE_TIME.newMeeting);
+
+		ELEM.find('#tt-head-prev').click(TABLE_TIME.prev);
+
+		ELEM.find('#tt-head-next').click(TABLE_TIME.next);
+
+		ELEM.find('#starttime').on('change', function(){
+			ELEM.find('#nm-start').text(this.value);
+			TABLE_TIME.setEndTime();
+		})
+
+		ELEM.find('#new-meeting').on('submit', function(e){
+			TM.submitForm.call(this, e, TABLE_TIME.Task.createMeeting);
+		})
+
+		ELEM.find('.calendar-icon').on('click', function(){
+			$('#calendar').datepicker('option', 'onSelect', TABLE_TIME.setDay);
+			$('.ac-tab').hide().css('z-index', 0);
+			$('#calendar').parent().show().css('z-index', 1);
+		})
+
+		ELEM.find('#nm-add-client').on('click', function(){
+			TM.changeTab.call($('.menu-tab[tab=client]'), TABLE_TIME);
+			$(clients).accordion('option', 'active', 0);
+		})
+	}
+
+	this.advanceReady = function(){
+
+		TABLE_TIME.readyState++;
+
+		if(TABLE_TIME.readyState == TABLE_TIME.readyTotal){
+			TABLE_TIME.onReady && TABLE_TIME.onReady();
+
+			TABLE_TIME.readyState = 0;
 		}
-	},
+	}
 
-	applyChanges: function(){
+	this.apiRequest = function(){
 
-		tableTime.fillTable();
-		Task.showSoonMeetings();
-		tableTime.showDateTitle();
-		changeTab.apply($('.menu-tab[tab=table-time]'));
-		Agenda.applyChanges();
+		var params = arguments[2];
 
-		$('.tt-content-part.now').removeClass('now');
+		if(typeof params == 'object')
+			arguments[2].system = INDEX;
+		else{
+			arguments[3] = params;
+			arguments[2] = {system: INDEX};
+			arguments.length = 4;
+		}
 
-		if(tableTime.isToDay())
-			tableTime.scrollToNow();
-	},
+		return Api.send.apply(null, arguments);
+	}
 
-	createHour: function(hour){
+	this.applyChanges = function(){
+
+		TABLE_TIME.fillTable();
+		TABLE_TIME.showDateTitle();
+		TM.changeTab.apply(TABLE_TIME.menuTab);
+		TABLE_TIME.Agenda.applyChanges();
+
+		ELEM.find('.tt-content-part.now').removeClass('now');
+
+		if(TABLE_TIME.isToDay())
+			TABLE_TIME.scrollToNow();
+
+		if(! INDEX){
+			TM.showSoonMeetings();
+			TM.listAgenda();
+		}
+	}
+
+	this.createHour = function(hour){
 		var tt_content = $('<div>', {'class': 'tt-content'})
 
 		for(var i = 0; i < 12; i++)
@@ -49,66 +130,67 @@ var tableTime = {
 			$('<div>', {'class': 'tt-title'}).text(timeFormat(hour) + ':' + '00'),
 			tt_content
 		)
-	},
+	}
 
-	createTable: function(){
-		tableTime.box = $('#tt-hours');
+	this.createTable = function(){
+
+		TABLE_TIME.box = ELEM.find('#tt-hours');
+
 		for(var i = 0; i < 24; i++){
-			var hour = tableTime.createHour(i);
-			tableTime.box.append(hour);
+			var hour = TABLE_TIME.createHour(i);
+			TABLE_TIME.box.append(hour);
 		}
-		tableTime.setPartsHeight();
-	},
 
-	fillTable: function(){
-		var date = tableTime.date,
+		TABLE_TIME.setPartsHeight();
+	}
+
+	this.fillTable = function(){
+		var date = TABLE_TIME.date,
 			strDate = date.toLocaleDateString(),
-			meetings = Task.meetings[strDate];
+			meetings = TABLE_TIME.Task.meetings[strDate];
 
-		$('#tt-body-overlay .tt-meeting').remove();
+		ELEM.find('#tt-body-overlay .tt-meeting').remove();
 
 		for(var m in meetings)
 			meetings[m].addToTable();
-	},
+	}
 
-	getHourPart: function(date){
+	this.getHourPart = function(date){
 		var hour = date.getHours(),
 			minutes = date.getMinutes(),
-			hourSection = tableTime.getHourSection(hour),
+			hourSection = TABLE_TIME.getHourSection(hour),
 			part = Math.round(Math.floor(minutes / 5));
 
 		return hourSection.find('.tt-content-part').eq(part);
-	},
+	}
 
-	getHourSection: function(hour){
-		return $('#tt-hour-' + +hour);
-	},
+	this.getHourSection = function(hour){
+		return ELEM.find('#tt-hour-' + +hour);
+	}
 
-	getMinutesByHeight: function(height){
-		return Math.round(height / tableTime.pHeight) * 5;
-	},
+	this.getMinutesByHeight = function(height){
+		return Math.round(height / TABLE_TIME.pHeight) * 5;
+	}
 
-	getPartTop: function(date){
+	this.getPartTop = function(date){
 
-		var aday = tableTime.date.getDate(),
+		var aday = TABLE_TIME.date.getDate(),
 			bday = date.getDate();
 
 		if(aday != bday)
-			return aday < bday ? tableTime.getTotalHeight() : 0;
+			return aday < bday ? TABLE_TIME.getTotalHeight() : 0;
 
-		var hourHeight = tableTime.sHeight,
-			partHeight = tableTime.pHeight,
-			hour = date.getHours(),
-			Isection = tableTime.getHourSection(hour).index('.tt-hour'),
-			Ipart = tableTime.getHourPart(date).index();
+		var hourHeight = TABLE_TIME.sHeight,
+			partHeight = TABLE_TIME.pHeight,
+			Ipart = TABLE_TIME.getHourPart(date).index();
 
-		return Isection * hourHeight + Ipart * partHeight;
-	},
+		return date.getHours() * hourHeight + Ipart * partHeight;
+	}
 
-	getPartsRange: function(start, end){
-		var parts = $('.tt-content-part'),
-			Istart = tableTime.getHourPart(start).index('.tt-content-part'),
-			Iend = tableTime.getHourPart(end).index('.tt-content-part'),
+	this.getPartsRange = function(start, end){
+		var parts = ELEM.find('.tt-content-part'),
+			Istart = TABLE_TIME.getHourPart(start).index('.tt-content-part'),
+			Iend = TABLE_TIME.getHourPart(end).index('.tt-content-part'),
 			stack = $([]);
 
 		if(Iend < Istart)
@@ -118,33 +200,33 @@ var tableTime = {
 			stack.push(parts[Istart++]);
 
 		return stack;
-	},
+	}
 
-	getRangeTime: function(date, duration){
+	this.getRangeTime = function(date, duration){
 
 		var ndate = new Date(date);
 
 		ndate.setMinutes(ndate.getMinutes() + +duration);
 
 		return ndate;
-	},
+	}
 
-	getTimeByPosition: function(){
+	this.getTimeByPosition = function(){
 
 		var elem = $(this),
 			dataMeet = elem.data('meeting'),
 			data = elem.data('ui-draggable'),
 			orgTop = data.originalPosition.top,
 			top = data.position.top,
-			minRange = tableTime.getMinutesByHeight(top - orgTop);
+			minRange = TABLE_TIME.getMinutesByHeight(top - orgTop);
 
 		return {
-			starttime: tableTime.getRangeTime(dataMeet.starttime, minRange),
-			endtime: tableTime.getRangeTime(dataMeet.endtime, minRange)
+			starttime: TABLE_TIME.getRangeTime(dataMeet.starttime, minRange),
+			endtime: TABLE_TIME.getRangeTime(dataMeet.endtime, minRange)
 		}
-	},
+	}
 
-	getTimeBySize: function(){
+	this.getTimeBySize = function(){
 
 		var minRange,
 			elem = $(this),
@@ -155,21 +237,21 @@ var tableTime = {
 			top = data.position.top;
 
 		if(orgTop != top){
-			minRange = tableTime.getMinutesByHeight(top - orgTop);
-			starttime = tableTime.getRangeTime(starttime, minRange);
+			minRange = TABLE_TIME.getMinutesByHeight(top - orgTop);
+			starttime = TABLE_TIME.getRangeTime(starttime, minRange);
 		}
 
-		minRange = tableTime.getMinutesByHeight(height);
+		minRange = TABLE_TIME.getMinutesByHeight(height);
 
 		return {
 			starttime: starttime,
-			endtime: tableTime.getRangeTime(starttime, minRange)
+			endtime: TABLE_TIME.getRangeTime(starttime, minRange)
 		}
-	},
+	}
 
-	getTimeType: function(date){
+	this.getTimeType = function(date){
 
-		var data = VBoard.getTime(date),
+		var data = TABLE_TIME.VBoard.getTime(date),
 			type;
 
 		if(data){
@@ -184,23 +266,23 @@ var tableTime = {
 		}
 
 		return {type: type, data: data};
-	},
+	}
 
-	getTotalHeight: function(){
-		return $('#tt-hours').height();
-	},
+	this.getTotalHeight = function(){
+		return ELEM.find('#tt-hours').height();
+	}
 
-	isToDay: function(){
-		var date = new Date(tableTime.date);
+	this.isToDay = function(){
+		var date = new Date(TABLE_TIME.date);
 		return date.setHours(0,0,0,0) == new Date().setHours(0,0,0,0);
-	},
+	}
 
-	meetingForm: function(params){
-		var elem = $('#new-meeting'),
+	this.meetingForm = function(params){
+
+		var elem = ELEM.find('#new-meeting'),
 			inputs = elem.find('input, textarea');
 
-		if(tableTime.date.getDate() != params.date.getDate())
-			tableTime.setDay(params.date);
+		TABLE_TIME.setDay(params.date, null, false, true);
 
 		elem[0].reset();
 
@@ -208,46 +290,46 @@ var tableTime = {
 			$(this).val(params[this.name] || '');
 		})
 
-		$('#nm-title')
+		ELEM.find('#nm-title')
 			.text(LOCAL[params.type] + '-')
 			.append($('<span>', {id: 'nm-start'}).text(params.time));
 
 		elem.data({id: params.id, tasktype: params.tasktype});
-		$('#starttime').timepicker(params.time);
+		ELEM.find('#starttime').timepicker(params.time);
 		elem.find('button.ui-state-default').text(LOCAL[params.button]);
-		tableTime.setEndTime();
+		TABLE_TIME.setEndTime();
 
 		if(params.client)
-			$('#client_id option').each(function(){
+			ELEM.find('#client_id option').each(function(){
 				this.selected = this.value == params.client;
 			})
 
 		elem.show().position({of: '#appcenter'});
-	},
+	}
 
-	moveMeets: function(ids){
+	this.moveMeets = function(ids){
 
-		Api.confirm(63, tableTime.templates.mmPicker, function(){
-			Task.changeMultiTime(ids, $('#mm-input').val());
+		Api.confirm(63, TABLE_TIME.templates.mmPicker, function(){
+			TABLE_TIME.Task.changeMultiTime(ids, ELEM.find('#mm-input').val());
 		})
 
-		$('#mm-input').attr('disabled', true).val(Config.default.move_range).spinner({
+		ELEM.find('#mm-input').attr('disabled', true).val(Config.default.move_range).spinner({
 			max: 120,
 			min: -120,
 			step: 5
 		})
-	},
+	}
 
-	newMeeting: function(){
+	this.newMeeting = function(){
 
 		var strTime = this.title,
-			date = new Date(tableTime.date).setTextTime(strTime);
+			date = new Date(TABLE_TIME.date).setTextTime(strTime);
 
-		tableTime.typeOfTime(date, function(type){
+		TABLE_TIME.typeOfTime(date, function(type){
 
-			var data = getMultiObj(type, ['data', 'agenda']);
+			var data = TM.getMultiObj(type, ['data', 'agenda']);
 
-			tableTime.typeCare(type.type, function(){
+			TABLE_TIME.typeCare(type.type, function(){
 
 				var param = {
 					button: 8,
@@ -264,76 +346,78 @@ var tableTime = {
 					param.title = typeInfo.title;
 				}
 
-				tableTime.meetingForm(param);
+				TABLE_TIME.meetingForm(param);
 
-				$('#new-meeting [name=title]').focus()[0].select();
-
+				ELEM.find('#new-meeting [name=title]').focus()[0].select();
 			})
 		})
-	},
+	}
 
-	next: function(){
-		var date = new Date(tableTime.date);
-		date.setDate(tableTime.date.getDate() + 1);
-		tableTime.setDay(date);
-	},
+	this.next = function(){
+		var date = new Date(TABLE_TIME.date);
+		date.setDate(TABLE_TIME.date.getDate() + 1);
+		TABLE_TIME.setDay(date);
+	}
 
-	prev: function(){
-		var date = new Date(tableTime.date);
-		date.setDate(tableTime.date.getDate() - 1);
-		tableTime.setDay(date);
-	},
+	this.prev = function(){
+		var date = new Date(TABLE_TIME.date);
+		date.setDate(TABLE_TIME.date.getDate() - 1);
+		TABLE_TIME.setDay(date);
+	}
 
-	scrollToNow: function(){
+	this.scrollToNow = function(){
 
 		var now = new Date(),
-			hourPart = tableTime.getHourPart(now).addClass('now');
+			hourPart = TABLE_TIME.getHourPart(now).addClass('now');
 
-		tableTime.scrollToTime(now);
-	},
+		TABLE_TIME.scrollToTime(now);
+	}
 
-	scrollToTime: function(date){
-		$('#tt-body')[0].scrollTop = tableTime.getPartTop(date);
-	},
+	this.scrollToTime = function(date){
+		ELEM.find('#tt-body')[0].scrollTop = TABLE_TIME.getPartTop(date);
+	}
 
-	setDay: function(date, ready, stay){
+	this.setDay = function(date, ready, dontMove, dontUpdate){
 
 		var goReady = $.isFunction(ready);
 
 		if(date)
-			tableTime.date = typeof date == 'string' ? date.toDate() : date;
+			TABLE_TIME.date = typeof date == 'string' ? date.toDate() : date;
 		else
-			tableTime.date = new Date();
+			TABLE_TIME.date = new Date();
 
-		tableTime.strDate = tableTime.date.toLocaleDateString();
+		TABLE_TIME.strDate = TABLE_TIME.date.toLocaleDateString();
 
-		if(stay && VBoard.hasDate(date))
+		if((dontUpdate) && TABLE_TIME.VBoard.hasDate(TABLE_TIME.date)){
+			if(! dontMove)
+				TABLE_TIME.applyChanges();
 			return goReady && ready();
+		}
 
-		VBoard.addDay(tableTime.strDate);
+		TABLE_TIME.VBoard.addDay(TABLE_TIME.strDate);
 
-		tableTime.onReady = function(){
+		TABLE_TIME.onReady = function(){
 			console.log('TableTime updated');
 			goReady && ready();
 
-			if(! stay)
-				tableTime.applyChanges();
+			if(! dontMove)
+				TABLE_TIME.applyChanges();
 		}
 
-		Task.getDay(tableTime.date);
-		Agenda.refresh();
-	},
+		TABLE_TIME.Task.getDay(TABLE_TIME.date);
+		TABLE_TIME.Agenda.refresh();
+	}
 
-	showDateTitle: function(){
-		var date = tableTime.date.getFullHeDate();
-		$('#tt-head-title').text(date);
-	},
+	this.showDateTitle = function(){
+		var date = TABLE_TIME.date.getFullHeDate();
+		ELEM.find('#tt-head-title').text(date);
+	}
 
-	setEndTime: function(){
+	this.setEndTime = function(){
 
-		var strTime = $('#starttime').val(),
-			date = new Date(tableTime.date).setTextTime(strTime),
-			data = $('#new-meeting').data(),
+		var strTime = ELEM.find('#starttime').val(),
+			date = new Date(TABLE_TIME.date).setTextTime(strTime),
+			data = ELEM.find('#new-meeting').data(),
 			id = data.id,
 			tasktype = data.tasktype,
 			strDate = date.toLocaleDateString(),
@@ -341,19 +425,19 @@ var tableTime = {
 			duration;
 
 		try{
-			duration = Task.meetings[strDate][id].duration;
+			duration = TABLE_TIME.Task.meetings[strDate][id].duration;
 		}
 		catch(e){
 			duration =  typeInfo ? typeInfo.duration : Config.default.meeting_duration;
 		}
 
-		var endtime = tableTime.getRangeTime(date, duration).toRealTime();
+		var endtime = TABLE_TIME.getRangeTime(date, duration).toRealTime();
 
-		$('#endtime').timepicker(endtime);
-	},
+		ELEM.find('#endtime').timepicker(endtime);
+	}
 
-	selectedMeets: function(){
-		var selected = $('.tt-meeting.ui-selected'),
+	this.selectedMeets = function(){
+		var selected = ELEM.find('.tt-meeting.ui-selected'),
 			ids = $.map(selected, function(elem){
 				return $(elem).data('meeting').id;
 			});
@@ -361,41 +445,41 @@ var tableTime = {
 		if(! selected.length)
 			return;
 
-		Api.confirm(43, tableTime.templates.smMessage, function(){
+		Api.confirm(43, TABLE_TIME.templates.smMessage, function(){
 	
-			var action = $('.sm-option input:checked').attr('id');
+			var action = ELEM.find('.sm-option input:checked').attr('id');
 
 			if(! action){
-				popup('error', 44);
-				return tableTime.selectedMeets();
+				TM.popup('error', 44);
+				return TABLE_TIME.selectedMeets();
 			}
 
 			action = action.split('-')[1];
 
 			switch(action){
-				case '1': return tableTime.moveMeets(ids);
-				case '3': return Task.removeTask(ids);
+				case '1': return TABLE_TIME.moveMeets(ids);
+				case '3': return TABLE_TIME.Task.removeTask(ids);
 			}
 		})
-	},
+	}
 
-	setPartsHeight: function(){
-		var hourSection = $('.tt-hour:first'),
+	this.setPartsHeight = function(){
+		var hourSection = ELEM.find('.tt-hour:first'),
 			partsLength = hourSection.find('.tt-content-part').length;
 
-		tableTime.sHeight = hourSection.height();
-		tableTime.pHeight = tableTime.sHeight / partsLength;
-		$('.tt-content-part').height(tableTime.pHeight);
+		TABLE_TIME.sHeight = hourSection.height();
+		TABLE_TIME.pHeight = TABLE_TIME.sHeight / partsLength;
+		ELEM.find('.tt-content-part').height(TABLE_TIME.pHeight);
 
-	},
+	}
 
-	templates: {
-		smMessage: $('#sm-message'),
-		mmPicker: $('#mm-picker'),
-		fmTr: $('#fm-tr').find('tr')
-	},
+	this.templates = {
+		smMessage: ELEM.find('#sm-message'),
+		mmPicker: ELEM.find('#mm-picker'),
+		fmTr: ELEM.find('#fm-tr tr')
+	}
 
-	typeCare: function(type, fn){
+	this.typeCare = function(type, fn){
 
 		var options = {
 			title: LOCAL[28]
@@ -414,13 +498,13 @@ var tableTime = {
 			case 'free':
 				return fn();
 			default:
-				return Task.confirmCreate(type ? 'static' : 'undefined', fn);
+				return TABLE_TIME.Task.confirmCreate(type ? 'static' : 'undefined', fn);
 		}
 
-		return dialog.show(options);
-	},
+		return TM.dialog.show(options);
+	}
 
-	typeCareGroup: function(type, fn){
+	this.typeCareGroup = function(type, fn){
 
 		var options = {
 			title: LOCAL[44],
@@ -438,29 +522,29 @@ var tableTime = {
 				options.content += LOCAL[48];
 				break;
 			default:
-				return Task.confirmCreate(type ? 'staticgroup' : 'undefinedgroup', fn);
+				return TABLE_TIME.Task.confirmCreate(type ? 'staticgroup' : 'undefinedgroup', fn);
 		}
 
-		return dialog.show(options);
-	},
+		return TM.dialog.show(options);
+	}
 
-	typeOfTime: function(date, callback){
+	this.typeOfTime = function(date, callback){
 
 		if(callback){
-			var current = new Date(tableTime.date);
+			var current = new Date(TABLE_TIME.date);
 
-			tableTime.setDay(date, function(){
-				callback(tableTime.getTimeType(date));
-				tableTime.setDay(current, null, true);
-			}, true);
+			TABLE_TIME.setDay(date, function(){
+				callback(TABLE_TIME.getTimeType(date));
+				TABLE_TIME.setDay(current, null, true, true);
+			}, true, true);
 		}
-		else if(VBoard.hasDate(date))
-			return tableTime.getTimeType(date);
+		else if(TABLE_TIME.VBoard.hasDate(date))
+			return TABLE_TIME.getTimeType(date);
 		else
 			console.error('The date ' + date + ' has not been set');
-	},
+	}
 
-	validateTime: function(objDate, group, callback){
+	this.validateTime = function(objDate, group, callback){
 
 		for(var o in objDate){
 
@@ -469,16 +553,16 @@ var tableTime = {
 				isFree = true,
 				type;
 
-			tableTime.typeOfTime(end, function(){
+			TABLE_TIME.typeOfTime(end, function(){
 
 				var confirmed = Api.validate.confirm.taskTime,
 					tasktype;
 
-				VBoard.each(start, end, function(){
+				TABLE_TIME.VBoard.each(start, end, function(){
 
-					type = tableTime.typeOfTime(this);
+					type = TABLE_TIME.typeOfTime(this);
 
-					var agenda = getMultiObj(type, ['data', 'agenda', 'index']) || null;
+					var agenda = TM.getMultiObj(type, ['data', 'agenda', 'index']) || null;
 
 					if(tasktype !== undefined && tasktype != agenda){
 						type.type = 'different';
@@ -488,7 +572,7 @@ var tableTime = {
 					tasktype = agenda;
 
 					if(type.type != 'free'){
-						var otherId = getMultiObj(type.data, ['meeting', 'id']);
+						var otherId = TM.getMultiObj(type.data, ['meeting', 'id']);
 
 						if(
 							otherId === objDate[o].id ||

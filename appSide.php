@@ -23,8 +23,9 @@
 	</div>
 </div>
 <div id="menu" class="as-bar">
-	<div class="menu-tab" tab="table-time"><?=$LOCAL[6]?></div>
-	<div class="menu-tab" tab="calendar"><?=$LOCAL[0]?></div>
+	<?foreach($default['table_times'] as $i => $title){?>
+		<div class="menu-tab" tab="table-time-<?=$i?>"><?=$title?></div>
+	<?}?>
 	<div class="menu-tab" tab="client"><?=$LOCAL[2]?></div>
 	<div class="menu-tab" tab=""><?=$LOCAL[50]?></div>
 	<div class="menu-tab"><?=$LOCAL[3]?></div>

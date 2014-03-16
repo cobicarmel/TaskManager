@@ -1,33 +1,35 @@
 'use strict';
 
-var VBoard = {
+var VBoard = function(TABLE_TIME){
 
-	days: {},
+	this.days = {};
 
-	step: 5,
+	this.step = 5;
 
-	addDay: function(strDate){
+	var self = this;
 
-		if(VBoard.days[strDate])
+	this.addDay = function(strDate){
+
+		if(self.days[strDate])
 			return;
 
-		VBoard.days[strDate] = {};
+		self.days[strDate] = {};
 
 		for(var h = 0; h < 24; h++){
 
 			var hour = timeFormat(h);
 
-			for(var m = 0; m < 60; m += VBoard.step){
+			for(var m = 0; m < 60; m += self.step){
 
 				var minute = timeFormat(m),
 					time = [hour, minute].join(':');
 
-				VBoard.days[strDate][time] = {};
+				self.days[strDate][time] = {};
 			}
 		}
-	},
+	}
 
-	each: function(start, end, fn){
+	this.each = function(start, end, fn){
 
 		var starttime = new Date(start),
 			endtime = new Date(end);
@@ -41,63 +43,63 @@ var VBoard = {
 			if(call == false)
 				break;
 
-			starttime.setMinutes(starttime.getMinutes() + VBoard.step);
+			starttime.setMinutes(starttime.getMinutes() + self.step);
 		}
-	},
+	}
 
-	getTime: function(date){
+	this.getTime = function(date){
 
 		var strDate = date.toLocaleDateString(),
 			strTime = date.toRealTime();
 
-		return VBoard.days[strDate][strTime];
-	},
+		return self.days[strDate][strTime];
+	}
 
-	getRangeTime: function(start, end){
+	this.getRangeTime = function(start, end){
 
 		var stack = {};
 
-		VBoard.each(start, end, function(n, strTime){
-			stack[strTime] = VBoard.getTime(this);
+		self.each(start, end, function(n, strTime){
+			stack[strTime] = self.getTime(this);
 		})
 
 		return stack;
-	},
+	}
 
-	hasDate: function(date){
+	this.hasDate = function(date){
 		try{
-			VBoard.getTime(date);
+			self.getTime(date);
 		}
 		catch(e){
 			return false;
 		}
 
 		return true;
-	},
+	}
 
-	reset: function(date, spec){
+	this.reset = function(date, spec){
 
 		var strDate = date.toLocaleDateString(),
 			strTime = date.toRealTime();
 
-		for(var time in VBoard.days[strDate]){
+		for(var time in self.days[strDate]){
 			if(! spec)
-				delete VBoard.days[strDate][time];
+				delete self.days[strDate][time];
 			else
-				delete VBoard.days[strDate][time][spec];
+				delete self.days[strDate][time][spec];
 		}
 
-	},
+	}
 
-	setData: function(strDate, strTime, data){
-		VBoard.addDay(strDate);
-		VBoard.days[strDate][strTime] = $.extend(VBoard.days[strDate][strTime], data);
-	},
+	this.setData = function(strDate, strTime, data){
+		self.addDay(strDate);
+		self.days[strDate][strTime] = $.extend(self.days[strDate][strTime], data);
+	}
 
-	setRangeData: function(start, end, data){
+	this.setRangeData = function(start, end, data){
 
-		VBoard.each(start, end, function(strDate, strTime){
-			VBoard.setData(strDate, strTime, data);
+		self.each(start, end, function(strDate, strTime){
+			self.setData(strDate, strTime, data);
 		})
 	}
 }

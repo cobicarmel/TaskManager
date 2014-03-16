@@ -107,7 +107,7 @@ class Task{
 
 		$where = Database::parseMultiWhere($column, $values);
 
-		$this -> data = $this -> output -> query("select * from tasks $where");
+		$this -> data = $this -> output -> query("select * from tasks where ($where) && system = $_POST[system]");
 
 		$this -> toClient();
 	}
@@ -127,7 +127,7 @@ class Task{
 
 		$where = Database::parseMultiWhere('id', $ids);
 
-		$this -> input -> query('remove', 'tasks', null, $where);
+		$this -> input -> query('remove', 'tasks', null, "where $where");
 
 		$this -> getDay();
 	}

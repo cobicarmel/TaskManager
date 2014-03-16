@@ -21,7 +21,7 @@ class Agenda{
 
 	function getAll(){
 
-		$data = $this -> output -> query('select * from agenda');
+		$data = $this -> output -> query("select * from agenda where system = $_POST[system]");
 
 		Database::addResponse($data);
 
@@ -29,7 +29,7 @@ class Agenda{
 
 	function getSpecial(){
 
-		$data = $this -> output -> query("select * from special where date = Date('$_POST[date]')");
+		$data = $this -> output -> query("select * from special where date = Date('$_POST[date]') && system = $_POST[system]");
 
 		$cdate = Dtime::DBToClient($_POST['date'])[0];
 
@@ -47,7 +47,10 @@ class Agenda{
 
 	function updateSpecial(){
 
-		$where = ['date' => $_POST['date'], 'original' => $_POST['original']];
+		$where = [
+			'date' => $_POST['date'],
+			'original' => $_POST['original']
+		];
 
 		unset($_POST['original']);
 

@@ -163,8 +163,14 @@ form tr {
 #calendar .ui-datepicker-title {
 	font-size: 20px;
 }
-#table-time{
+.table-time{
 	height: 100%;
+}
+.table-time img{
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	z-index: 2;
 }
 #tt-head {
 	height: 7%;
@@ -349,7 +355,7 @@ form tr {
 #filter-meets button{
 	margin: 10px 0 5px;
 }
-#client_id{
+.clients-list{
 	padding-right: 20px;
 }
 #nm-add-client {

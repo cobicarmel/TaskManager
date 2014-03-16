@@ -8,7 +8,11 @@ $query = $output -> query('select * from config');
 $default = [];
 
 foreach($query as $set)
-	$default[$set['name']] = $set['value'];
+	$default[$set['name']] = $set['value'];	
+
+$json = ['מערכת שעות', 'רופאים'];
+
+$default['table_times'] = json_decode($default['table_times'], true);
 
 $config = [
 	'actions' => $allowedActions,
@@ -37,9 +41,11 @@ $config = [
 		<div class="ac-tab" tab="calendar">
 			<div id="calendar"></div>
 		</div>
-		<div class="ac-tab" tab="table-time">
-			<?require 'tableTime.php';?>
-		</div>
+		<?foreach($default['table_times'] as $i => $title){?>
+			<div class="ac-tab" tab="table-time-<?=$i?>">
+				<?require 'tableTime.php';?>
+			</div>
+		<?}?>
 		<div class="ac-tab" tab="client">
 			<?require 'Client.php';?>
 		</div>
@@ -47,6 +53,7 @@ $config = [
 			<div id="popup-img"></div>
 			<div id="popup-title"></div>
 		</div>
+		<?require 'tt-templates.php'?>
 	</div>
 	<div id="appside">
 		<?require 'appSide.php';?>
@@ -66,7 +73,8 @@ $config = [
 <script src="scripts/Client.js"></script>
 <script src="scripts/Payment.js"></script>
 <script src="scripts/Api.js"></script>
-<script src="scripts/global.js"></script>
+<script src="scripts/jquery-plugins.js"></script>
+<script src="scripts/TaskManager.js"></script>
 <script src="scripts/script.js"></script>
 <script>var Config = <?=json_encode($config)?></script>
 </html>

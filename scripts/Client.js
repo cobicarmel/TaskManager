@@ -2,6 +2,21 @@
 
 var Client = {
 
+	apiActions: function(action){
+
+		var methods = {
+			'new-client': Client.newClient,
+			'search-client': Client.search,
+			'edit-client': Client.saveEdit,
+			'cai-form': Client.saveItem,
+			'new-payment': Client.newPayment,
+			'edit-payment': Client.editPayment,
+			'cdp-reports': Client.expReport
+		}
+
+		return methods[action];
+	},
+
 	addClient: function(data){
 		var key = Object.keys(data);
 		Client.all[key] = data[key];
@@ -21,10 +36,10 @@ var Client = {
 
 		params.id = Client.id;
 
-		popup('loading', data.loading);
+		TM.popup('loading', data.loading);
 
 		Api.send('Client', data.action, params, function(res){
-			popup('success', data.success);
+			TM.popup('success', data.success);
 			Client.addClient(res[0]);
 			Client.getClientTr(Client.id).click();
 		})
@@ -169,7 +184,8 @@ var Client = {
 	},
 
 	fillTableTime: function(){
-		var select = $('#client_id'),
+
+		var select = $('.clients-list'),
 			options = [];
 
 		for(var id in Client.all)
@@ -199,7 +215,7 @@ var Client = {
 	},
 
 	goTo: function(){
-		changeTab.apply($('[tab=client]'));
+		TM.changeTab.apply($('[tab=client]'));
 		Client.details.apply(Client.getClientTr($(this).data('id')));
 		$(clients).accordion('option', 'active', 3);
 	},
@@ -261,10 +277,19 @@ var Client = {
 						$('<td>').text(values.date),
 						$('<td>').text(values.start.toRealTime() + ' - ' + values.end.toRealTime()),
 						$('<td>').text(values.title)
-					).click(Task.meetings[tableTime.strDate][meet].edit)
+					)
+
+					tr.on('click', function(meet, values){
+						return function(){
+							TM.popup('loading', 34);
+							TM.tableTimes[values.system].Task.getMeeting(values.date, meet, function(){
+								TM.popup();
+								this.edit();
+							})
+						}
+					}(meet, values))
 
 					tbody.prepend(tr);
-
 				}
 
 				if(tbody.children().length)
@@ -277,6 +302,28 @@ var Client = {
 		values: {}
 	},
 
+	init: function(){
+
+		var options = {
+			active: 3,
+			beforeActivate: function(){
+				if(arguments[1].newHeader.index('h4') != 2)	
+					$('.search-results').hide();
+			}
+		}
+
+		$(clients).accordion($.extend(Config.accordion, options))
+
+		$('.search-results').hide();
+
+		$('#cd-list').tableScroll(392).tablesorter({sortList: [[0,0]]});
+
+		$('.ts-head th').on('click', function(){
+			var index = $(this).index('.ts-head th');
+			$('#cd-list th').eq(index).click();
+		})
+	},
+
 	list: function(){
 
 		$('#cd-detailed .clear').clear(LOCAL[25]);
@@ -284,6 +331,7 @@ var Client = {
 		var table = $('#cd-list tbody').empty();
 
 		for(var client in Client.all){
+
 			var data = Client.all[client],
 				tr = $('<tr>', {id: 'cb-' + client}).append(
 				$('<td>').text(data.first_name),
@@ -294,7 +342,6 @@ var Client = {
 		}
 
 		table.trigger('update');
-
 	},
 
 	newClient: function(){
@@ -302,10 +349,10 @@ var Client = {
 		var form = this,
 			param = form.serializeObject();
 
-		popup('loading', 21);
+		TM.popup('loading', 21);
 
 		Api.send('Client', 'newclient', param, function(res){
-			popup('success', 22);
+			TM.popup('success', 22);
 			form[0].reset();
 			Client.addClient(res[0]);
 
@@ -313,10 +360,11 @@ var Client = {
 
 			Client.details.apply(Client.getClientTr(id)[0]);
 
-			if(form.data('new-meet')){
-				$('#client_id').selectOption('val', id);
-				return changeTab.apply($('[tab=table-time]'));
-				$('#new-meeting').show();
+			var data = form.data('new-meet');
+
+			if(data instanceof tableTime){
+				data.ELEM.find('.clients-list').selectOption('val', id);
+				return TM.changeTab.apply(data.menuTab);
 			}
 
 			$(clients).accordion('option', 'active', 3);
@@ -362,11 +410,11 @@ var Client = {
 
 		Api.confirm(40, LOCAL[56].replace('%1', title), function(){
 
-			popup('loading', 57);
+			TM.popup('loading', 57);
 
 			Api.send('Client', 'remove', {id: id}, function(){
 
-				popup('success', 58);
+				TM.popup('success', 58);
 
 				delete Client.all[id];
 
@@ -403,10 +451,10 @@ var Client = {
 
 		var param = this.serializeObject();
 
-		popup('loading', 51);
+		TM.popup('loading', 51);
 
 		Api.send('Client', 'search', param, function(res){
-			popup();
+			TM.popup();
 			$('.search-results').show();
 			$(clients).accordion('option', 'active', 2);
 

@@ -1,9 +1,17 @@
-var Agenda = {
+'use strict';
 
-	addBarPart: function(data){
+var Agenda = function(TABLE_TIME){
 
-		var topStart = tableTime.getPartTop(data.starttime),
-			topEnd = tableTime.getPartTop(data.endtime),
+	var self = this;
+
+	this.days = {};
+
+	this.special = {};
+
+	this.addBarPart = function(data){
+
+		var topStart = TABLE_TIME.getPartTop(data.starttime),
+			topEnd = TABLE_TIME.getPartTop(data.endtime),
 			height = topEnd - topStart;
 
 		var part = $('<div>', {'class': 'ab-part', title: data.title});
@@ -23,17 +31,17 @@ var Agenda = {
 		})
 
 		part.resizable({
-			grid: tableTime.pHeight,
+			grid: TABLE_TIME.pHeight,
 			handles: 'n, s',
 			stop: function(){
-				Agenda.addSpecial.call(this, 'Size');
+				self.addSpecial.call(this, 'Size');
 			}
 		})
 
 		part.draggable({
 			containment: '#tt-hours',
 			stop: function(){
-				Agenda.addSpecial.call(this, 'Position');
+				self.addSpecial.call(this, 'Position');
 			}
 		})
 
@@ -42,27 +50,12 @@ var Agenda = {
 		if(data.isStatic)
 			part.addClass('agenda-static');
 
-		$('#agenda-bar').append(part);
-	},
+		TABLE_TIME.ELEM.find('#agenda-bar').append(part);
+	}
 
-	addListPart: function(data){
+	this.addSpecial = function(type){
 
-		var tr = $('<tr>').append(
-			$('<td>', {'class': 'td-range tahoma'}).width('37%').text(data.starttime.toRealTime() + ' - ' + data.endtime.toRealTime()),
-			$('<td>').width('9%').html($('<span>', {'class': 'ui-icon ui-icon-arrowthick-1-w'})),
-			$('<td>', {'class': 'td-title'}).width('54%').text(data.title)
-		)
-
-		tr.click(function(){
-			tableTime.scrollToTime(data.starttime);
-		})
-
-		$('#today-agenda').append(tr);
-	},
-
-	addSpecial: function(type){
-
-		var params = tableTime['getTimeBy' + type].apply(this),
+		var params = TABLE_TIME['getTimeBy' + type].apply(this),
 			elem = $(this),
 			data = elem.data('meeting'),
 			title = elem.attr('title'),
@@ -71,25 +64,25 @@ var Agenda = {
 			isFree = true;
 
 		if(prevData){
-			var prevend = getMultiObj(prevData, ['meeting', 'endtime']);
+			var prevend = TM.getMultiObj(prevData, ['meeting', 'endtime']);
 			if(params.starttime < prevend)
 				isFree = false;
 		}
 
 		if(nextData){
-			var nextstart = getMultiObj(nextData, ['meeting', 'starttime']);
+			var nextstart = TM.getMultiObj(nextData, ['meeting', 'starttime']);
 			if(params.endtime > nextstart)
 				isFree = false;
 		}
 
 		if(! isFree){
-			Agenda.resetPos.call(elem, type);
-			return popup('error', 15);
+			self.resetPos.call(elem, type);
+			return TM.popup('error', 15);
 		}
 
 		var copy = $.extend({}, params);
 
-		params.date = tableTime.strDate;
+		params.date = TABLE_TIME.strDate;
 		params.original = data.id;
 		params.starttime = params.starttime.toRealTime();
 		params.endtime = params.endtime.toRealTime();
@@ -101,57 +94,48 @@ var Agenda = {
 			$('<div>').text(LOCAL[62].replace('%1', title)),
 			$('<div>').text(LOCAL[31] + ': ' + params.starttime),
 			$('<div>').text(LOCAL[32] + ': ' + params.endtime)
-		);
+		)
 
 		Api.confirm(40, message, function(){
 
-			popup('loading', 12);
+			TM.popup('loading', 12);
 
-			Api.send('Agenda', data.special ? 'updatespecial' : 'addspecial', params, function(res){
+			TABLE_TIME.apiRequest('Agenda', data.special ? 'updatespecial' : 'addspecial', params, function(res){
 
-				Config.agenda.special[params.date] = res[0][params.date];
-				Agenda.writeData();
-				Agenda.applyChanges();
+				self.special[params.date] = res[0][params.date];
+				self.writeData();
+				self.applyChanges();
 
-				var misses = Agenda.checkMissMeet(data, copy);
+				var misses = self.checkMissMeet(data, copy);
 
 				if(! misses.length)
-					return popup('success', 13);
+					return TM.popup('success', 13);
 
-				popup();
+				TM.popup();
 
-				Task.filterMeets(misses, LOCAL[74], function(ids){
+				TABLE_TIME.Task.filterMeets(misses, LOCAL[74], function(ids){
 					if(ids.length)
-						Task.removeTask(ids);
+						TABLE_TIME.Task.removeTask(ids);
 				})
 
-				$('#fm-multi-check').multiCheck(true);
+				TABLE_TIME.ELEM.find('#fm-multi-check').multiCheck(true);
 			})
 		}, function(){
-			Agenda.resetPos.call(elem, type);
+			self.resetPos.call(elem, type);
 		})
-	},
+	}
 
-	applyChanges: function(){
+	this.applyChanges = function(){
 
-		var agenda = Agenda.getDay();
+		var agenda = self.getDay();
 
-		$('#today-agenda').empty().clear(LOCAL[30]);
-		$('#agenda-bar').empty();
+		TABLE_TIME.ELEM.find('#agenda-bar').empty();
 
-		if(agenda[0])
-			$('#today-agenda').unClear();
+		for(var a in agenda)
+			self.addBarPart(self.parseData(agenda[a]));
+	}
 
-		for(var a in agenda){
-
-			var data = Agenda.parseData(agenda[a]);
-
-			Agenda.addBarPart(data);
-			Agenda.addListPart(data);
-		}
-	},
-
-	boardRegister: function(data){
+	this.boardRegister = function(data){
 
 		var blockStart = new Date(data.starttime),
 			blockEnd = new Date(data.endtime);
@@ -159,15 +143,15 @@ var Agenda = {
 		blockStart.setMinutes(blockStart.getMinutes() + - data.blockbefore);
 		blockEnd.setMinutes(blockEnd.getMinutes() + + data.blockafter);
 
-		VBoard.setRangeData(data.starttime, data.endtime, {agenda: {tasktype: data.tasktype, index: data.index, isStatic: data.isStatic}});
-		VBoard.setRangeData(blockStart, data.starttime, {agenda: {blockbefore: data.tasktype}});
-		VBoard.setRangeData(data.endtime, blockEnd, {agenda: {blockafter: data.tasktype}});
-	},
+		TABLE_TIME.VBoard.setRangeData(data.starttime, data.endtime, {agenda: {tasktype: data.tasktype, index: data.index, isStatic: data.isStatic}});
+		TABLE_TIME.VBoard.setRangeData(blockStart, data.starttime, {agenda: {blockbefore: data.tasktype}});
+		TABLE_TIME.VBoard.setRangeData(data.endtime, blockEnd, {agenda: {blockafter: data.tasktype}});
+	}
 
-	checkMissMeet: function(before, after){
+	this.checkMissMeet = function(before, after){
 
-		var beforeRange = VBoard.getRangeTime(before.starttime, before.endtime),
-			afterRange = VBoard.getRangeTime(after.starttime, after.endtime);
+		var beforeRange = TABLE_TIME.VBoard.getRangeTime(before.starttime, before.endtime),
+			afterRange = TABLE_TIME.VBoard.getRangeTime(after.starttime, after.endtime);
 
 		var misses = [];
 
@@ -183,25 +167,22 @@ var Agenda = {
 		}
 
 		return misses;
-	},
+	}
 
-	getAll: function(callback){
+	this.getAll = function(callback){
 
-		if(! Config.agenda)
-			Config.agenda = {special: {}};
-
-		Api.send('Agenda', 'getall', function(res){
-			Config.agenda.days = res[0];
+		TABLE_TIME.apiRequest('Agenda', 'getall', function(res){
+			self.days = res[0];
 			callback();
 		})
-	},
+	}
 
-	getDay: function(){
-		var date = tableTime.date,
+	this.getDay = function(){
+		var date = TABLE_TIME.date,
 			strDate = date.toLocaleDateString(),
 			day = date.getDay(),
-			days = Config.agenda.days,
-			specials = Config.agenda.special[strDate],
+			days = self.days,
+			specials = self.special[strDate],
 			agenda = [];
 
 		for(var d in days)
@@ -221,20 +202,20 @@ var Agenda = {
 			}
 
 		return agenda;
-	},
+	}
 
-	getSpecial: function(callback){
-		var strDate = tableTime.strDate;
+	this.getSpecial = function(callback){
+		var strDate = TABLE_TIME.strDate;
 
-		Api.send('Agenda', 'getspecial', {date: strDate}, function(res){
-			Config.agenda.special[strDate] = res[0][strDate];
+		TABLE_TIME.apiRequest('Agenda', 'getspecial', {date: strDate}, function(res){
+			self.special[strDate] = res[0][strDate];
 			callback();
 		})
-	},
+	}
 
-	parseData: function(agendaPart){
+	this.parseData = function(agendaPart){
 
-		var date = tableTime.date,
+		var date = TABLE_TIME.date,
 			starttime = new Date(date).setTextTime(agendaPart.starttime),
 			endtime = new Date(date).setTextTime(agendaPart.endtime),
 			title = Config.tasktypes[agendaPart.tasktype].title;
@@ -250,15 +231,15 @@ var Agenda = {
 		}
 
 		return $.extend({}, agendaPart, data);
-	},
+	}
 
-	refresh: function(){
-		Agenda.getSpecial(function(){
-			Agenda.writeData();
+	this.refresh = function(){
+		self.getSpecial(function(){
+			self.writeData();
 		})
-	},
+	}
 
-	resetPos: function(type){
+	this.resetPos = function(type){
 
 		var isDrag = type == 'Position',
 			data = this.data('ui-' + (isDrag ? 'draggable' : 'resizable')),
@@ -268,23 +249,23 @@ var Agenda = {
 			css.height = data.originalSize.height;
 
 		this.css(css);
-	},
+	}
 
-	writeData: function(){
+	this.writeData = function(){
 
-		var agenda = Agenda.getDay();
+		var agenda = self.getDay();
 
-		VBoard.reset(tableTime.date, 'agenda');
+		TABLE_TIME.VBoard.reset(TABLE_TIME.date, 'agenda');
 
 		for(var a in agenda){
 
-			var data = Agenda.parseData(agenda[a]);
+			var data = self.parseData(agenda[a]);
 
 			data.index = a;
 
-			Agenda.boardRegister(data);
+			self.boardRegister(data);
 		}
 
-		tableTime.advanceReady();
+		TABLE_TIME.advanceReady();
 	}
 }

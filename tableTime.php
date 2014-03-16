@@ -1,4 +1,5 @@
-<div id="table-time">
+<div class="table-time">
+	<img class="calendar-icon cmd-icon" src="media/Calendar-icon.png" title="<?=$LOCAL[0]?>">
 	<div id="tt-head" class="ui-widget-header ui-corner-all">
 		<div id="tt-head-prev" class="ui-corner-all ui-datepicker-prev" title="<?=$LOCAL[12]?>">
 			<span class="ui-icon ui-icon-circle-triangle-e"></span>
@@ -56,7 +57,7 @@
 					<td class="form-label"><?=$LOCAL[10]?>:</td>
 					<td colspan="3">
 						<div id="nm-add-client" class="ui-icon ui-icon-plus cmd-icon" title="<?=$LOCAL[19]?>"></div>
-						<select name="client_id" id="client_id"></select>
+						<select name="client_id" class="clients-list"></select>
 					</td>
 				</tr>
 				<tr>
@@ -84,51 +85,4 @@
 			<button class="ui-state-default"><?=$LOCAL[69]?></button>
 		</div>
 	</div>
-</div>
-<div id="tt-templates" class="templates">
-	<div class="tt-meeting">
-		<div class="ttm-wrapper auto-center">
-			<div class="ttm-time"></div>
-			<div class="ttm-title"></div>
-			<div class="ttm-client"></div>
-		</div>
-		<div class="ttm-close ui-icon ui-icon-close cmd-icon" title="<?=$LOCAL[33]?>"></div>
-	</div>
-	<div id="sm-message">
-		<p><?=$LOCAL[34]?></p>
-		<div class="sm-option">
-			<input type="radio" name="sm-action" id="sms-1">
-			<label for="sms-1">
-				<div></div>
-				<span><?=$LOCAL[37]?></span>
-			</label>
-		</div>
-		<div class="sm-option">
-			<input type="radio" name="sm-action" id="sms-2">
-			<label for="sms-2">
-				<div></div>
-				<span><?=$LOCAL[36]?></span>
-			</label>
-		</div>
-		<div class="sm-option">
-			<input type="radio" name="sm-action" id="sms-3">
-			<label for="sms-3">
-				<div></div>
-				<span><?=$LOCAL[35]?></span>
-			</label>
-		</div>
-	</div>
-	<div id="mm-picker">
-		<label for="mm-input"><?=$LOCAL[38]?>:</label>
-		<input id="mm-input">
-	</div>
-	<table id="fm-tr">
-		<tr>
-			<td>
-				<input type="checkbox" class="auto-center">
-			</td>
-			<td class="fm-time"></td>
-			<td class="fm-title"></td>
-		</tr>
-	</table>
 </div>

@@ -1,145 +1,5 @@
 'use strict';
 
-function showDateTime(){
-
-	var date = new Date();
-
-	$('#dt-day').text(date.getFullHeDay());
-	$('#dt-date').text(date.getFullHeMonth() + ' ' + date.getFullYear());
-
-	var time = $('#dt-time');
-
-	if(time.text() == '23:59:59' && ! date.getHours())
-		tableTime.next();
-
-	time.text(date.toLocaleTimeString());
-
-}
-
-function changeTab(){
-	$('.menu-tab.active').removeClass('active');
-	$(this).addClass('active');
-
-	var tab = $(this).attr('tab');
-
-	$('.ac-tab').hide().css('z-index', 0);
-	$('.ac-tab[tab=' + tab + ']').show().css('z-index', 1);
-
-	$('#new-client').data('new-meet', arguments[0] == 'new-meet');
-
-	if(tab == 'client' && ! $(clients).data('ui-accordion')){
-
-		var options = {
-			active: 3,
-			beforeActivate: function(){
-				if(arguments[1].newHeader.index('h4') != 2)	
-					$('.search-results').hide();
-			}
-		}
-
-		$(clients).accordion($.extend(Config.accordion, options))
-
-		$('.search-results').hide();
-
-		$('#cd-list').tableScroll(392).tablesorter({sortList: [[0,0]]});
-
-		$('.ts-head th').on('click', function(){
-			var index = $(this).index('.ts-head th');
-			$('#cd-list th').eq(index).click();
-		})
-	}
-}
-
-function popup(type, text){
-
-	var elem = $('#popup');
-
-	if(! type)
-		return elem.hide();
-
-	elem.stop(true);
-
-	text = LOCAL[text] || text;
-
-	if(type == 'loading')
-		text += '...';
-
-	elem.removeClass().addClass(type).show().position({of: '#appcenter', at: 'center top+100'});
-
-	$('#popup-title').text(text);
-
-	if(type != 'loading')
-		elem.delay(2000).fadeOut();
-}
-
-function sortObjects(array, by){
-	array.sort(function(a, b){
-		return a[by] < b[by] ? -1 : a[by] > b[by] ? 1 : 0;
-	})
-}
-
-function addMultiObj(obj, keys, value){
-
-	var firstKey = keys.splice(0, 1);
-
-	if(typeof obj[firstKey] == 'object')
-		obj[firstKey] = addMultiObj(obj[firstKey], keys, value);
-	else
-		obj[firstKey] = value;
-
-	return obj;
-}
-
-function getMultiObj(obj, keys, wanted){
-
-	var firstKey = keys.shift();
-
-	if(typeof obj[firstKey] == 'object' && keys.length)
-		return getMultiObj(obj[firstKey], keys, wanted || keys.slice(keys.length - 1));
-	else
-		return firstKey == wanted ? obj[firstKey] : null;
-}
-
-var dialog = {
-
-	close: function(){
-		dialog.elem.dialog('destroy');
-	},
-
-	elem: $('#ac-dialog'),
-
-	show: function(custom){
-
-		var defaultButton = {};
-
-		defaultButton[LOCAL[17]] = function(){};
-
-		var options = {
-			beforeClose: function(){
-				$('.ui-selected').removeClass('ui-selected');
-				var cancel = $('.ui-dialog .ui-dialog-buttonset button:contains(' + LOCAL[18] + ')');
-				if(cancel.length){
-					cancel.click();
-					return false;
-				}
-			},
-			buttons: defaultButton,
-			closeText: LOCAL[14],
-			draggable: false,
-			modal: true,
-			position: {of: '#appcenter'},
-			resizable: false
-		}
-
-		if(custom){
-			options = $.extend(options, custom);
-			dialog.elem.children('p').html(custom.content);
-		}
-
-		dialog.elem.dialog(options);
-	}
-}
-
 $.fn.serializeObject = function(){
 
 	var arrData = this.serializeArray(),
@@ -204,7 +64,7 @@ $.fn.validate = function(){
 	for(var r in res)
 		return res;
 
-	return isEmpty ? popup('error', 53) : true;
+	return isEmpty ? TM.popup('error', 53) : true;
 }
 
 var orgShow = $.fn.show;
@@ -303,7 +163,7 @@ $.fn.addData = function(keys, value){
 }
 
 $.fn.getData = function(keys){
-	return getMultiObj(this.data(), keys);
+	return TM.getMultiObj(this.data(), keys);
 }
 
 $.fn.selectOption = function(type, value){

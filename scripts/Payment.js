@@ -51,10 +51,10 @@ var Payment = function(CLIENT){
 
 		params.client = CLIENT;
 
-		popup('loading', 66);
+		TM.popup('loading', 66);
 
 		Api.send('Payment', 'addpayment', params, function(){
-			popup('success', 67);
+			TM.popup('success', 67);
 			form[0].reset();
 			self.reset();
 			self.payments = [];
@@ -159,10 +159,10 @@ var Payment = function(CLIENT){
 		
 			var id = self.editId;
 
-			popup('loading', 57);
+			TM.popup('loading', 57);
 
 			Api.send('Payment', 'removepayment', {id: id}, function(){
-				popup('success', 70);
+				TM.popup('success', 70);
 				self.payments.splice(self.editIndex, 1);
 				self.addToTable();
 			})
@@ -222,10 +222,10 @@ var Payment = function(CLIENT){
 		params.client = CLIENT;
 		params.id = self.editId;
 
-		popup('loading', 12);
+		TM.popup('loading', 12);
 
 		Api.send('Payment', 'editpayment', params, function(res){
-			popup('success', 13);
+			TM.popup('success', 13);
 			self.addData(res[0]);
 			form.hide();
 		})

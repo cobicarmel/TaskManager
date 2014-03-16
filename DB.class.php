@@ -123,7 +123,7 @@ abstract class Database{
 		else
 			$where = "$column = '$values'";
 
-		return "where $where";
+		return $where;
 
 	}
 

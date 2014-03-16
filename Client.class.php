@@ -41,20 +41,20 @@ class Client{
 
 	private function getMultiData(){
 
-		foreach($this -> query as $client_id => $client_details){
+		$ids = array_keys($this -> query);
 
-			foreach($this -> multiData as $key => $params){
+		$where = Database::parseMultiWhere('client_id', $ids);
 
-				$data = $this -> output -> query("select id, $params[column] from $params[table] where client_id = $client_id");
+		foreach($this -> multiData as $key => $values){
 
-				$client_details[$key] = [];
+			$data = $this -> output -> query("select * from $values[table] where $where");
 
-				foreach($data as $k => $v)
-					$client_details[$key][$v['id']] = $v[$params['column']];
+			foreach($data as $item){
+				if(empty($this -> query[$item['client_id']][$key]))
+					$this -> query[$item['client_id']][$key] = [];
 
+				$this -> query[$item['client_id']][$key][$item['id']] = $item[$values['column']];
 			}
-
-			$this -> query[$client_id] = $client_details;
 		}
 	}
 
@@ -182,7 +182,7 @@ class Client{
 		$query = 'select * from Clients';
 
 		if($id)
-			$query .= ' ' . Database::parseMultiWhere('id', $id);
+			$query .= ' where ' . Database::parseMultiWhere('id', $id);
 
 		$query .= ' order by last_name, first_name';
 

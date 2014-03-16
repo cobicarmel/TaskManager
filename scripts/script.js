@@ -1,14 +1,16 @@
+'use strict';
+
 $(function(){
 
 	/** Scripts that starting after the page has been loaded **/
 
-	setInterval(showDateTime, 200);
+	setInterval(TM.showDateTime, 200);
 
-	changeTab.apply($('.menu-tab')[0]);
+	TM.changeTab.apply($('.menu-tab')[0]);
 
-	tableTime.createTable();
-
-	Agenda.getAll(tableTime.setDay);
+	$('.table-time').each(function(index){
+		TM.tableTimes.push(new tableTime($(this), index).init());
+	})
 
 	Client.getAll();
 
@@ -17,13 +19,7 @@ $(function(){
 		icons: {header: 'ui-icon-triangle-1-w'}
 	}
 
-	$('#calendar, #nm-date input').datepicker({onSelect: tableTime.setDay});
-
-	$('#tt-body').selectable({
-		filter: '#tt-body-overlay .tt-meeting',
-		delay: 100,
-		stop: tableTime.selectedMeets
-	})
+	$('#calendar').datepicker();
 
 	$('#search-clients').html(function(){
 		var form = $('#new-client').clone().attr('id', 'search-client');
@@ -58,17 +54,8 @@ $(function(){
 
 	/** Attaching Events **/
 
-	$('form').on('submit', function(e){
-
-		e.preventDefault();
-
-		var form = $(this),
-			valid = form.validate();
-
-		if(valid == true)
-			Api.perform[this.id].apply(form);
-		else if(typeof valid == 'object')
-			Api.validate.error(valid);
+	$('#clients form, #c-templates form').on('submit', function(e){
+		TM.submitForm.call(this, e, Client.apiActions(this.id));
 	})
 
 	$('.number').on('keydown', function(event){
@@ -94,13 +81,7 @@ $(function(){
 		}
 	)
 
-	$('.menu-tab').click(changeTab);
-
-	$('.tt-content-part').click(tableTime.newMeeting);
-
-	$('#tt-head-prev').click(tableTime.prev);
-
-	$('#tt-head-next').click(tableTime.next);
+	$('.menu-tab').click(TM.changeTab);
 
 	$('.cdt-tab').click(Client.changeTab);
 
@@ -126,21 +107,11 @@ $(function(){
 		$(this).toggleClass('ui-state-hover');
 	})
 
-	$('#starttime').on('change', function(){
-		$('#nm-start').text(this.value);
-		tableTime.setEndTime();
-	})
-
-	$('#nm-add-client').on('click', function(){
-		changeTab.call($('[tab=client]'), 'new-meet');
-		$(clients).accordion('option', 'active', 0);
-	})
-
 	/** Live events **/
 
 	$('#cd-basic tbody').on('click', 'tr', Client.details);
 
-	$(document).on('click', '.ui-dialog-buttonset button', dialog.close);
+	$(document).on('click', '.ui-dialog-buttonset button', TM.dialog.close);
 
 	$('form').on('keyup', '.area-phone', function(){
 		if(this.value.length == 3 || this.value.length == 2 && /^0[2-4,8-9]$/.test(this.value))
