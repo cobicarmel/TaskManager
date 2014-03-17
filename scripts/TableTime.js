@@ -474,9 +474,9 @@ var tableTime = function(ELEM, INDEX){
 	}
 
 	this.templates = {
-		smMessage: ELEM.find('#sm-message'),
-		mmPicker: ELEM.find('#mm-picker'),
-		fmTr: ELEM.find('#fm-tr tr')
+		smMessage: $('#sm-message'),
+		mmPicker: $('#mm-picker'),
+		fmTr: $('#fm-tr tr')
 	}
 
 	this.typeCare = function(type, fn){

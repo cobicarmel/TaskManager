@@ -119,3 +119,8 @@ button:active{
 	width: 30px;
 	right: 375px;
 }
+#login-failed{
+	color: red;
+	font-size: 12px;
+	text-indent: 10px;
+}

@@ -6,10 +6,9 @@ $(function(){
 
 	setInterval(TM.showDateTime, 200);
 
-	TM.changeTab.apply($('.menu-tab')[0]);
-
-	$('.table-time').each(function(index){
-		TM.tableTimes.push(new tableTime($(this), index).init());
+	$($('.table-time').get().reverse()).each(function(index){
+		var elem = $(this);
+		TM.tableTimes.unshift(new tableTime(elem, elem.index('.table-time')).init());
 	})
 
 	Client.getAll();
@@ -18,8 +17,6 @@ $(function(){
 		heightStyle: 'content',
 		icons: {header: 'ui-icon-triangle-1-w'}
 	}
-
-	$('#calendar').datepicker();
 
 	$('#search-clients').html(function(){
 		var form = $('#new-client').clone().attr('id', 'search-client');
@@ -48,9 +45,13 @@ $(function(){
 		return form;
 	})
 
-	$('.p-date, #cdp-reports input').datepicker();
+	$('#calendar, .p-date, #cdp-reports input').datepicker();
 
 	$('#fm-multi-check').multiCheck('#filter-meets tbody input');
+
+	$('#settings-toolbar').buttonset({icons: {primary: 'ui-icon-gear'}});
+
+	Settings.navAgenda.setActive();
 
 	/** Attaching Events **/
 
@@ -85,15 +86,19 @@ $(function(){
 
 	$('.cdt-tab').click(Client.changeTab);
 
+	$('#settings-toolbar label').click(Settings.changeTab);
+
 	$('#cdd-remove').click(Client.remove);
 
 	$('#cdd-remove').click(Client.remove);
 	
-	$('.cn-arrows .ui-icon').click(Client.browsePayment);
+	$('#cdp-navigate .ui-icon').click(Client.browsePayment);
 
 	$('.cdc-right .cmd-icon').click(Client.addItem);
 
 	$('#cr-print button').click(Client.printReport);
+
+	$('.nav-arrows-wrap div').click(Settings.navAgenda.navigate);
 
 	$('#cai-close').click(function(){
 		$('#c-add-item').hide();
@@ -122,4 +127,5 @@ $(function(){
 
 	Client.copyForm = $('#edit-client').clone(true);
 
+	$('#settings-toolbar label:first').click();
 })

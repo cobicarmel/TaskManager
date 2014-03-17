@@ -1,5 +1,4 @@
 <?
-
 require '../local/detect.lib.php';
 
 $lang = detectLang();
@@ -29,6 +28,9 @@ require "local/$lang.php";
 						<label data-icon="p"><?=$LOCAL[3]?>:</label>
 						<input name="upass" required type="password" placeholder="<?=$LOCAL[6]?>">
 					</p>
+					<?if(isset($_GET['login_attempt'])){?>
+						<div id="login-failed"><?=$LOCAL[7]?></div>
+					<?}?>
 					<p>
 						<input  id="keep-login" type="checkbox" name="loginkeeping">
 						<label for="keep-login"><?=$LOCAL[4]?></label>

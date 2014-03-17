@@ -99,7 +99,10 @@ var TM = {
 
 	sortObjects: function(array, by){
 		array.sort(function(a, b){
-			return a[by] < b[by] ? -1 : a[by] > b[by] ? 1 : 0;
+			var Avalue = TM.getMultiObj(a, by),
+				Bvalue = TM.getMultiObj(b, by);
+
+			return Avalue < Bvalue ? -1 : Avalue > Bvalue ? 1 : 0;
 		})
 	},
 
@@ -117,10 +120,12 @@ var TM = {
 
 	getMultiObj: function(obj, keys, wanted){
 
-		var firstKey = keys.shift();
+		var firstKey = keys[0],
+			otherKeys = keys.slice(1),
+			lastKey = keys.slice(keys.length - 1);
 
-		if(typeof obj[firstKey] == 'object' && keys.length)
-			return TM.getMultiObj(obj[firstKey], keys, wanted || keys.slice(keys.length - 1));
+		if(typeof obj[firstKey] == 'object' && otherKeys.length)
+			return TM.getMultiObj(obj[firstKey], otherKeys, wanted || lastKey);
 		else
 			return firstKey == wanted ? obj[firstKey] : null;
 	},
@@ -159,7 +164,7 @@ var TM = {
 			elem.unClear();
 
 		soon.splice(Config.default.soon_mount);
-		TM.sortObjects(soon, 'start');
+		TM.sortObjects(soon, ['start', 'date']);
 
 		for(var i in soon){
 
@@ -204,9 +209,11 @@ var TM = {
 				$('<td>', {'class': 'td-title'}).width('54%').text(data.title)
 			)
 
-			tr.click(function(){
-				TM.tableTimes[0].scrollToTime(data.starttime);
-			})
+			tr.click(function(starttime){
+				return function(){
+					TM.tableTimes[0].scrollToTime(starttime);
+				}
+			}(data.starttime))
 
 			board.append(tr);
 		}

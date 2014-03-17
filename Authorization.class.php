@@ -58,11 +58,9 @@ class Authorization{
 		setcookie($this -> cookies['password'], $this -> encodeCookie($password), $time, $path);
 	}
 
-	function createAuth($path){
+	function createAuth(){
 		$password = $this -> cryptPass($_POST[$this -> cookies['password']]);
-		$this -> setCookies($_POST[$this -> cookies['username']], $password, $path);
-		header("location: $path");
-		exit;
+		$this -> setCookies($_POST[$this -> cookies['username']], $password, APP_BASE);
 	}
 
 	function detectUser(){
@@ -79,7 +77,6 @@ class Authorization{
 
 	function logout(){
 		foreach($_COOKIE as $key => $value)
-			setcookie($key, null, time());
+			setcookie($key, null, time(), APP_BASE);
 	}
-
 }

@@ -383,7 +383,7 @@ var Task =  function(TABLE_TIME){
 						$('<div>').text(LOCAL[32] + ': ' + endtime.toRealTime())
 					);
 
-				if(data['meeting']['starttime'] == starttime && data['meeting']['endtime'] == endtime)
+				if(data['meeting']['starttime'].toRealTime() == starttime.toRealTime() && data['meeting']['endtime'].toRealTime() == endtime.toRealTime())
 					return;
 
 				Api.confirm(40, message, function(){

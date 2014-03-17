@@ -10,8 +10,6 @@ $default = [];
 foreach($query as $set)
 	$default[$set['name']] = $set['value'];	
 
-$json = ['מערכת שעות', 'רופאים'];
-
 $default['table_times'] = json_decode($default['table_times'], true);
 
 $config = [
@@ -43,17 +41,20 @@ $config = [
 		</div>
 		<?foreach($default['table_times'] as $i => $title){?>
 			<div class="ac-tab" tab="table-time-<?=$i?>">
-				<?require 'tableTime.php';?>
+				<?require 'TableTime.php';?>
 			</div>
 		<?}?>
 		<div class="ac-tab" tab="client">
 			<?require 'Client.php';?>
 		</div>
+		<div class="ac-tab" tab="settings">
+			<?require 'Settings.php';?>
+		</div>
 		<div id="popup">
 			<div id="popup-img"></div>
 			<div id="popup-title"></div>
 		</div>
-		<?require 'tt-templates.php'?>
+		<?require 'Templates.php'?>
 	</div>
 	<div id="appside">
 		<?require 'appSide.php';?>
@@ -72,6 +73,7 @@ $config = [
 <script src="scripts/TableTime.js"></script>
 <script src="scripts/Client.js"></script>
 <script src="scripts/Payment.js"></script>
+<script src="scripts/Settings.js"></script>
 <script src="scripts/Api.js"></script>
 <script src="scripts/jquery-plugins.js"></script>
 <script src="scripts/TaskManager.js"></script>

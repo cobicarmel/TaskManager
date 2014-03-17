@@ -28,5 +28,5 @@
 	<?}?>
 	<div class="menu-tab" tab="client"><?=$LOCAL[2]?></div>
 	<div class="menu-tab" tab=""><?=$LOCAL[50]?></div>
-	<div class="menu-tab"><?=$LOCAL[3]?></div>
+	<div class="menu-tab" tab="settings"><?=$LOCAL[3]?></div>
 </div>

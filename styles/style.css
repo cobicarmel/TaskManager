@@ -84,7 +84,7 @@ form tr {
 .tahoma{
 	font-family: Conv_Tahoma;
 }
-.templates, #ac-dialog, .sm-option input{
+#templates, #ac-dialog, .sm-option input{
 	display: none;
 }
 .abs-form{
@@ -619,23 +619,22 @@ form tr {
 #cdp-navigate{
 	height: 9%;
 	box-shadow: 1px 1px 7px 1px #A5BECF;
-	padding: 0 5px;
 }
-#cdp-navigate div{
+.navigate-box > div{
 	float: right;
 	height: 100%;
 }
-#cdp-navigate .ui-icon{
+.navigate-box .ui-icon{
 	cursor: pointer;
-	display: none;
+	/* display: none; */
 }
 #cn-total {
-	width: 88.9%;
 	font-size: 13px;
 	color: green;
 }
-.cn-arrows {
-	width: 16px;
+.nav-arrows-wrap {
+	width: 5.5%;
+	position: relative;
 }
 #api-error{
 	position: absolute;
@@ -874,7 +873,90 @@ form tr {
 #mm-picker span{
 	margin-right: 20px;
 }
-#mm-input {
+#mm-input{
 	direction: ltr;
 	width: 35px;
+}
+#settings{
+	height: 100%;
+}
+#settings-toolbar label{
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	border-bottom: none;
+}
+#settings-toolbar span{
+	padding: 1em 1.3em;
+}
+#settings-toolbar{
+	text-align: right;
+}
+#settings-body{
+	height: 90%;
+	width: 99.3%;
+	border-top: 1px solid #aed0ea;
+}
+#settings-body > div{
+	width: 100%;
+	height: 100%;
+	display: none;
+}
+.navigate-box{
+	padding: 0 5px;
+}
+.nav-center{
+	width: 88.9%;	
+}
+#set-agenda-nav{
+	height: 9%;
+}
+#san-title{
+	font-size: 30px;
+	color: #2779aa;
+	line-height: 1.5;
+}
+#set-agenda-body{
+	height: 88%;
+	margin: 10px;
+	position: relative;
+	overflow: hidden;
+}
+.sab-system{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	right: 100%;
+}
+.sab-system:first-child{
+	right: 0;
+}
+.ss-day{
+	text-align: right;
+	height: 11.7%;
+	margin: 10px;
+	background-color: rgba(255, 255, 255, .6);
+	padding: 0 10px;
+	border-radius: 6px;
+	border: 1px solid rgb(226, 226, 226);
+}
+.ss-day > div{
+	height: 100%;
+	float: right;
+}
+.ss-title{
+	width: 10%;
+	line-height: 3;
+	color: #6495ED;
+	font-weight: bold;
+	font-size: 18px;
+}
+.ss-hours{
+	width: 82%;
+}
+.ss-add{
+	width: 8%;
+	position: relative;
+}
+.ss-add div{
+	cursor: pointer;
 }
