@@ -45,7 +45,7 @@
 		</tr>
 	</table>
 	<div id="c-add-item">
-		<div id="cai-close" class="ui-icon ui-icon-close" title="<?=$LOCAL[14]?>"></div>
+		<div class="ui-icon ui-icon-close f-close" title="<?=$LOCAL[14]?>"></div>
 		<div id="cai-title"></div>
 		<form id="cai-form">
 			<div id="cai-inputs"></div>
@@ -83,4 +83,58 @@
 		</div>
 		<button class="ui-state-default"><?=$LOCAL[65]?></button>
 	</div>
+	<div class="ss-part">
+		<div class="ui-icon ui-icon-close cmd-icon" title="<?=$LOCAL[46]?>"></div>
+		<div class="sp-title"></div>
+		<div class="sp-time tahoma"></div>
+	</div>
+	<div id="agenda-edit">
+		<div class="ui-icon ui-icon-close f-close" title="<?=$LOCAL[14]?>"></div>
+		<form>
+			<table>
+				<tr>
+					<td><?=$LOCAL[4]?>:</td>
+					<td>
+						<select id="ae-starttime" name="starttime" required></select>
+					</td>
+				</tr>
+				<tr>
+					<td><?=$LOCAL[5]?>:</td>
+					<td>
+						<select id="ae-endtime" name="endtime" required></select>
+					</td>
+				</tr>
+				<tr>
+					<td><?=$LOCAL[80]?>:</td>
+					<td>
+						<select id="ae-taskgroup" name="tasktype" required></select>
+					</td>
+				</tr>
+				<tr>
+					<td><?=$LOCAL[81]?>:</td>
+					<td>
+						<select id="ae-static" name="static" required>
+							<option></option>
+							<option value="0"><?=$LOCAL[83]?></option>
+							<option value="1"><?=$LOCAL[82]?></option>
+						</select>
+					</td>
+				</tr>
+			</table>
+			<button class="ui-state-default"></button>
+		</form>
+	</div>
+	<table id="set-tt-tr">
+		<tr>
+			<td class="stt-title"></td>
+			<td class="stt-place"></td>
+			<td class="stt-duration tahoma"></td>
+			<td>
+				<div class="fa fa-pencil" title="<?=$LOCAL[88]?>"></div>
+			</td>
+			<td>
+				<div class="fa fa-times" title="<?=$LOCAL[46]?>"></div>
+			</td>
+		</tr>
+	</table>
 </div>

@@ -1,5 +1,4 @@
 <div class="table-time">
-	<img class="calendar-icon cmd-icon" src="media/Calendar-icon.png" title="<?=$LOCAL[0]?>">
 	<div id="tt-head" class="ui-widget-header ui-corner-all">
 		<div id="tt-head-prev" class="ui-corner-all ui-datepicker-prev" title="<?=$LOCAL[12]?>">
 			<span class="ui-icon ui-icon-circle-triangle-e"></span>
@@ -83,6 +82,14 @@
 				<tbody></tbody>
 			</table>
 			<button class="ui-state-default"><?=$LOCAL[69]?></button>
+		</div>
+	</div>
+	<div id="tt-toolbar-wrapper">
+		<div id="tt-toolbar">
+			<div id="ttt-toggle" class="fa fa-angle-up"></div>
+			<ul>
+				<li class="fa fa-calendar-o" title="<?=$LOCAL[0]?>"></li>
+			</ul>
 		</div>
 	</div>
 </div>

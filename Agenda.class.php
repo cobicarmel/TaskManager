@@ -12,6 +12,13 @@ class Agenda{
 		}
 	}
 
+	function addAgenda(){
+
+		$this -> input -> query('insert', 'agenda', $_POST);
+
+		$this -> getAll();
+	}
+
 	function addSpecial(){
 
 		$this -> input -> query('insert', 'special', $_POST);
@@ -45,6 +52,13 @@ class Agenda{
 
 	}
 
+	function remove(){
+
+		$this -> input -> query('remove', 'agenda', null, "where id = $_POST[id]");
+
+		$this -> getAll();
+	}
+
 	function updateSpecial(){
 
 		$where = [
@@ -59,6 +73,13 @@ class Agenda{
 		$this -> input -> query('update', 'special', $_POST, " where $where");
 
 		$this -> getSpecial();
+	}
+
+	function updateAgenda(){
+
+		$this -> input -> query('update', 'agenda', $_POST, "where id = $_POST[id]");
+
+		$this -> getAll();
 	}
 
 }

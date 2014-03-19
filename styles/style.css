@@ -1,31 +1,31 @@
 @font-face {
-    font-family: 'Alef';
-    src: url('../fonts/Alef/Alef-Webfont/Alef-bold.eot');
-    src: url('../fonts/Alef/Alef-Webfont/Alef-bold.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/Alef/Alef-Webfont/Alef-bold.woff') format('woff'),
-         url('../fonts/Alef/Alef-Webfont/Alef-bold.ttf') format('truetype'),
-         url('../fonts/Alef/Alef-Webfont/Alef-bold.svg#alefbold') format('svg');
+    font-family: Alef;
+    src: url(../fonts/Alef/Alef-Webfont/Alef-bold.eot);
+    src: url(../fonts/Alef/Alef-Webfont/Alef-bold.eot?#iefix) format('embedded-opentype'),
+         url(../fonts/Alef/Alef-Webfont/Alef-bold.woff) format('woff'),
+         url(../fonts/Alef/Alef-Webfont/Alef-bold.ttf) format('truetype'),
+         url(../fonts/Alef/Alef-Webfont/Alef-bold.svg#alefbold) format('svg');
     font-weight: bold;
     font-style: normal;
 
 }
 @font-face {
-    font-family: 'Alef';
-    src: url('../fonts/Alef/Alef-Webfont/Alef-regular.eot');
-    src: url('../fonts/Alef/Alef-Webfont/Alef-regular.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/Alef/Alef-Webfont/Alef-regular.woff') format('woff'),
-         url('../fonts/Alef/Alef-Webfont/Alef-regular.ttf') format('truetype'),
-         url('../fonts/Alef/Alef-Webfont/Alef-regular.svg#alefregular') format('svg');
+    font-family: Alef;
+    src: url(../fonts/Alef/Alef-Webfont/Alef-regular.eot);
+    src: url(../fonts/Alef/Alef-Webfont/Alef-regular.eot?#iefix) format('embedded-opentype'),
+         url(../fonts/Alef/Alef-Webfont/Alef-regular.woff) format('woff'),
+         url(../fonts/Alef/Alef-Webfont/Alef-regular.ttf) format('truetype'),
+         url(../fonts/Alef/Alef-Webfont/Alef-regular.svg#alefregular) format('svg');
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
-	font-family: 'Conv_Tahoma';
-	src: url('../fonts/Tahoma/Tahoma.eot');
-	src: url('../fonts/Tahoma/Tahoma.eot?#iefix') format('embedded-opentype'),
-		 url('../fonts/Tahoma/Tahoma.woff') format('woff'),
-		 url('../fonts/Tahoma/Tahoma.ttf') format('truetype'),
-		 url('../fonts/Tahoma/Tahoma.svg') format('svg');
+	font-family: Tahoma;
+	src: url(../fonts/Tahoma/Tahoma.eot);
+	src: url(../fonts/Tahoma/Tahoma.eot?#iefix) format('embedded-opentype'),
+		 url(../fonts/Tahoma/Tahoma.woff) format('woff'),
+		 url(../fonts/Tahoma/Tahoma.ttf) format('truetype'),
+		 url(../fonts/Tahoma/Tahoma.svg) format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -82,7 +82,8 @@ form tr {
 	direction: ltr;
 }
 .tahoma{
-	font-family: Conv_Tahoma;
+	font-family: Tahoma;
+	font-size: 0.85em;
 }
 #templates, #ac-dialog, .sm-option input{
 	display: none;
@@ -102,6 +103,7 @@ form tr {
 	left: 0;
 	cursor: pointer;
 	display: block;
+	top: 0;
 }
 #app{
 	height: 620px;
@@ -166,12 +168,6 @@ form tr {
 .table-time{
 	height: 100%;
 }
-.table-time img{
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	z-index: 2;
-}
 #tt-head {
 	height: 7%;
 	line-height: 2.3;
@@ -197,6 +193,34 @@ form tr {
 	width: 97%;
 	z-index: 1;
 }
+#tt-toolbar-wrapper{
+	position: absolute;
+	width: 99.5%;
+}
+#tt-toolbar{
+	border-radius: 6px 6px 0 0;
+	width: 30%;
+	box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+	position: absolute;
+	left: 0;
+	right: 0;
+	margin: auto;
+	bottom: -4px;
+}
+#tt-toolbar .fa{
+	cursor: pointer;
+}
+#ttt-toggle{
+	font-size: 11px;
+	display: block;
+	height: 8px;
+	background-color: #FFF;
+	border-radius: 6px 6px 0 0;
+}
+#tt-toolbar ul{
+	display: none;
+	margin-top: 3px;
+}
 #agenda-bar{
 	width: 4px;
 	float: right;
@@ -209,16 +233,19 @@ form tr {
 	position: absolute;
 	background-color: rgb(116, 116, 206);
 	border-radius: 2px;
-	right: -14px;
+	right: -11px;
 }
 .agenda-static:before{
-	content: ' ';
+	content: ' - 'attr(title);
 	position: absolute;
 	right: 4px;
 	width: 671px;
 	height: 100%;
 	background: rgba(196, 118, 233, .1);
 	box-shadow: inset -1px 0px 15px rgba(0, 0, 0, 0.2);
+	text-align: right;
+	text-indent: 64px;
+	line-height: 1.5;
 }
 #tt-hours {
 	width: 98%;
@@ -448,10 +475,10 @@ form tr {
 }
 .data-table tbody tr{
 	background-color: #FFF;
-	cursor: pointer;
 }
-.data-table tbody tr:hover:not(.active){
+.editable tbody tr:hover{
 	background-color: #EBEBEB;
+	cursor: pointer;
 }
 .data-table th{
 	background-color: #e6EEEE;
@@ -518,25 +545,21 @@ form tr {
 	display: none;
 	height: 100%;
 }
-#c-add-item {
+#c-add-item, #agenda-edit{
 	position: absolute;
 	background: #fff;
 	padding: 5px;
 	box-shadow: 1px 2px 10px rgba(0,0,0, .3);
-	width: 76%;
 	border: 2px solid #B6B6FF;
-	right: 37px;
 	border-radius: 5px;
 	color: #3F4C6D;
 	font-size: 14px;
 }
-#cai-close {
-	position: absolute;
-	left: 0;
-	top: 0;
-	cursor: pointer;
+#c-add-item{
+	width: 76%;
+	right: 37px;
 }
-#cai-title {
+#cai-title{
 	text-align: right;
 	text-indent: 10px;
 	border-bottom: 1px solid #DFDFDF;
@@ -555,7 +578,7 @@ form tr {
 }
 #cd-blanks .data-table{
 	margin-top: 10px;
-	font-size: 13px;
+	font-size: 15px;
 }
 .cdc-data-box {
 	border: 1px solid #E0E0E0;
@@ -599,7 +622,7 @@ form tr {
 	height: 100%;
 }
 #clients input, #clients textarea{
-	font: 13px tahoma;
+	font: 13px Tahoma;
 }
 #cdp-new {
 	padding: 10px 6px 0;
@@ -762,14 +785,13 @@ form tr {
 }
 #today tr {
 	cursor: pointer;
+	font-size: 15px;
 }
 .td-title {
-	font-size: 14px;
 	line-height: 1.7;
 	color: #6464C0;
 }
 .td-range{
-	font-size: 13px;
 	color: #3F3F3F;
 }
 #menu{
@@ -938,9 +960,9 @@ form tr {
 	padding: 0 10px;
 	border-radius: 6px;
 	border: 1px solid rgb(226, 226, 226);
+	overflow: hidden;
 }
 .ss-day > div{
-	height: 100%;
 	float: right;
 }
 .ss-title{
@@ -952,11 +974,53 @@ form tr {
 }
 .ss-hours{
 	width: 82%;
+	height: 119%;
+	overflow-x: auto;
+	overflow-y: hidden;
+	white-space: nowrap;
 }
 .ss-add{
 	width: 8%;
+	height: 100%;
 	position: relative;
 }
 .ss-add div{
 	cursor: pointer;
+}
+.ss-part{
+	position: relative;
+	padding: 5px 8px 0;
+	text-align: center;
+	display: inline-block;
+	background-color: #DFEEF0;
+	height: 73%;
+	margin: 0 2px;
+	box-shadow: inset 0 0 0 1px white;
+	border: 1px solid #ABD1D6;
+	color: #406F9B;
+	cursor: pointer;
+}
+.ss-part .ui-icon-close {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+#agenda-edit{
+	width: 34%;
+}
+#set-tasktypes{
+	padding: 15px 25px;
+}
+#set-tasktypes td .fa{
+	font-size: 13px;
+	cursor: pointer;
+}
+#stt-edit{
+	width: 44%;
+}
+#stt-edit table{
+	margin-top: 10px;
+}
+#stt-duration{
+	box-shadow: none;
 }

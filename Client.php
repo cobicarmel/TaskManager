@@ -64,7 +64,7 @@
 	<h4><?=$LOCAL[28]?></h4>
 	<div id="client-details">
 		<div id="cd-basic">
-			<table id="cd-list" class="data-table">
+			<table id="cd-list" class="data-table editable">
 				<thead>
 					<tr>
 						<th><?=$LOCAL[29]?></th>
@@ -131,7 +131,7 @@
 							</div>
 						</div>
 						<div id="cd-history">
-							<table class="data-table">
+							<table class="data-table editable">
 								<thead>
 									<th><?=$LOCAL[32]?></th>
 									<th><?=$LOCAL[7]?></th>

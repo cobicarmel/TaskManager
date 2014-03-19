@@ -103,6 +103,13 @@ class Task{
 		$this -> getDay();
 	}
 
+	function editType(){
+
+		$this -> input -> query('update', 'tasktypes', $_POST, "where id = $_POST[id]");
+
+		$this -> getTypes();
+	}
+
 	function getTasks($column, $values){
 
 		$where = Database::parseMultiWhere($column, $values);
@@ -110,6 +117,15 @@ class Task{
 		$this -> data = $this -> output -> query("select * from tasks where ($where) && system = $_POST[system]");
 
 		$this -> toClient();
+	}
+
+	function getTypes(){
+
+		$query = $this -> output -> query('select * from tasktypes');
+
+		$query = Database::groupArray('id', $query);
+
+		Database::addResponse($query);
 	}
 
 	function getDay(){
@@ -132,4 +148,10 @@ class Task{
 		$this -> getDay();
 	}
 
+	function removeType(){
+
+		$this -> input -> query('remove', 'tasktypes', null, "where id = $_POST[id]");
+
+		$this -> getTypes();
+	}
 }

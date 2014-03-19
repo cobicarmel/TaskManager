@@ -24,7 +24,9 @@ var tableTime = function(ELEM, INDEX){
 
 		TABLE_TIME.menuTab = $('.menu-tab[tab=' + ELEM.parent().attr('tab') + ']');
 
-		TABLE_TIME.Agenda.getAll(TABLE_TIME.setDay);
+		TABLE_TIME.Agenda.setTab = $('.sab-system').eq(INDEX);
+
+		TABLE_TIME.Agenda.getAll();
 
 		TABLE_TIME.createTable();
 
@@ -58,15 +60,30 @@ var tableTime = function(ELEM, INDEX){
 			TM.submitForm.call(this, e, TABLE_TIME.Task.createMeeting);
 		})
 
-		ELEM.find('.calendar-icon').on('click', function(){
+		ELEM.find('#tt-toolbar .fa-calendar-o').on('click', function(){
 			$('#calendar').datepicker('option', 'onSelect', TABLE_TIME.setDay);
 			$('.ac-tab').hide().css('z-index', 0);
 			$('#calendar').parent().show().css('z-index', 1);
 		})
 
+		ELEM.find('#tt-toolbar li').on('click', function(){
+			ELEM.find('#ttt-toggle').trigger('click');
+		})
+
 		ELEM.find('#nm-add-client').on('click', function(){
 			TM.changeTab.call($('.menu-tab[tab=client]'), TABLE_TIME);
 			$(clients).accordion('option', 'active', 0);
+		})
+
+		ELEM.find('#ttt-toggle').on('click', function(){
+			var button = $(this);
+			ELEM.find('#tt-toolbar ul').slideToggle(function(){
+				button.toggleClass('fa-angle-up fa-angle-down');
+			})
+		})
+
+		TABLE_TIME.Agenda.setTab.find('.ss-add div').on('click', function(){
+			TABLE_TIME.Agenda.agendaForm('add', $(this).attr('day'));
 		})
 	}
 
@@ -108,10 +125,8 @@ var tableTime = function(ELEM, INDEX){
 		if(TABLE_TIME.isToDay())
 			TABLE_TIME.scrollToNow();
 
-		if(! INDEX){
+		if(! INDEX)
 			TM.showSoonMeetings();
-			TM.listAgenda();
-		}
 	}
 
 	this.createHour = function(hour){
@@ -269,7 +284,22 @@ var tableTime = function(ELEM, INDEX){
 	}
 
 	this.getTotalHeight = function(){
-		return ELEM.find('#tt-hours').height();
+
+		var table = ELEM.find('#tt-hours'),
+			height = table.height();
+
+		if(height)
+			return height;
+
+		var clone = table.clone();
+
+		clone.css({visibility: 'hidden', position: 'absolute', top: 0});
+
+		clone.appendTo('body');
+
+		var height = clone.height();
+
+		return clone.remove(), height;
 	}
 
 	this.isToDay = function(){
@@ -310,10 +340,10 @@ var tableTime = function(ELEM, INDEX){
 	this.moveMeets = function(ids){
 
 		Api.confirm(63, TABLE_TIME.templates.mmPicker, function(){
-			TABLE_TIME.Task.changeMultiTime(ids, ELEM.find('#mm-input').val());
+			TABLE_TIME.Task.changeMultiTime(ids, $('#mm-input').val());
 		})
 
-		ELEM.find('#mm-input').attr('disabled', true).val(Config.default.move_range).spinner({
+		$('#mm-input').attr('disabled', true).val(Config.default.move_range).spinner({
 			max: 120,
 			min: -120,
 			step: 5
@@ -447,7 +477,7 @@ var tableTime = function(ELEM, INDEX){
 
 		Api.confirm(43, TABLE_TIME.templates.smMessage, function(){
 	
-			var action = ELEM.find('.sm-option input:checked').attr('id');
+			var action = $('.sm-option input:checked').attr('id');
 
 			if(! action){
 				TM.popup('error', 44);

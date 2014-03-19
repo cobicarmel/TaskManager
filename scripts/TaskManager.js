@@ -4,20 +4,16 @@ var TM = {
 
 	tableTimes: [],
 
-	showDateTime: function(){
+	addMultiObj: function(obj, keys, value){
 
-		var date = new Date();
+		var firstKey = keys.splice(0, 1);
 
-		$('#dt-day').text(date.getFullHeDay());
-		$('#dt-date').text(date.getFullHeMonth() + ' ' + date.getFullYear());
+		if(typeof obj[firstKey] == 'object')
+			obj[firstKey] = addMultiObj(obj[firstKey], keys, value);
+		else
+			obj[firstKey] = value;
 
-		var time = $('#dt-time');
-
-		if(time.text() == '23:59:59' && ! date.getHours())
-			tableTime.next();
-
-		time.text(date.toLocaleTimeString());
-
+		return obj;
 	},
 
 	changeTab: function(){
@@ -75,6 +71,46 @@ var TM = {
 		}
 	},
 
+	getMultiObj: function(obj, keys, wanted){
+
+		var firstKey = keys[0],
+			otherKeys = keys.slice(1),
+			lastKey = keys.slice(keys.length - 1);
+
+		if(typeof obj[firstKey] == 'object' && otherKeys.length)
+			return TM.getMultiObj(obj[firstKey], otherKeys, wanted || lastKey);
+		else
+			return firstKey == wanted || keys.length == 1 ? obj[firstKey] : null;
+	},
+
+	listAgenda: function(){
+
+		var board = $('#today-agenda').empty().clear(LOCAL[30]),
+			agenda = TM.tableTimes[0].Agenda.getDay();
+
+		if(agenda[0])
+			board.unClear();
+
+		for(var a in agenda){
+
+			var data = TM.tableTimes[0].Agenda.parseData(agenda[a]);
+
+			var tr = $('<tr>').append(
+				$('<td>', {'class': 'td-range tahoma'}).width('37%').text(data.starttime.toRealTime() + ' - ' + data.endtime.toRealTime()),
+				$('<td>').width('9%').html($('<span>', {'class': 'ui-icon ui-icon-arrowthick-1-w'})),
+				$('<td>', {'class': 'td-title'}).width('54%').text(data.title)
+			)
+
+			tr.click(function(starttime){
+				return function(){
+					TM.tableTimes[0].scrollToTime(starttime);
+				}
+			}(data.starttime))
+
+			board.append(tr);
+		}
+	},
+
 	popup: function(type, text){
 
 		var elem = $('#popup');
@@ -97,52 +133,22 @@ var TM = {
 			elem.delay(2000).fadeOut();
 	},
 
-	sortObjects: function(array, by){
-		array.sort(function(a, b){
-			var Avalue = TM.getMultiObj(a, by),
-				Bvalue = TM.getMultiObj(b, by);
+	showDateTime: function(){
 
-			return Avalue < Bvalue ? -1 : Avalue > Bvalue ? 1 : 0;
-		})
+		var date = new Date();
+
+		$('#dt-day').text(date.getFullHeDay());
+		$('#dt-date').text(date.getFullHeMonth() + ' ' + date.getFullYear());
+
+		var time = $('#dt-time');
+
+		if(time.text() == '23:59:59' && ! date.getHours())
+			tableTime.next();
+
+		time.text(date.toLocaleTimeString());
+
 	},
 
-	addMultiObj: function(obj, keys, value){
-
-		var firstKey = keys.splice(0, 1);
-
-		if(typeof obj[firstKey] == 'object')
-			obj[firstKey] = addMultiObj(obj[firstKey], keys, value);
-		else
-			obj[firstKey] = value;
-
-		return obj;
-	},
-
-	getMultiObj: function(obj, keys, wanted){
-
-		var firstKey = keys[0],
-			otherKeys = keys.slice(1),
-			lastKey = keys.slice(keys.length - 1);
-
-		if(typeof obj[firstKey] == 'object' && otherKeys.length)
-			return TM.getMultiObj(obj[firstKey], otherKeys, wanted || lastKey);
-		else
-			return firstKey == wanted ? obj[firstKey] : null;
-	},
-
-	submitForm: function(event, callback){
-
-		event.preventDefault();
-
-		var form = $(this),
-			valid = form.validate();
-
-		if(valid == true)
-			callback.apply(form);
-		else if(typeof valid == 'object')
-			Api.validate.error(valid);
-	},
-	
 	showSoonMeetings: function(){
 
 		var elem = $('#soon').empty().clear(LOCAL[19]),
@@ -191,31 +197,25 @@ var TM = {
 		return soon;
 	},
 
-	listAgenda: function(){
+	sortObjects: function(array, by){
+		array.sort(function(a, b){
+			var Avalue = TM.getMultiObj(a, by),
+				Bvalue = TM.getMultiObj(b, by);
 
-		var board = $('#today-agenda').empty().clear(LOCAL[30]),
-			agenda = TM.tableTimes[0].Agenda.getDay();
+			return Avalue < Bvalue ? -1 : Avalue > Bvalue ? 1 : 0;
+		})
+	},
 
-		if(agenda[0])
-			board.unClear();
+	submitForm: function(event, callback){
 
-		for(var a in agenda){
+		event.preventDefault();
 
-			var data = TM.tableTimes[0].Agenda.parseData(agenda[a]);
+		var form = $(this),
+			valid = form.validate();
 
-			var tr = $('<tr>').append(
-				$('<td>', {'class': 'td-range tahoma'}).width('37%').text(data.starttime.toRealTime() + ' - ' + data.endtime.toRealTime()),
-				$('<td>').width('9%').html($('<span>', {'class': 'ui-icon ui-icon-arrowthick-1-w'})),
-				$('<td>', {'class': 'td-title'}).width('54%').text(data.title)
-			)
-
-			tr.click(function(starttime){
-				return function(){
-					TM.tableTimes[0].scrollToTime(starttime);
-				}
-			}(data.starttime))
-
-			board.append(tr);
-		}
+		if(valid == true)
+			callback.apply(form);
+		else if(typeof valid == 'object')
+			Api.validate.error(valid);
 	}
 }

@@ -167,9 +167,13 @@ $.fn.getData = function(keys){
 }
 
 $.fn.selectOption = function(type, value){
+
 	var options = this.children('option');
 
 	options.filter('[selected]').removeAttr('selected');
+
+	if(type == 'reset')
+		return options.filter(':first-child').attr('selected', true), this;
 
 	options.filter(function(){
 		return $(this)[type]() == value;

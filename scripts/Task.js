@@ -359,7 +359,7 @@ var Task =  function(TABLE_TIME){
 			TABLE_TIME.meetingForm(param);
 		}
 
-		this.elem = $('#tt-templates .tt-meeting').clone();
+		this.elem = $('#templates .tt-meeting').clone();
 
 		this.interaction = {
 			delay: 250,

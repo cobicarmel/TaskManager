@@ -26,6 +26,7 @@ $config = [
 	<title><?=$LOCAL[18]?></title>
 	<link rel="stylesheet" href="styles/style.css">
 	<link rel="stylesheet" href="styles/jquery-ui.css">
+	<link rel="stylesheet" href="styles/font-awesome.min.css">
 	<link rel="icon" href="media/icon.png">
 </head>
 <body>

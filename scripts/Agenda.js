@@ -8,6 +8,44 @@ var Agenda = function(TABLE_TIME){
 
 	this.special = {};
 
+	this.addAgenda = function(type, day, id){
+
+		var params = $(this).serializeObject(),
+			current = self.getDay(day);
+
+		if(params.endtime < params.starttime && params.endtime != '00:00' || params.starttime == params.endtime)
+			return Api.validate.error({element: '#ae-endtime', no: 1});
+
+		for(var range in current){
+
+			var part = self.parseData(current[range]);
+
+			part.starttime = part.starttime.toRealTime();
+			part.endtime = part.endtime.toRealTime();
+
+			if(
+				(! id || id && part.id != id) && (
+				part.starttime >= params.starttime && part.starttime < params.endtime ||
+				part.endtime > params.starttime && part.endtime < params.endtime
+				)
+			)
+			return TM.dialog.show({title: LOCAL[81], content: LOCAL[15] + '.'});
+		}
+
+		if(id)
+			params.id = id;
+		else
+			params.day = day;
+
+		TM.popup('loading', type == 'add' ? 60 : 12);
+
+		TABLE_TIME.apiRequest('Agenda', type == 'add' ? 'addagenda' : 'updateagenda', params, function(res){
+			TM.popup('success', type == 'add' ? 61 : 13);
+			$('#agenda-edit').hide();
+			self.rewrite(res);
+		})
+	}
+
 	this.addBarPart = function(data){
 
 		var topStart = TABLE_TIME.getPartTop(data.starttime),
@@ -39,7 +77,7 @@ var Agenda = function(TABLE_TIME){
 		})
 
 		part.draggable({
-			containment: '#tt-hours',
+			containment: TABLE_TIME.ELEM.find('#tt-hours'),
 			stop: function(){
 				self.addSpecial.call(this, 'Position');
 			}
@@ -125,6 +163,29 @@ var Agenda = function(TABLE_TIME){
 		})
 	}
 
+	this.agendaForm = function(type, day, id){
+
+		var form = $('#agenda-edit form'),
+			types = Config.tasktypes,
+			typesList = $('#ae-taskgroup').html($('<option>'));
+
+		for(var type in types)
+			typesList.append($('<option>').attr('value', type).text(types[type].title));
+
+		if(type == 'add')
+			form.find('select').selectOption('reset');
+
+		form.find('button').text(LOCAL[type == 'update' ? 9 : 80]);
+
+		$('#agenda-edit').show().appendTo(self.setTab).position({of: '#appcenter'});
+
+		form.off('submit').on('submit', function(e){
+			TM.submitForm.call(this, e, function(){
+				self.addAgenda.call(form, type, day, id);
+			})
+		})
+	}
+
 	this.applyChanges = function(){
 
 		var agenda = self.getDay();
@@ -133,6 +194,8 @@ var Agenda = function(TABLE_TIME){
 
 		for(var a in agenda)
 			self.addBarPart(self.parseData(agenda[a]));
+
+		TM.listAgenda();
 	}
 
 	this.boardRegister = function(data){
@@ -169,18 +232,35 @@ var Agenda = function(TABLE_TIME){
 		return misses;
 	}
 
-	this.getAll = function(callback){
+	this.edit = function(e){
+
+		var data = $(this).data('agenda');
+
+		if($(e.target).is('.ui-icon-close'))
+			return self.remove.call(this, data);
+
+		$('#ae-starttime').selectOption('text', data.starttime);
+		$('#ae-endtime').selectOption('text', data.endtime);
+		$('#ae-taskgroup').selectOption('val', data.tasktype);
+		$('#ae-static').selectOption('val', data.static);
+
+		self.agendaForm('update', data.day, data.id);
+	}
+
+	this.getAll = function(){
 
 		TABLE_TIME.apiRequest('Agenda', 'getall', function(res){
 			self.days = res[0];
-			callback();
+			TABLE_TIME.setDay();
+			self.writeSettings();
 		})
 	}
 
-	this.getDay = function(){
+	this.getDay = function(nospecial){
+
 		var date = TABLE_TIME.date,
 			strDate = date.toLocaleDateString(),
-			day = date.getDay(),
+			day = nospecial != undefined ? nospecial : date.getDay(),
 			days = self.days,
 			specials = self.special[strDate],
 			agenda = [];
@@ -189,7 +269,7 @@ var Agenda = function(TABLE_TIME){
 			if(days[d].day == day){
 				agenda.push(days[d]);
 
-				if(! specials)
+				if(! specials || nospecial)
 					continue;
 
 				var id = days[d].id,
@@ -200,6 +280,8 @@ var Agenda = function(TABLE_TIME){
 					$.extend(days[d], special);
 				}
 			}
+
+		TM.sortObjects(agenda, ['starttime']);
 
 		return agenda;
 	}
@@ -236,7 +318,28 @@ var Agenda = function(TABLE_TIME){
 	this.refresh = function(){
 		self.getSpecial(function(){
 			self.writeData();
+			TABLE_TIME.advanceReady();
 		})
+	}
+
+	this.remove = function(data){
+
+		Api.confirm(40, LOCAL[82].replace('%1', data.title), function(){
+
+			TM.popup('loading', 83);
+
+			TABLE_TIME.apiRequest('Agenda', 'remove', {id: data.id}, function(res){
+				TM.popup('success', 84);
+				self.rewrite(res);
+			})
+		})
+	}
+
+	this.rewrite = function(data){
+		self.days = data[0];
+		self.writeData();
+		self.writeSettings();
+		self.applyChanges();
 	}
 
 	this.resetPos = function(type){
@@ -265,7 +368,30 @@ var Agenda = function(TABLE_TIME){
 
 			self.boardRegister(data);
 		}
+	}
 
-		TABLE_TIME.advanceReady();
+	this.writeSettings = function(){
+
+		var list = self.setTab.find('.ss-hours').empty();
+
+		for(var day = 0; day < 7; day++){
+
+			var data = self.getDay(day);
+
+			for(var d in data){
+				var info = self.parseData(data[d]),
+					part = $('#templates .ss-part').clone();
+
+				info.starttime = info.starttime.toRealTime();
+				info.endtime = info.endtime.toRealTime();
+
+				part.children('.sp-title').text(info.title);
+				part.children('.sp-time').text([info.endtime, info.starttime].join(' - '));
+
+				part.click(self.edit).data('agenda', info);
+
+				list.eq(day).append(part);
+			}
+		}
 	}
 }

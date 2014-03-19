@@ -53,9 +53,19 @@ $(function(){
 
 	Settings.navAgenda.setActive();
 
+	$('#ae-starttime, #ae-endtime').timepicker(null, 5);
+
+	Settings.tasktypes.list();
+
+	$('#stt-duration').spinner({
+		max: 300,
+		min: 10,
+		step: 5
+	})
+
 	/** Attaching Events **/
 
-	$('#clients form, #c-templates form').on('submit', function(e){
+	$('#clients form, #cai-form').on('submit', function(e){
 		TM.submitForm.call(this, e, Client.apiActions(this.id));
 	})
 
@@ -100,10 +110,6 @@ $(function(){
 
 	$('.nav-arrows-wrap div').click(Settings.navAgenda.navigate);
 
-	$('#cai-close').click(function(){
-		$('#c-add-item').hide();
-	})
-
 	$('.f-close').on('click', function(){
 		$(this).parent().hide();
 	})
@@ -111,6 +117,8 @@ $(function(){
 	$('button.ui-state-default').hover(function(){
 		$(this).toggleClass('ui-state-hover');
 	})
+
+	$('#stt-edit').submit(Settings.tasktypes.submitForm);
 
 	/** Live events **/
 
@@ -122,6 +130,10 @@ $(function(){
 		if(this.value.length == 3 || this.value.length == 2 && /^0[2-4,8-9]$/.test(this.value))
 			$(this).siblings('.phone').focus();
 	})
+
+	$('#set-tasktypes tbody').on('click', '.fa-pencil', Settings.tasktypes.edit);
+
+	$('#set-tasktypes tbody').on('click', '.fa-times', Settings.tasktypes.remove);
 
 	/** Scripts that must run after events attached **/
 
