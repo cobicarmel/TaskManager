@@ -1,3 +1,1 @@
-﻿<pre>
-<?=__dir__?>
-</pre>
+﻿<script src="scripts/heDate.js"></script>

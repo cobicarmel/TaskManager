@@ -44,6 +44,26 @@ var Settings = {
 
 	tasktypes: {
 
+		add: function(){
+
+			Settings.tasktypes.form[0].reset();
+
+			Settings.tasktypes.showForm(80, {action: 'addtype', id: null});
+		},
+
+		applyChanges: function(data){
+
+			if(data)
+				Config.tasktypes = data[0];
+
+			Settings.tasktypes.list();
+
+			var typesList = $('#ae-taskgroup').html($('<option>'));
+
+			for(var option in Config.tasktypes)
+				typesList.append($('<option>').attr('value', option).text(Config.tasktypes[option].title));
+		},
+
 		edit: function(){
 
 			var data = Settings.tasktypes.getTrType.call(this),
@@ -52,9 +72,7 @@ var Settings = {
 			for(var item in data.type)
 				form.find('[name=' + item + ']').val(data.type[item]);
 
-			form.data({action: 'edittype', id: data.id});
-
-			Settings.tasktypes.showForm(9);
+			Settings.tasktypes.showForm(9, {action: 'edittype', id: data.id});
 		},
 
 		form: $('#stt-edit'),
@@ -99,16 +117,16 @@ var Settings = {
 
 					TM.popup('success', 88);
 
-					Config.tasktypes = res[0];
-
-					Settings.tasktypes.list();
+					Settings.tasktypes.applyChanges(res);
 				})
 			})
 		},
 
-		showForm: function(button){
-			
+		showForm: function(button, data){
+
 			var form = Settings.tasktypes.form;
+
+			form.data(data);
 
 			form.find('button').text(LOCAL[button]);
 
@@ -133,9 +151,7 @@ var Settings = {
 
 					form.hide();
 
-					Config.tasktypes = res[0];
-
-					Settings.tasktypes.list();
+					Settings.tasktypes.applyChanges(res);
 				})
 			})
 		}

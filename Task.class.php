@@ -56,6 +56,13 @@ class Task{
 		Database::addResponse($result);
 	}
 
+	function addType(){
+
+		$this -> input -> query('insert', 'tasktypes', $_POST);
+
+		$this -> getTypes();
+	}
+
 	function changeTime(){
 
 		$this -> currentDate = $_POST['date'];

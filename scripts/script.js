@@ -55,7 +55,7 @@ $(function(){
 
 	$('#ae-starttime, #ae-endtime').timepicker(null, 5);
 
-	Settings.tasktypes.list();
+	Settings.tasktypes.applyChanges();
 
 	$('#stt-duration').spinner({
 		max: 300,
@@ -109,6 +109,8 @@ $(function(){
 	$('#cr-print button').click(Client.printReport);
 
 	$('.nav-arrows-wrap div').click(Settings.navAgenda.navigate);
+
+	$('#stt-add').click(Settings.tasktypes.add);
 
 	$('.f-close').on('click', function(){
 		$(this).parent().hide();

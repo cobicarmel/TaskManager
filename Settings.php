@@ -37,6 +37,7 @@
 			</div>
 		</div>
 		<div class="set-tab" tab="st-radio2">
+			<div id="stt-add"><?=$LOCAL[90]?></div>
 			<div id="set-tasktypes">
 				<table class="data-table">
 					<thead>

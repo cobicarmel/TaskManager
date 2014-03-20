@@ -17,7 +17,7 @@
 		<form id="new-meeting" class="abs-form">
 			<div class="f-close ui-icon ui-icon-close" title="<?=$LOCAL[14]?>"></div>
 			<div id="nm-head">
-				<p id="nm-title" class="tahoma"></p>
+				<p id="nm-title" class="tahoma form-title"></p>
 				<div id="nm-date">
 					<input name="strdate">
 					<div id="nm-calendar" class="ui-icon ui-icon-calendar"></div>

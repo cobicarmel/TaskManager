@@ -105,6 +105,12 @@ form tr {
 	display: block;
 	top: 0;
 }
+.form-title{
+	color: #15C;
+	text-align: right;
+	font-weight: bold;
+	text-indent: 10px;
+}
 #app{
 	height: 620px;
 	width: 1000px;
@@ -336,9 +342,6 @@ form tr {
 	float: right;
 }
 #nm-title{
-	color: #15C;
-	text-align: right;
-	font-weight: bold;
 	font-size: 14px;
 	width: 74%;
 }
@@ -901,6 +904,7 @@ form tr {
 }
 #settings{
 	height: 100%;
+	width: 95%;
 }
 #settings-toolbar label{
 	border-bottom-left-radius: 0;
@@ -915,16 +919,14 @@ form tr {
 }
 #settings-body{
 	height: 90%;
-	width: 99.3%;
 	border-top: 1px solid #aed0ea;
 }
 #settings-body > div{
-	width: 100%;
 	height: 100%;
 	display: none;
 }
 .navigate-box{
-	padding: 0 5px;
+	/* padding: 0 5px; */
 }
 .nav-center{
 	width: 88.9%;	
@@ -938,8 +940,7 @@ form tr {
 	line-height: 1.5;
 }
 #set-agenda-body{
-	height: 88%;
-	margin: 10px;
+	height: 90%;
 	position: relative;
 	overflow: hidden;
 }
@@ -954,8 +955,8 @@ form tr {
 }
 .ss-day{
 	text-align: right;
-	height: 11.7%;
-	margin: 10px;
+	height: 11.8%;
+	margin: 10px 0;
 	background-color: rgba(255, 255, 255, .6);
 	padding: 0 10px;
 	border-radius: 6px;
@@ -1008,12 +1009,19 @@ form tr {
 #agenda-edit{
 	width: 34%;
 }
-#set-tasktypes{
-	padding: 15px 25px;
-}
 #set-tasktypes td .fa{
 	font-size: 13px;
 	cursor: pointer;
+}
+#stt-add{
+	color: #15C;
+	margin: 10px 12px 5px;
+	cursor: pointer;
+	font-size: 14px;
+	float: right;
+}
+#stt-add:hover{
+	text-decoration: underline;
 }
 #stt-edit{
 	width: 44%;

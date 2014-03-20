@@ -165,19 +165,17 @@ var Agenda = function(TABLE_TIME){
 
 	this.agendaForm = function(type, day, id){
 
-		var form = $('#agenda-edit form'),
-			types = Config.tasktypes,
-			typesList = $('#ae-taskgroup').html($('<option>'));
+		var elem = $('#agenda-edit'),
+			form = elem.children('form');
 
-		for(var type in types)
-			typesList.append($('<option>').attr('value', type).text(types[type].title));
+		elem.children('#ae-day').text(LOCAL[89].replace('%1', Date.prototype.heDays[day]))
 
 		if(type == 'add')
 			form.find('select').selectOption('reset');
 
 		form.find('button').text(LOCAL[type == 'update' ? 9 : 80]);
 
-		$('#agenda-edit').show().appendTo(self.setTab).position({of: '#appcenter'});
+		elem.show().appendTo(self.setTab).position({of: '#appcenter'});
 
 		form.off('submit').on('submit', function(e){
 			TM.submitForm.call(this, e, function(){
