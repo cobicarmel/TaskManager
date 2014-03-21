@@ -15,7 +15,8 @@ $default['table_times'] = json_decode($default['table_times'], true);
 $config = [
 	'actions' => $allowedActions,
 	'default' => $default,
-	'tasktypes' => Database::groupArray('id', $output -> query('select * from tasktypes'))
+	'tasktypes' => Database::groupArray('id', $output -> query('select * from tasktypes')),
+	'users' => Database::groupArray('id', $output -> query('select * from users'))
 ];
 ?>
 

@@ -11,6 +11,10 @@ var Settings = {
 		})
 
 		tasktypes.init();
+
+		var users = new Settings.createGroup('Users', 'users');
+
+		users.init();
 	},
 
 	createGroup: function(SUBJECT, NAME, onUpdate){
@@ -66,8 +70,11 @@ var Settings = {
 
 		this.getTrType = function(){
 
-			var id = $(this).parents('tr').data('id'),
-				type = Config.tasktypes[id];
+			var tr = $(this).parents('tr'),
+				id = tr.data('id'),
+				type = Config[NAME][id];
+
+			type.title = tr.children(':first').text();
 
 			return {id: id, type: type};
 		}
@@ -102,7 +109,7 @@ var Settings = {
 
 			var data = self.getTrType.call(this);
 
-			Api.confirm(40, LOCAL[87].replace('%1', data.type.title), function(){
+			Api.confirm(40, LOCAL[56].replace('%1', data.type.title), function(){
 
 				TM.popup('loading', 83);
 

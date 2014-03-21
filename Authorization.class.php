@@ -2,24 +2,25 @@
 
 class Authorization{
 
-	private $usersTable;
+	var $users;
 
-	private $users = [];
+	var $input;
 
-	private $cookies = [
+	var $output;
+
+	var $cookies = [
 		'username' => 'uname',
 		'password' => 'upass'
 	];
 
-	function __construct($usersTable = null){
+	function __construct($users = null){
 
-		if(! $usersTable)
+		if(! $users)
 			return;
 
-		$this -> usersTable = $usersTable;
+		$this -> users = $users;
 		$this -> input = new DBInput;
 		$this -> output = new DBOutput;
-		$this -> getAllUsers();
 	}
 
 	private function cryptPass($pass){
@@ -32,10 +33,6 @@ class Authorization{
 
 	private function encodeCookie($text){
 		return base64_encode($text); 
-	}
-
-	private function getAllUsers(){
-		$this -> users = $this -> output -> query("select * from {$this -> usersTable}");
 	}
 
 	private function getCookies(){

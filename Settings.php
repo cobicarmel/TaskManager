@@ -88,6 +88,50 @@
 				</tr>
 			</table>
 		</div>
-		<div id="set-group-users" class="set-tab" tab="st-radio3"></div>
+		<div id="set-group-users" class="set-tab" tab="st-radio3">
+			<div class="sg-add"><?=$LOCAL[91]?></div>
+			<table class="sg-list data-table">
+				<thead>
+					<tr>
+						<th><?=$LOCAL[29]?></th>
+						<th><?=$LOCAL[22]?></th>
+						<th><?=$LOCAL[30]?></th>
+						<th style="width: 12%" colspan="2"><?=$LOCAL[87]?></th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+			<form class="sg-edit abs-form">
+				<div class="ui-icon ui-icon-close f-close" title="<?=$LOCAL[14]?>"></div>
+				<table>
+					<tr>
+						<td class="form-label"><?=$LOCAL[22]?>:</td>
+						<td colspan="2">
+							<input name="phone">
+						</td>
+					</tr>
+					<tr>
+						<td class="form-label"><?=$LOCAL[30]?>:</td>
+						<td colspan="2">
+							<input name="email">
+						</td>
+					</tr>
+				</table>
+				<button class="ui-state-default"></button>
+			</form>
+			<table class="sg-temp">
+				<tr>
+					<td class="sg-username"></td>
+					<td class="sg-phone tahoma number"></td>
+					<td class="sg-email"></td>
+					<td>
+						<div class="fa fa-pencil" title="<?=$LOCAL[88]?>"></div>
+					</td>
+					<td>
+						<div class="fa fa-times" title="<?=$LOCAL[46]?>"></div>
+					</td>
+				</tr>
+			</table>
+		</div>
 	</div>
 </div>
