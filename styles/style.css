@@ -85,7 +85,7 @@ form tr {
 	font-family: Tahoma;
 	font-size: 0.85em;
 }
-#templates, #ac-dialog, .sm-option input{
+#templates, #ac-dialog, .sm-option input, .sg-temp{
 	display: none;
 }
 .abs-form{
@@ -242,15 +242,12 @@ form tr {
 	right: -11px;
 }
 .agenda-static:before{
-	content: ' - 'attr(title);
+	content: attr(title);
 	position: absolute;
-	right: 4px;
 	width: 671px;
 	height: 100%;
 	background: rgba(196, 118, 233, .1);
-	box-shadow: inset -1px 0px 15px rgba(0, 0, 0, 0.2);
-	text-align: right;
-	text-indent: 64px;
+	box-shadow: inset -1px 1px 15px rgba(0, 0, 0, .1);
 	line-height: 1.5;
 }
 #tt-hours {
@@ -990,11 +987,11 @@ form tr {
 }
 .ss-part{
 	position: relative;
-	padding: 5px 8px 0;
+	padding: 10px 8px 0;
 	text-align: center;
 	display: inline-block;
 	background-color: #DFEEF0;
-	height: 73%;
+	height: 65%;
 	margin: 0 2px;
 	box-shadow: inset 0 0 0 1px white;
 	border: 1px solid #ABD1D6;
@@ -1009,24 +1006,24 @@ form tr {
 #agenda-edit{
 	width: 34%;
 }
-#set-tasktypes td .fa{
+.sg-list td .fa{
 	font-size: 13px;
 	cursor: pointer;
 }
-#stt-add{
+.sg-add{
 	color: #15C;
 	margin: 10px 12px 5px;
 	cursor: pointer;
 	font-size: 14px;
 	float: right;
 }
-#stt-add:hover{
+.sg-add:hover{
 	text-decoration: underline;
 }
-#stt-edit{
+.sg-edit{
 	width: 44%;
 }
-#stt-edit table{
+.sg-edit table{
 	margin-top: 10px;
 }
 #stt-duration{

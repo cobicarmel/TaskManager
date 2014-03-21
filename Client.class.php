@@ -188,7 +188,8 @@ class Client{
 
 		$this -> query = Database::groupArray('id', $this -> output -> query($query));
 
-		$this -> getMultiData();
+		if(! empty($this -> query))
+			$this -> getMultiData();
 
 		return $this -> query;
 	}

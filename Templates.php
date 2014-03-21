@@ -125,17 +125,4 @@
 			<button class="ui-state-default"></button>
 		</form>
 	</div>
-	<table id="set-tt-tr">
-		<tr>
-			<td class="stt-title"></td>
-			<td class="stt-place"></td>
-			<td class="stt-duration tahoma"></td>
-			<td>
-				<div class="fa fa-pencil" title="<?=$LOCAL[88]?>"></div>
-			</td>
-			<td>
-				<div class="fa fa-times" title="<?=$LOCAL[46]?>"></div>
-			</td>
-		</tr>
-	</table>
 </div>

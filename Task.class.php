@@ -56,11 +56,11 @@ class Task{
 		Database::addResponse($result);
 	}
 
-	function addType(){
+	function addTaskTypes(){
 
 		$this -> input -> query('insert', 'tasktypes', $_POST);
 
-		$this -> getTypes();
+		$this -> getTaskTypes();
 	}
 
 	function changeTime(){
@@ -110,11 +110,11 @@ class Task{
 		$this -> getDay();
 	}
 
-	function editType(){
+	function editTaskTypes(){
 
 		$this -> input -> query('update', 'tasktypes', $_POST, "where id = $_POST[id]");
 
-		$this -> getTypes();
+		$this -> getTaskTypes();
 	}
 
 	function getTasks($column, $values){
@@ -126,7 +126,7 @@ class Task{
 		$this -> toClient();
 	}
 
-	function getTypes(){
+	function getTaskTypes(){
 
 		$query = $this -> output -> query('select * from tasktypes');
 
@@ -155,10 +155,10 @@ class Task{
 		$this -> getDay();
 	}
 
-	function removeType(){
+	function removeTaskTypes(){
 
 		$this -> input -> query('remove', 'tasktypes', null, "where id = $_POST[id]");
 
-		$this -> getTypes();
+		$this -> getTaskTypes();
 	}
 }

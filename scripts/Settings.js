@@ -2,6 +2,154 @@
 
 var Settings = {
 
+	buildGroups: function(){
+
+		var tasktypes = new Settings.createGroup('Task', 'tasktypes', function(){
+			var typesList = $('#ae-taskgroup').html($('<option>'));
+			for(var option in Config.tasktypes)
+				typesList.append($('<option>').attr('value', option).text(Config.tasktypes[option].title));
+		})
+
+		tasktypes.init();
+	},
+
+	createGroup: function(SUBJECT, NAME, onUpdate){
+
+		var self = this;
+
+		this.tab = $('#set-group-' + NAME);
+
+		this.form = this.tab.find('.sg-edit');
+
+		this.tbody = this.tab.find('.sg-list tbody');
+
+		this.trTemp = this.tab.find('.sg-temp tr');
+
+		this.add = function(){
+
+			self.form[0].reset();
+
+			self.showForm(80, {action: 'add', id: null});
+		}
+
+		this.applyChanges = function(data){
+
+			if(data)
+				Config[NAME] = data[0];
+
+			self.list();
+
+			onUpdate && onUpdate();
+		}
+
+		this.attachEvents = function(){
+
+			self.tab.find('.sg-add').click(self.add);
+
+			self.tbody.on('click', '.fa-pencil', self.edit);
+
+			self.tbody.on('click', '.fa-times', self.remove);
+
+			self.form.submit(self.submitForm);
+		}
+
+		this.edit = function(){
+
+			var data = self.getTrType.call(this),
+				form = self.form;
+
+			for(var item in data.type)
+				form.find('[name=' + item + ']').val(data.type[item]);
+
+			self.showForm(9, {action: 'edit', id: data.id});
+		}
+
+		this.getTrType = function(){
+
+			var id = $(this).parents('tr').data('id'),
+				type = Config.tasktypes[id];
+
+			return {id: id, type: type};
+		}
+
+		this.init = function(){
+
+			self.applyChanges();
+
+			self.attachEvents();
+		}
+
+		this.list = function(){
+
+			var tbody = self.tbody.empty();
+
+			for(var id in Config[NAME]){
+
+				var tr = self.trTemp.clone(),
+					data = Config[NAME][id];
+
+				tr.data('id', id);
+
+				for(var item in data){
+					tr.children('.sg-' + item).text(data[item]);
+				}
+
+				tbody.append(tr);
+			}
+		}
+
+		this.remove = function(){
+
+			var data = self.getTrType.call(this);
+
+			Api.confirm(40, LOCAL[87].replace('%1', data.type.title), function(){
+
+				TM.popup('loading', 83);
+
+				Api.send(SUBJECT, 'remove' + NAME, {id: data.id}, function(res){
+
+					TM.popup('success', 88);
+
+					self.applyChanges(res);
+				})
+			})
+		}
+
+		this.showForm = function(button, data){
+
+			var form = self.form;
+
+			form.data(data);
+
+			form.find('button').text(LOCAL[button]);
+
+			form.show().position({of: '#appcenter'});
+		}
+
+		this.submitForm = function(e){
+
+			var form = self.form,
+				data = form.data(),
+				params = form.serializeObject();
+
+			params.id = data.id;
+
+			TM.popup('loading', 85);
+
+			TM.submitForm.call(this, e, function(){
+
+				Api.send(SUBJECT, data.action + NAME, params, function(res){
+
+					TM.popup('success', 86);
+
+					form.hide();
+
+					self.applyChanges(res);
+				})
+			})
+		}
+	},
+
 	changeTab: function(){
 		$('.set-tab').hide();
 		$('.set-tab[tab=' + $(this).attr('for') + ']').show();
@@ -42,122 +190,4 @@ var Settings = {
 		}
 	},
 
-	tasktypes: {
-
-		add: function(){
-
-			Settings.tasktypes.form[0].reset();
-
-			Settings.tasktypes.showForm(80, {action: 'addtype', id: null});
-		},
-
-		applyChanges: function(data){
-
-			if(data)
-				Config.tasktypes = data[0];
-
-			Settings.tasktypes.list();
-
-			var typesList = $('#ae-taskgroup').html($('<option>'));
-
-			for(var option in Config.tasktypes)
-				typesList.append($('<option>').attr('value', option).text(Config.tasktypes[option].title));
-		},
-
-		edit: function(){
-
-			var data = Settings.tasktypes.getTrType.call(this),
-				form = Settings.tasktypes.form;
-
-			for(var item in data.type)
-				form.find('[name=' + item + ']').val(data.type[item]);
-
-			Settings.tasktypes.showForm(9, {action: 'edittype', id: data.id});
-		},
-
-		form: $('#stt-edit'),
-
-		getTrType: function(){
-
-			var id = $(this).parents('tr').data('id'),
-				type = Config.tasktypes[id];
-
-			return {id: id, type: type};
-		},
-
-		list: function(){
-
-			var types = Config.tasktypes,
-				tbody = $('#set-tasktypes tbody').empty();
-
-			for(var type in types){
-
-				var tr = Settings.templates.tasktypesTr.clone(),
-					task = types[type];
-
-				tr.data('id', type);
-
-				for(var item in task){
-					tr.children('.stt-' + item).text(task[item]);
-				}
-
-				tbody.append(tr);
-			}
-		},
-
-		remove: function(){
-
-			var data = Settings.tasktypes.getTrType.call(this);
-
-			Api.confirm(40, LOCAL[87].replace('%1', data.type.title), function(){
-
-				TM.popup('loading', 83);
-
-				Api.send('Task', 'removetype', {id: data.id}, function(res){
-
-					TM.popup('success', 88);
-
-					Settings.tasktypes.applyChanges(res);
-				})
-			})
-		},
-
-		showForm: function(button, data){
-
-			var form = Settings.tasktypes.form;
-
-			form.data(data);
-
-			form.find('button').text(LOCAL[button]);
-
-			form.show().position({of: '#appcenter'});
-		},
-
-		submitForm: function(e){
-
-			var form = Settings.tasktypes.form,
-				data = form.data(),
-				params = form.serializeObject();
-
-			params.id = data.id;
-
-			TM.popup('loading', 85);
-
-			TM.submitForm.call(this, e, function(){
-
-				Api.send('Task', data.action, params, function(res){
-
-					TM.popup('success', 86);
-
-					form.hide();
-
-					Settings.tasktypes.applyChanges(res);
-				})
-			})
-		}
-	},
-
-	templates: {
-		tasktypesTr: $('#set-tt-tr tr')
-	}
 }

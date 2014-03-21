@@ -36,22 +36,20 @@
 			<?}?>
 			</div>
 		</div>
-		<div class="set-tab" tab="st-radio2">
-			<div id="stt-add"><?=$LOCAL[90]?></div>
-			<div id="set-tasktypes">
-				<table class="data-table">
-					<thead>
-						<tr>
-							<th><?=$LOCAL[84]?></th>
-							<th><?=$LOCAL[85]?></th>
-							<th style="width: 10%"><?=$LOCAL[86]?></th>
-							<th style="width: 12%" colspan="2"><?=$LOCAL[87]?></th>
-						</tr>
-					</thead>
-					<tbody></tbody>
-				</table>
-			</div>
-			<form id="stt-edit" class="abs-form">
+		<div id="set-group-tasktypes" class="set-tab" tab="st-radio2">
+			<div class="sg-add"><?=$LOCAL[90]?></div>
+			<table class="sg-list data-table">
+				<thead>
+					<tr>
+						<th><?=$LOCAL[84]?></th>
+						<th><?=$LOCAL[85]?></th>
+						<th style="width: 10%"><?=$LOCAL[86]?></th>
+						<th style="width: 12%" colspan="2"><?=$LOCAL[87]?></th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+			<form class="sg-edit abs-form">
 				<div class="ui-icon ui-icon-close f-close" title="<?=$LOCAL[14]?>"></div>
 				<table>
 					<tr>
@@ -76,7 +74,20 @@
 				</table>
 				<button class="ui-state-default"></button>
 			</form>
+			<table class="sg-temp">
+				<tr>
+					<td class="sg-title"></td>
+					<td class="sg-place"></td>
+					<td class="sg-duration tahoma"></td>
+					<td>
+						<div class="fa fa-pencil" title="<?=$LOCAL[88]?>"></div>
+					</td>
+					<td>
+						<div class="fa fa-times" title="<?=$LOCAL[46]?>"></div>
+					</td>
+				</tr>
+			</table>
 		</div>
-		<div class="set-tab" tab="st-radio3"></div>
+		<div id="set-group-users" class="set-tab" tab="st-radio3"></div>
 	</div>
 </div>
