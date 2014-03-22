@@ -12,6 +12,6 @@ if(isset($_GET['logout'])){
 	exit;
 }
 
-$auth -> createAuth(APP_BASE);
+$auth -> createAuth();
 
-header('location: ' . APP_BASE . '?login_attempt');
+header('location: ' . APP_BASE . '?login');

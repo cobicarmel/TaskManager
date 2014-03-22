@@ -59,6 +59,7 @@ button{
 	 0px 5px 3px 3px rgb(210, 210, 210);
 	-moz-transition: all 0.2s linear;
 	transition: all 0.2s linear;
+	float: left;
 }
 button:hover{
 	background: rgb(74, 179, 198);
@@ -103,13 +104,6 @@ button:active{
 	text-align: center;
 	padding-bottom: 30px;
 }
-#keep-login + label{
-	font-size: 12px;
-	font-style: italic;
-}
-#login-button{
-	text-align: left;
-}
 [data-icon]:after{
 	content: attr(data-icon);
 	font-family: fontomas;
@@ -123,4 +117,15 @@ button:active{
 	color: red;
 	font-size: 12px;
 	text-indent: 10px;
+}
+#keepme{
+	float: right;
+}
+#keepme *{
+	float: right;
+}
+#keepme label{
+	font-size: 12px;
+	font-style: italic;
+	margin: 2px;
 }

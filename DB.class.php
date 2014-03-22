@@ -4,11 +4,24 @@ abstract class Database{
 
 	private static $response = [];
 
+	private static $host = 'localhost';
+
+	private static $dbuser = 'root';
+
+	private static $dbpass = '';
+
 	static $sql;
 
-	static function createSql($host, $dbuser, $dbpass, $dbname){
-		self::$sql = new mysqli($host, $dbuser, $dbpass, $dbname) or die(mysqli_error());
+	static function createSql($dbname){
+
+		self::$sql = new mysqli(self::$host, self::$dbuser, self::$dbpass, $dbname);
+
+		if(! self::$sql)
+			return;
+
 		self::$sql -> set_charset('utf8');
+
+		return true;
 	}
 
 	static function addResponse($key, $value = null){

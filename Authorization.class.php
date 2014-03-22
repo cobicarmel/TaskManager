@@ -1,27 +1,16 @@
 <?
 
+require_once 'DB.class.php';
+
 class Authorization{
-
-	var $users;
-
-	var $input;
-
-	var $output;
 
 	var $cookies = [
 		'username' => 'uname',
-		'password' => 'upass'
+		'password' => 'upass',
+		'area' => 'uns'
 	];
 
-	function __construct($users = null){
-
-		if(! $users)
-			return;
-
-		$this -> users = $users;
-		$this -> input = new DBInput;
-		$this -> output = new DBOutput;
-	}
+	var $data;
 
 	private function cryptPass($pass){
 		return md5(md5(gzcompress($pass)));
@@ -35,41 +24,61 @@ class Authorization{
 		return base64_encode($text); 
 	}
 
-	private function getCookies(){
+	private function detectUser(){
 
-		if(empty($_COOKIE[$this -> cookies['username']]) || empty($_COOKIE[$this -> cookies['password']]))
-			return false;
+		require 'Users.class.php';
 
-		return [
-			'username' => $this -> decodeCookie($_COOKIE[$this -> cookies['username']]),
-			'password' => $this -> decodeCookie($_COOKIE[$this -> cookies['password']])
-		];
+		$users = (new Users) -> getAll();
+
+		$data = $this -> data;
+
+		foreach($users as $user)
+			if($data['username'] == $user['username'] && $data['password'] == $user['password'])
+				return $user;
 	}
 
-	private function setCookies($username, $password, $path){
+	private function getCookies(){
 
-		$time = time() + (3600 * 24 * 30);
+		$cookies = [];
 
-		setcookie($this -> cookies['username'], $this -> encodeCookie($username), $time, $path);
+		foreach($this -> cookies as $title => $name){
+			if(empty($_COOKIE[$name]))
+				return false;
 
-		setcookie($this -> cookies['password'], $this -> encodeCookie($password), $time, $path);
+			$cookies[$title] = $this -> decodeCookie($_COOKIE[$name]);
+		}
+
+		return $cookies;
 	}
 
 	function createAuth(){
-		$password = $this -> cryptPass($_POST[$this -> cookies['password']]);
-		$this -> setCookies($_POST[$this -> cookies['username']], $password, APP_BASE);
+
+		$_POST[$this -> cookies['password']] = $this -> cryptPass($_POST[$this -> cookies['password']]);
+
+		$time = $_POST['keepme'] ? time() + (3600 * 24 * 30) : 0;
+
+		foreach($this -> cookies as $name)
+			setcookie($name, $this -> encodeCookie($_POST[$name]), $time, APP_BASE);
 	}
 
-	function detectUser(){
+	function createWorkSpace(){
+	
+		$this -> data = $this -> getCookies();
 
-		$cookies = $this -> getCookies();
+		if(! $this -> data)
+			return 'nocookies';
 
-		if(! $cookies)
-			return;
+		$db = Database::createSql(DB_AREA . $this -> data['area']);
 
-		foreach($this -> users as $user)
-			if($cookies['username'] == $user['username'] && $cookies['password'] == $user['password'])
-				return $user;
+		if(! $db)
+			return 'noarea';
+
+		$user = $this -> detectUser();
+
+		if(! $user)
+			return 'nouser';
+
+		return $user;
 	}
 
 	function logout(){

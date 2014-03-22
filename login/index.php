@@ -4,6 +4,8 @@ require '../local/detect.lib.php';
 $lang = detectLang();
 
 require "local/$lang.php";
+
+$attempt = isset($_GET['login']) ? $_GET['login'] : null;
 ?>
 <!DOCTYPE html>
 <html>
@@ -28,16 +30,21 @@ require "local/$lang.php";
 						<label data-icon="p"><?=$LOCAL[3]?>:</label>
 						<input name="upass" required type="password" placeholder="<?=$LOCAL[6]?>">
 					</p>
-					<?if(isset($_GET['login_attempt'])){?>
+					<?if($attempt == 'nouser'){?>
 						<div id="login-failed"><?=$LOCAL[7]?></div>
 					<?}?>
 					<p>
-						<input  id="keep-login" type="checkbox" name="loginkeeping">
+						<label><?=$LOCAL[8]?>:</label>
+						<input name="uns" required placeholder="<?=$LOCAL[9]?>">
+					</p>
+					<?if($attempt == 'noarea'){?>
+						<div id="login-failed"><?=$LOCAL[10]?></div>
+					<?}?>
+					<div id="keepme">
+						<input  id="keep-login" type="checkbox" name="keepme">
 						<label for="keep-login"><?=$LOCAL[4]?></label>
-					</p>
-					<p id="login-button">
-						<button><?=$LOCAL[1]?></button>
-					</p>
+					</div>
+					<button><?=$LOCAL[1]?></button>
 				</form>
 			</div>
 		</div>
