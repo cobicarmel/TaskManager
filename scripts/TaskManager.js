@@ -71,6 +71,63 @@ var TM = {
 		}
 	},
 
+	fillEditForm: function(form, data){
+
+		var insertRow = function(td, item){
+
+			var rowData = item.split('-').reverse();
+
+			for(var i in rowData){
+
+				var input = td.children(':input').eq(i);
+
+				if(input.is('select'))
+					input.selectOption('val', rowData[i]);
+				else
+					input.val(rowData[i]);
+			}
+		}
+
+		for(var d in data){
+
+			var item = data[d],
+				input = form.find('[name=' + d + ']'),
+				td =  input.parent();
+
+			if(! input.length || $.isArray(item))
+				continue;
+
+			if(typeof item == 'object'){
+
+				var tr = input.parents('tr'),
+					firstTd = tr.children().first(),
+					title = firstTd.text(),
+					stack = [];
+
+				firstTd.empty();
+
+				for(var p in item){
+
+					var trCopy = tr.clone();
+
+					insertRow(td, item[p]);
+
+					trCopy.find('input').each(function(){
+						var input = $(this);
+						input.attr('name', input.attr('name') + '[' + p + ']');
+					})
+
+					stack.push(trCopy);
+				}
+
+				tr.after(stack).next().children().first().text(title);
+				tr.remove();
+			}
+			else
+				insertRow(td, item);
+		}
+	},
+
 	getMultiObj: function(obj, keys, wanted){
 
 		var firstKey = keys[0],

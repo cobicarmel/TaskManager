@@ -136,43 +136,7 @@ var Client = {
 
 		$('#edit-client').replaceWith(Client.copyForm.clone(true));
 
-		var form = $('#edit-client');
-
-		for(var d in client){
-			var item = client[d],
-				input = form.find('[name=' + d + ']');
-
-			if(! input.length || $.isArray(item))
-				continue;
-
-			if(typeof item == 'object'){
-
-				var tr = input.parents('tr'),
-					firstTd = tr.children().first(),
-					title = firstTd.text(),
-					stack = [];
-
-				firstTd.empty();
-
-				for(var data in item){
-					var trCopy = tr.clone(),
-						tdData = trCopy.children().last(),
-						rowData = item[data].split('-').reverse();
-
-					for(var text in rowData){
-						input = tdData.children().eq(text);
-						input.attr('name', input.attr('name') + '[' + data + ']').val(rowData[text]);
-					}
-
-					stack.push(trCopy);
-				}
-
-				tr.after(stack).next().children().first().text(title);
-				tr.remove();
-			}
-			else
-				input.val(item);
-		}
+		TM.fillEditForm($('#edit-client'), client);
 	},
 
 	editPayment: function(){
@@ -316,7 +280,8 @@ var Client = {
 
 		$('.search-results').hide();
 
-		$('#cd-list').tableScroll(392).tablesorter({sortList: [[0,0]]});
+		if($('#cd-list').find('tbody tr').length)
+			$('#cd-list').tableScroll(392).tablesorter({sortList: [[0,0]]});
 
 		$('.ts-head th').on('click', function(){
 			var index = $(this).index('.ts-head th');

@@ -59,11 +59,9 @@ var Settings = {
 
 		this.edit = function(){
 
-			var data = self.getTrType.call(this),
-				form = self.form;
+			var data = self.getTrType.call(this);
 
-			for(var item in data.type)
-				form.find('[name=' + item + ']').val(data.type[item]);
+			TM.fillEditForm(self.form, data.type);
 
 			self.showForm(9, {action: 'edit', id: data.id});
 		}
@@ -98,7 +96,8 @@ var Settings = {
 				tr.data('id', id);
 
 				for(var item in data){
-					tr.children('.sg-' + item).text(data[item]);
+					var value = typeof data[item] == 'string' ? data[item] : data[item][Object.keys(data[item])];
+					tr.children('.sg-' + item).text(value);
 				}
 
 				tbody.append(tr);
@@ -141,9 +140,9 @@ var Settings = {
 
 			params.id = data.id;
 
-			TM.popup('loading', 85);
-
 			TM.submitForm.call(this, e, function(){
+
+				TM.popup('loading', 85);
 
 				Api.send(SUBJECT, data.action + NAME, params, function(res){
 

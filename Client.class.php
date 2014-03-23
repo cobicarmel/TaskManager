@@ -85,23 +85,6 @@ class Client{
 		}
 	}
 
-	private function phoneToDb(){
-
-		if(gettype($_POST['area-phone']) == 'array'){
-
-			foreach($_POST['area-phone'] as $key => $value)
-
-				if($value && $_POST['phone'][$key])
-
-					$_POST['phone'][$key] = implode('-', [$value, $_POST['phone'][$key]]);
-		}
-		elseif($_POST['phone'] && $_POST['area-phone'])
-
-			$_POST['phone'] = implode('-', [$_POST['area-phone'], $_POST['phone']]);
-
-		unset($_POST['area-phone']);
-	}
-
 	private function toClient(){
 		Database::addResponse($this -> query);
 	}
@@ -109,7 +92,7 @@ class Client{
 	private function toDb(){
 
 		if(isset($_POST['phone']))
-			$this -> phoneToDb();
+			Database::phoneToDb();
 
 		if(isset($_POST['id'])){
 

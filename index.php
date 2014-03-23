@@ -8,15 +8,13 @@ $query = $output -> query('select * from config');
 $default = [];
 
 foreach($query as $set)
-	$default[$set['name']] = $set['value'];	
-
-$default['table_times'] = json_decode($default['table_times'], true);
+	$default[$set['name']] = json_decode($set['value']);	
 
 $config = [
 	'actions' => $allowedActions,
 	'default' => $default,
 	'tasktypes' => Database::groupArray('id', $output -> query('select * from tasktypes')),
-	'users' => Database::groupArray('id', $output -> query('select * from users'))
+	'users' => $recognizedUsers
 ];
 ?>
 

@@ -30,7 +30,7 @@ foreach($_POST as $key => $value)
 
 /** performing action **/
 
-require "$subject.class.php";
+require_once "$subject.class.php";
 
 $class = new $subject;
 

@@ -12,7 +12,9 @@ class Authorization{
 
 	var $data;
 
-	private function cryptPass($pass){
+	var $userClass;
+
+	static function cryptPass($pass){
 		return md5(md5(gzcompress($pass)));
 	}
 
@@ -28,7 +30,9 @@ class Authorization{
 
 		require 'Users.class.php';
 
-		$users = (new Users) -> getAll();
+		$this -> userClass = new Users;
+
+		$users = $this -> userClass -> getAll();
 
 		$data = $this -> data;
 
@@ -53,7 +57,7 @@ class Authorization{
 
 	function createAuth(){
 
-		$_POST[$this -> cookies['password']] = $this -> cryptPass($_POST[$this -> cookies['password']]);
+		$_POST[$this -> cookies['password']] = self::cryptPass($_POST[$this -> cookies['password']]);
 
 		$time = $_POST['keepme'] ? time() + (3600 * 24 * 30) : 0;
 

@@ -347,12 +347,12 @@ var Task =  function(TABLE_TIME){
 				button: 9,
 				id: self.id,
 				strdate: self.start.strDate,
-				time: self.start.strTime,
+				starttime: self.start.strTime,
 				title: self.title,
 				type: 7,
 				content: self.content,
 				place: self.place,
-				client: self.client_id,
+				client_id: self.client_id,
 				date: self.start.date
 			}
 

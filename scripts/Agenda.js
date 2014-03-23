@@ -13,9 +13,6 @@ var Agenda = function(TABLE_TIME){
 		var params = $(this).serializeObject(),
 			current = self.getDay(day);
 
-		if(params.endtime < params.starttime && params.endtime != '00:00' || params.starttime == params.endtime)
-			return Api.validate.error({element: '#ae-endtime', no: 1});
-
 		for(var range in current){
 
 			var part = self.parseData(current[range]);

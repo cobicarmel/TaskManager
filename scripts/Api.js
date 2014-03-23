@@ -50,6 +50,10 @@ var Api = {
 		params.subject = subject;
 
 		var options = {
+			complete: function(status){
+				if(status.getResponseHeader('TM-finalURL') == 'login/')
+					location.replace($('#logout a').prop('href'));
+			},
 			data: params,
 			dataType: 'json',
 			statusCode: {
@@ -58,6 +62,7 @@ var Api = {
 				}
 			},
 			success: function(res){
+
 				if(res.error)
 					return Api.error(24);
 
@@ -78,39 +83,66 @@ var Api = {
 			}
 		},
 
-		names: [{
-			type: ['date', 'from', 'to'],
-			check: function(){
-				return /^([0-2][0-9]|3(0|1))\/(0[1-9]|1[0-2])\/20[0-9]{2}$/.test(this.value) ? true : 65;
-			}
-		}, {
-			type: ['mid'],
-			check: function(){
-				return Api.validate.validateId(this.value) ? true : 27;
-			}
-		}],
+		names: {
+
+			global: [{
+				type: ['date', 'from', 'to'],
+				check: function(){
+					return /^([0-2][0-9]|3(0|1))\/(0[1-9]|1[0-2])\/20[0-9]{2}$/.test(this.value) ? true : 65;
+				}
+			}, {
+				type: ['mid'],
+				check: function(){
+					return Api.validate.validateId(this.value) ? true : 27;
+				}
+			}],
+
+			'ae-form': [{
+				type: ['endtime'],
+				check: function(){
+
+					var startVal = $(this).parents('form').find('[name=starttime]').val(),
+						endVal = this.value;
+
+					return endVal < startVal && endVal != '00:00' || startVal == endVal ? 1 : true;
+				}
+			}],
+
+			'se-user': [{
+				type: ['re-password'],
+				check: function(){
+
+					var password = $(this).parents('form').find('[name=password]').val();
+
+					return password != this.value ? 87 : true;
+				}
+			}]
+		},
 
 		check: function(){
 
 			if(! this.value)
 				return true;
 
-			var names = Api.validate.names,
-				nameFn,
+			var formId = $(this).parents('form').attr('id'),
+				names = Api.validate.names.global,
+				specialNames = Api.validate.names[formId],
 				classFn = Api.validate.classes[this.className];
 
-			for(var name in names){
-				var group = names[name];
-				if(group.type.indexOf(this.name) + 1){
-					nameFn = group.check;
-					break;
-				}
-			}
+			if(specialNames)
+				names = names.concat(specialNames);
 
-			if(nameFn){
-				var nameValid = nameFn.apply(this);
-				if(nameValid !== true)
-					return nameValid;
+			for(var i in names){
+
+				var group = names[i];
+
+				if(group.type.indexOf(this.name) + 1){
+
+					var nameValid = group.check.apply(this);
+
+					if(nameValid !== true)
+						return nameValid;
+				}
 			}
 
 			if(classFn){

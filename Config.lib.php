@@ -22,7 +22,9 @@ define('COMPANY_NAME', 'TaskManager');
 
 define('DB_AREA', 'taskmanager_');
 
-$user = (new Authorization) -> createWorkSpace();
+$author = new Authorization;
+
+$user = $author -> createWorkSpace();
 
 if(gettype($user) != 'array'){
 
@@ -48,3 +50,5 @@ define('ACCESS', (int) $user['permission']);
 $sql = new DBOutput;
 
 $allowedActions = $sql -> query('select * from action_authorized where access >= ' . ACCESS);
+
+$recognizedUsers = $author -> userClass -> getRecognized();

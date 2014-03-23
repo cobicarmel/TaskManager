@@ -254,7 +254,7 @@
 							<div id="cdp-list">
 								<div id="cdp-wrapper" style="height: 100%">
 									<div style="height: 90%; overflow: auto">
-										<table id="cdp-table" class="data-table">
+										<table id="cdp-table" class="data-table editable">
 											<thead>
 												<th style="width: 6%"></th>
 												<th style="width: 26%"><?=$LOCAL[32]?></th>

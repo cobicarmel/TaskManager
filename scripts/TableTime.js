@@ -82,6 +82,8 @@ var tableTime = function(ELEM, INDEX){
 			})
 		})
 
+		ELEM.find('#starttime, #endtime').timepicker();
+
 		TABLE_TIME.Agenda.setTab.find('.ss-add div').on('click', function(){
 			TABLE_TIME.Agenda.agendaForm('add', $(this).attr('day'));
 		})
@@ -309,32 +311,25 @@ var tableTime = function(ELEM, INDEX){
 
 	this.meetingForm = function(params){
 
-		var elem = ELEM.find('#new-meeting'),
-			inputs = elem.find('input, textarea');
+		var form = ELEM.find('#new-meeting');
 
 		TABLE_TIME.setDay(params.date, null, false, true);
 
-		elem[0].reset();
+		form[0].reset();
 
-		inputs.each(function(){
-			$(this).val(params[this.name] || '');
-		})
+		TM.fillEditForm(form, params);
 
-		ELEM.find('#nm-title')
+		form.find('#nm-title')
 			.text(LOCAL[params.type] + '-')
-			.append($('<span>', {id: 'nm-start'}).text(params.time));
+			.append($('<span>', {id: 'nm-start'}).text(params.starttime));
 
-		elem.data({id: params.id, tasktype: params.tasktype});
-		ELEM.find('#starttime').timepicker(params.time);
-		elem.find('button.ui-state-default').text(LOCAL[params.button]);
+		form.data({id: params.id, tasktype: params.tasktype});
+
+		form.find('button.ui-state-default').text(LOCAL[params.button]);
+
 		TABLE_TIME.setEndTime();
 
-		if(params.client)
-			ELEM.find('#client_id option').each(function(){
-				this.selected = this.value == params.client;
-			})
-
-		elem.show().position({of: '#appcenter'});
+		form.show().position({of: '#appcenter'});
 	}
 
 	this.moveMeets = function(ids){
@@ -365,7 +360,7 @@ var tableTime = function(ELEM, INDEX){
 					button: 8,
 					date: date,
 					strdate: date.toLocaleDateString(),
-					time: strTime,
+					starttime: strTime,
 					type: 6
 				}
 
@@ -463,7 +458,7 @@ var tableTime = function(ELEM, INDEX){
 
 		var endtime = TABLE_TIME.getRangeTime(date, duration).toRealTime();
 
-		ELEM.find('#endtime').timepicker(endtime);
+		ELEM.find('#endtime').selectOption('text', endtime);
 	}
 
 	this.selectedMeets = function(){

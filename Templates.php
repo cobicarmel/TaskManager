@@ -91,7 +91,7 @@
 	<div id="agenda-edit">
 		<div class="ui-icon ui-icon-close f-close" title="<?=$LOCAL[14]?>"></div>
 		<div id="ae-day" class="form-title"></div>
-		<form>
+		<form id="ae-form">
 			<table>
 				<tr>
 					<td><?=$LOCAL[4]?>:</td>

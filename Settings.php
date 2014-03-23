@@ -101,19 +101,50 @@
 				</thead>
 				<tbody></tbody>
 			</table>
-			<form class="sg-edit abs-form">
+			<form id="se-user" class="sg-edit abs-form">
 				<div class="ui-icon ui-icon-close f-close" title="<?=$LOCAL[14]?>"></div>
 				<table>
 					<tr>
+						<td class="form-label"><?=$LOCAL[29]?>:</td>
+						<td colspan="2">
+							<input name="username" required placeholder="<?=$LOCAL[101]?>" pattern=".{4,}">
+						</td>
+					</tr>
+					<tr>
 						<td class="form-label"><?=$LOCAL[22]?>:</td>
 						<td colspan="2">
-							<input name="phone">
+							<input name="phone" class="phone number">
+							<input name="area-phone" class="area-phone number" maxlength="3">
 						</td>
 					</tr>
 					<tr>
 						<td class="form-label"><?=$LOCAL[30]?>:</td>
 						<td colspan="2">
 							<input name="email">
+						</td>
+					</tr>
+					<tr>
+						<td class="form-label"><?=$LOCAL[96]?>:</td>
+						<td colspan="2">
+							<input type="password" name="password" placeholder="<?=$LOCAL[99]?>" pattern=".{6,}">
+						</td>
+					</tr>
+					<tr>
+						<td class="form-label"><?=$LOCAL[97]?>:</td>
+						<td colspan="2">
+							<input type="password" name="re-password" placeholder="<?=$LOCAL[100]?>" pattern=".{6,}">
+						</td>
+					</tr>
+					<tr>
+						<td class="form-label"><?=$LOCAL[98]?>:</td>
+						<td colspan="2">
+							<select name="permission">
+								<?
+								foreach($default['ranks'] as $k => $v)
+									if($k >= ACCESS)
+										echo "<option value='$k'>$LOCAL[$v]</option>";
+								?>
+							</select>
 						</td>
 					</tr>
 				</table>
