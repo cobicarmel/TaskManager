@@ -11,7 +11,7 @@ foreach($query as $set)
 	$default[$set['name']] = json_decode($set['value']);	
 
 $config = [
-	'actions' => $allowedActions,
+	'actions' => $dbaccess -> listActions(),
 	'default' => $default,
 	'tasktypes' => Database::groupArray('id', $output -> query('select * from tasktypes')),
 	'users' => $recognizedUsers

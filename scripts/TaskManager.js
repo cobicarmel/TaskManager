@@ -73,6 +73,8 @@ var TM = {
 
 	fillEditForm: function(form, data){
 
+		form[0].reset();
+
 		var insertRow = function(td, item){
 
 			var rowData = item.split('-').reverse();

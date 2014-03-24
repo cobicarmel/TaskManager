@@ -88,7 +88,7 @@
 						<div class="cdt-tab" tab="cd-card"><?=$LOCAL[41]?></div>
 						<div class="cdt-tab" tab="cd-history"><?=$LOCAL[42]?></div>
 						<div class="cdt-tab" tab="cd-edit"><?=$LOCAL[43]?></div>
-						<?if(ACCESS <= 2){?>
+						<?if($dbaccess -> hasAction('Payment')){?>
 							<div class="cdt-tab" tab="cd-payments"><?=$LOCAL[51]?></div>
 						<?}?>
 					</div>
@@ -195,7 +195,7 @@
 								</table>
 							</form>
 						</div>
-						<?if(ACCESS <= 2){?>
+						<?if($dbaccess -> hasAction('Payment')){?>
 						<div id="cd-payments">
 							<h4><?=$LOCAL[53]?></h4>
 							<div id="cdp-new">

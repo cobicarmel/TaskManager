@@ -26,15 +26,9 @@ var Api = {
 
 	isAllowed: function(subject, action){
 
-		var allowed = false;
+		subject = Config.actions[subject];
 
-		for(var act in Config.actions)
-			if(Config.actions[act].subject == subject && Config.actions[act].action == action){
-				allowed = true;
-				break;
-			}
-
-		return allowed;
+		return typeof subject == 'object' && (subject.indexOf(action) + 1);
 	},
 
 	send: function(subject, action, params, success){

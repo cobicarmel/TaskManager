@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 19, 2014 at 11:06 PM
+-- Generation Time: Mar 24, 2014 at 07:41 PM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.9
 
@@ -25,6 +25,55 @@ USE `taskmanager_main`;
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `action_authorized`
+--
+
+CREATE TABLE IF NOT EXISTS `action_authorized` (
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `subject` enum('Task','Client','Payment','Agenda','Users') NOT NULL,
+  `action` varchar(20) NOT NULL,
+  `access` tinyint(2) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `action_authorized`
+--
+
+INSERT INTO `action_authorized` (`id`, `subject`, `action`, `access`) VALUES
+(1, 'Agenda', 'getall', 3),
+(2, 'Client', 'getall', 3),
+(3, 'Task', 'getday', 3),
+(4, 'Agenda', 'getspecial', 3),
+(5, 'Task', 'createtask', 3),
+(6, 'Task', 'changetime', 3),
+(7, 'Client', 'newclient', 3),
+(8, 'Task', 'clienthistory', 3),
+(9, 'Payment', 'getpayments', 3),
+(10, 'Client', 'remove', 3),
+(11, 'Payment', 'addpayment', 3),
+(12, 'Payment', 'editpayment', 3),
+(13, 'Payment', 'removepayment', 3),
+(14, 'Client', 'edit', 3),
+(15, 'Client', 'additem', 3),
+(16, 'Client', 'search', 3),
+(17, 'Task', 'removetask', 3),
+(18, 'Task', 'edittask', 3),
+(19, 'Agenda', 'addspecial', 3),
+(20, 'Agenda', 'updatespecial', 3),
+(21, 'Task', 'addtasktypes', 3),
+(22, 'Task', 'edittasktypes', 3),
+(23, 'Task', 'removetasktypes', 3),
+(24, 'Agenda', 'addagenda', 3),
+(25, 'Agenda', 'updateagenda', 3),
+(26, 'Agenda', 'remove', 3),
+(27, 'Users', 'editusers', 2),
+(28, 'Users', 'addusers', 2),
+(29, 'Users', 'removeusers', 2);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `agenda`
 --
 
@@ -37,7 +86,15 @@ CREATE TABLE IF NOT EXISTS `agenda` (
   `static` tinyint(1) NOT NULL,
   `system` tinyint(1) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `agenda`
+--
+
+INSERT INTO `agenda` (`id`, `day`, `starttime`, `endtime`, `tasktype`, `static`, `system`) VALUES
+(21, '0', '10:45:00', '13:00:00', 6, 0, 0),
+(22, '5', '11:30:00', '14:40:00', 8, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -53,7 +110,14 @@ CREATE TABLE IF NOT EXISTS `clients` (
   `address` tinytext,
   `city` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `clients`
+--
+
+INSERT INTO `clients` (`id`, `first_name`, `last_name`, `mid`, `address`, `city`) VALUES
+(1, 'טליה', 'אביגד', NULL, NULL, NULL);
 
 --
 -- Triggers `clients`
@@ -77,7 +141,17 @@ CREATE TABLE IF NOT EXISTS `config` (
   `value` tinytext NOT NULL,
   PRIMARY KEY (`id`),
   KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `config`
+--
+
+INSERT INTO `config` (`id`, `name`, `value`) VALUES
+(6, 'table_times', '["\\u05de\\u05e2\\u05e8\\u05db\\u05ea \\u05e9\\u05e2\\u05d5\\u05ea","\\u05e8\\u05d5\\u05e4\\u05d0\\u05d9\\u05dd"]'),
+(7, 'ranks', '{"1":92,"2":93,"3":94,"4":95}'),
+(8, 'payment_limit', '8'),
+(9, 'meeting_duration', '40');
 
 -- --------------------------------------------------------
 
@@ -90,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `email` (
   `email_address` text NOT NULL,
   `client_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -104,7 +178,7 @@ CREATE TABLE IF NOT EXISTS `mail_messages` (
   `subject` tinytext NOT NULL,
   `message` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -119,7 +193,14 @@ CREATE TABLE IF NOT EXISTS `payments` (
   `date` date NOT NULL,
   `client` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `payments`
+--
+
+INSERT INTO `payments` (`id`, `sum`, `title`, `date`, `client`) VALUES
+(1, '12.00', 'גלידה', '2014-03-23', 1);
 
 -- --------------------------------------------------------
 
@@ -132,7 +213,14 @@ CREATE TABLE IF NOT EXISTS `phone_numbers` (
   `phone_number` tinytext NOT NULL,
   `client_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `phone_numbers`
+--
+
+INSERT INTO `phone_numbers` (`id`, `phone_number`, `client_id`) VALUES
+(1, '050-4122135', 1);
 
 -- --------------------------------------------------------
 
@@ -164,7 +252,15 @@ CREATE TABLE IF NOT EXISTS `tasks` (
   `client_id` int(10) unsigned DEFAULT NULL,
   `system` tinyint(1) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=45 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tasks`
+--
+
+INSERT INTO `tasks` (`id`, `title`, `content`, `place`, `starttime`, `endtime`, `client_id`, `system`) VALUES
+(1, ' ירושלים', 'ארוחת חצות', ' ירושלים', '2014-03-23 12:00:00', '2014-03-23 12:45:00', 1, 0),
+(2, 'הייטק', NULL, 'יהודה הלוי 10, בני ברק', '2014-03-25 17:00:00', '2014-03-25 17:40:00', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -178,7 +274,41 @@ CREATE TABLE IF NOT EXISTS `tasktypes` (
   `place` tinytext NOT NULL,
   `duration` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tasktypes`
+--
+
+INSERT INTO `tasktypes` (`id`, `title`, `place`, `duration`) VALUES
+(6, 'קבלת קהל - ירושלים', 'לב שומע - ירושלים', 45),
+(7, 'קבלת קהל - בני ברק', 'לב שומע - בני ברק', 45),
+(8, 'פרופסור ויצמן', 'מגדלי ויצמן', 120);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `username` tinytext NOT NULL,
+  `password` tinytext NOT NULL,
+  `permission` tinyint(1) NOT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `email` tinytext,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `password`, `permission`, `phone`, `email`) VALUES
+(1, 'לייבל', 'c17672c95122be1262282cc9918bdca5', 2, '050-23464867', 'tamaryaalom7@gmail.com'),
+(2, 'קובי', 'c85f975261c91b72f5fd88a8f7e61653', 1, '052-7139161', ''),
+(3, 'ללוש', 'b736f6b24b377554f9b8539001e1b615', 3, NULL, NULL);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

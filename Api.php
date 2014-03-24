@@ -2,23 +2,15 @@
 
 require 'Global.php';
 
+/** checking user permissions for specify action **/
+
 $subject = $_POST['subject'];
 
 $action = $_POST['action'];
 
 unset($_POST['subject'], $_POST['action']);
 
-/** checking user permissions for specify action **/
-
-$allowed = false;
-
-foreach($allowedActions as $act)
-	if($act['subject'] == $subject && $act['action'] == $action){
-		$allowed = true;
-		break;
-	}
-
-if(! $allowed){
+if(! $dbaccess -> hasAction($subject, $action)){
 	header('HTTP/1.0 403 Forbidden');
 	exit;
 }

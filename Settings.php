@@ -4,8 +4,10 @@
 		<label for="st-radio1"><?=$LOCAL[1]?></label>
 		<input type="radio" name="st-radio" id="st-radio2"></input>
 		<label for="st-radio2"><?=$LOCAL[72]?></label>
-		<input type="radio" name="st-radio" id="st-radio3"></input>
-		<label for="st-radio3"><?=$LOCAL[89]?></label>
+		<?if($dbaccess -> hasAction('Users')){?>
+			<input type="radio" name="st-radio" id="st-radio3"></input>
+			<label for="st-radio3"><?=$LOCAL[89]?></label>
+		<?}?>
 		<input type="radio" name="st-radio" id="st-radio4"></input>
 		<label for="st-radio4"><?=$LOCAL[71]?></label>
 	</div>
@@ -88,6 +90,7 @@
 				</tr>
 			</table>
 		</div>
+		<?if($dbaccess -> hasAction('Users')){?>
 		<div id="set-group-users" class="set-tab" tab="st-radio3">
 			<div class="sg-add"><?=$LOCAL[91]?></div>
 			<table class="sg-list data-table">
@@ -164,5 +167,6 @@
 				</tr>
 			</table>
 		</div>
+		<?}?>
 	</div>
 </div>

@@ -6,6 +6,8 @@ require 'local/detect.lib.php';
 
 require 'Authorization.class.php';
 
+require 'DBAccess.class.php';
+
 /** General config **/
 
 date_default_timezone_set('Asia/Jerusalem');
@@ -47,8 +49,6 @@ define('ACCESS', (int) $user['permission']);
 
 /** getting all allowed actions for this user **/
 
-$sql = new DBOutput;
-
-$allowedActions = $sql -> query('select * from action_authorized where access >= ' . ACCESS);
+$dbaccess = new DBAccess;
 
 $recognizedUsers = $author -> userClass -> getRecognized();
