@@ -44,7 +44,7 @@ var Task =  function(TABLE_TIME){
 				return ids.indexOf(key) + 1 && data.client_id ? data.client_id : null;
 			})
 
-		if(sendSet == '0' || ! clients.length)
+		if(! sendSet || ! clients.length)
 			return;
 
 		var params = {
@@ -61,13 +61,10 @@ var Task =  function(TABLE_TIME){
 			})
 		}
 
-		switch(sendSet){
-			case 'ask':
-				Api.confirm(null, 75, send);
-				break;
-			case '1':
-				send();
-		}
+		if(sendSet == 1)
+			send();
+		else
+			Api.confirm(null, 75, send);
 	}
 
 	this.changeTime = function(meetings){
@@ -299,8 +296,10 @@ var Task =  function(TABLE_TIME){
 			if(self.start.strDate != self.end.strDate)
 				return;
 
-			self.draggable();
-			self.resizable();
+			if(Config.default.interactive_meet){
+				self.draggable();
+				self.resizable();
+			}
 		}
 
 		this.construct = function(data){
@@ -376,15 +375,19 @@ var Task =  function(TABLE_TIME){
 					options = data[event.type == 'dragstop' ? 'ui-draggable' : 'ui-resizable'].options,
 					timeRange = options.timeRange.apply(this),
 					starttime = timeRange.starttime,
-					endtime = timeRange.endtime,
-					message = $('<div>').append(
-						$('<div>').text(LOCAL[16]),
-						$('<div>').text(LOCAL[31] + ': ' + starttime.toRealTime()),
-						$('<div>').text(LOCAL[32] + ': ' + endtime.toRealTime())
-					);
+					endtime = timeRange.endtime;
 
 				if(data['meeting']['starttime'].toRealTime() == starttime.toRealTime() && data['meeting']['endtime'].toRealTime() == endtime.toRealTime())
 					return;
+
+				if(Config.default.interactive_meet == 1)
+					return self.changeTime(starttime, endtime);
+
+				var message = $('<div>').append(
+					$('<div>').text(LOCAL[16]),
+					$('<div>').text(LOCAL[31] + ': ' + starttime.toRealTime()),
+					$('<div>').text(LOCAL[32] + ': ' + endtime.toRealTime())
+				)
 
 				Api.confirm(40, message, function(){
 					self.changeTime(starttime, endtime);

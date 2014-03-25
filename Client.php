@@ -94,7 +94,7 @@
 					</div>
 					<div id="cd-blanks">
 						<div id="cd-card">
-							<div class="cdc-data-box">
+							<div class="data-box">
 								<div class="cdc-data">
 									<div class="cdc-right">
 										<div id="cdc-addphone" title="<?=$LOCAL[47]?>" class="ui-icon ui-icon-plus cmd-icon"></div>
@@ -110,7 +110,7 @@
 									<div id="cdc-email" class="cdc-items"></div>
 								</div>
 							</div>
-							<div class="cdc-data-box">
+							<div class="data-box">
 								<div class="cdc-data">
 									<div class="cdc-right"></div>
 									<div class="cdc-title"><?=$LOCAL[24]?></div>
@@ -122,7 +122,7 @@
 									<div id="cdc-address" class="cdc-items"></div>
 								</div>
 							</div>
-							<div class="cdc-data-box">
+							<div class="data-box">
 								<div class="cdc-data">
 									<div class="cdc-right"></div>
 									<div class="cdc-title"><?=$LOCAL[25]?></div>

@@ -23,7 +23,7 @@
 				</div>
 			</div>
 			<div id="set-agenda-body">
-			<?foreach($default['table_times'] as $n){?>
+			<?foreach($config['default']['table_times'] as $n){?>
 				<div class="sab-system">
 					<?for($day = 73, $i = 0; $i < 7; $i++){?>
 					<div class="ss-day">
@@ -143,7 +143,7 @@
 						<td colspan="2">
 							<select name="permission">
 								<?
-								foreach($default['ranks'] as $k => $v)
+								foreach($config['default']['ranks'] as $k => $v)
 									if($k >= ACCESS)
 										echo "<option value='$k'>$LOCAL[$v]</option>";
 								?>
@@ -168,5 +168,78 @@
 			</table>
 		</div>
 		<?}?>
+		<div class="set-tab" tab="st-radio4">
+			<form id="general-settings" class="abs-form auto-center">
+				<div id="gs-boxes">
+					<div class="data-box">
+						<h4 class="db-caption"><?=$LOCAL[8]?></h4>
+						<table>
+							<tr>
+								<td><?=$LOCAL[102]?></td>
+								<td>
+									<input name="meeting_duration" placeholder="<?=$LOCAL[103]?>" type="number" min="10">
+								</td>
+							</tr>
+							<tr>
+								<td><?=$LOCAL[104]?></td>
+								<td>
+									<select name="undefined_time">
+										<option value="0"><?=$LOCAL[107]?></option>
+										<option value="1"><?=$LOCAL[106]?></option>
+										<option value="2"><?=$LOCAL[105]?></option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td><?=$LOCAL[108]?></td>
+								<td>
+									<select name="interactive_meet">
+										<option value="0"><?=$LOCAL[111]?></option>
+										<option value="1"><?=$LOCAL[110]?></option>
+										<option value="2"><?=$LOCAL[109]?></option>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<div class="data-box">
+					<h4 class="db-caption"><?=$LOCAL[30]?></h4>
+					<table>
+						<tr>
+							<td><?=$LOCAL[112]?></td>
+							<td>
+								<select name="meet_cancel_mail">
+									<option value="0"><?=$LOCAL[113]?></option>
+									<option value="1"><?=$LOCAL[114]?></option>
+									<option value="2"><?=$LOCAL[115]?></option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td><?=$LOCAL[116]?></td>
+							<td>
+								<input name="mail_sender_address" type="email" placeholder="<?=$LOCAL[118]?>">
+							</td>
+						</tr>
+						<tr>
+							<td><?=$LOCAL[117]?></td>
+							<td>
+								<input name="mail_sender_pass" type="password" placeholder="<?=$LOCAL[120]?>">
+							</td>
+						</tr>
+						<tr>
+							<td><?=$LOCAL[119]?></td>
+							<td>
+								<input name="mail_sender_name">
+							</td>
+						</tr>
+					</table>
+				</div>
+				</div>
+				<div id="sg-submit">
+					<button class="ui-state-default"><?=$LOCAL[44]?></button>
+				</div>
+			</form>
+		</div>
 	</div>
 </div>

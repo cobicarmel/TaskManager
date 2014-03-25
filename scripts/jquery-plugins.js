@@ -177,7 +177,7 @@ $.fn.selectOption = function(type, value){
 
 	options.filter(function(){
 		return $(this)[type]() == value;
-	}).attr('selected', true);
+	}).prop('selected', true);
 
 	return this;
 }

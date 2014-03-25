@@ -1,19 +1,12 @@
 <?
 require 'Global.php';
 
-$output = new DBOutput;
-
-$query = $output -> query('select * from config');
-
-$default = [];
-
-foreach($query as $set)
-	$default[$set['name']] = json_decode($set['value']);	
+require 'Task.class.php';
 
 $config = [
 	'actions' => $dbaccess -> listActions(),
-	'default' => $default,
-	'tasktypes' => Database::groupArray('id', $output -> query('select * from tasktypes')),
+	'default' => (new Settings) -> listConfig(),
+	'tasktypes' => (new Task) -> getTaskTypes(),
 	'users' => $recognizedUsers
 ];
 ?>
@@ -39,7 +32,7 @@ $config = [
 		<div class="ac-tab" tab="calendar">
 			<div id="calendar"></div>
 		</div>
-		<?foreach($default['table_times'] as $i => $title){?>
+		<?foreach($config['default']['table_times'] as $i => $title){?>
 			<div class="ac-tab" tab="table-time-<?=$i?>">
 				<?require 'TableTime.php';?>
 			</div>

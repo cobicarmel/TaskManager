@@ -5,9 +5,13 @@ var Settings = {
 	buildGroups: function(){
 
 		var tasktypes = new Settings.createGroup('Task', 'tasktypes', function(){
-			var typesList = $('#ae-taskgroup').html($('<option>'));
-			for(var option in Config.tasktypes)
-				typesList.append($('<option>').attr('value', option).text(Config.tasktypes[option].title));
+
+			Settings.listTasktypes();
+
+			for(var tt in TM.tableTimes){
+				var agenda = TM.tableTimes[tt].Agenda;
+				agenda.getAll(agenda.rewrite);
+			}	
 		})
 
 		tasktypes.init();
@@ -79,7 +83,7 @@ var Settings = {
 
 		this.init = function(){
 
-			self.applyChanges();
+			self.list();
 
 			self.attachEvents();
 		}
@@ -161,6 +165,14 @@ var Settings = {
 		$('.set-tab[tab=' + $(this).attr('for') + ']').show();
 	},
 
+	listTasktypes: function(){
+
+		var typesList = $('#ae-taskgroup').html($('<option>'));
+
+		for(var option in Config.tasktypes)
+			typesList.append($('<option>').attr('value', option).text(Config.tasktypes[option].title));
+	},
+
 	navAgenda: {
 
 		active: 0,
@@ -196,4 +208,15 @@ var Settings = {
 		}
 	},
 
+	submitSettings: function(){
+
+		var params = this.serializeObject();
+
+		TM.popup('loading', 12);
+
+		Api.send('Settings', 'changesettings', params, function(){
+			TM.popup('success', 13);
+			location.reload();
+		})
+	}
 }

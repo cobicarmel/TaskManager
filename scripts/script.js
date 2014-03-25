@@ -57,6 +57,10 @@ $(function(){
 
 	Settings.buildGroups();
 
+	Settings.listTasktypes();
+
+	TM.fillEditForm($('#general-settings'), Config.default);
+
 	$('#stt-duration').spinner({
 		max: 300,
 		min: 10,
@@ -110,12 +114,18 @@ $(function(){
 
 	$('.nav-arrows-wrap div').click(Settings.navAgenda.navigate);
 
+	$('#as-datetime').click(TM.tableTimes[0].setDay);
+
 	$('.f-close').on('click', function(){
 		$(this).parent().hide();
 	})
 
 	$('button.ui-state-default').hover(function(){
 		$(this).toggleClass('ui-state-hover');
+	})
+
+	$('#general-settings').on('submit', function(e){
+		TM.submitForm.call(this, e, Settings.submitSettings);
 	})
 
 	/** Live events **/

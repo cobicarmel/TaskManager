@@ -77,7 +77,7 @@ var TM = {
 
 		var insertRow = function(td, item){
 
-			var rowData = item.split('-').reverse();
+			var rowData = ('' + item).split('-').reverse();
 
 			for(var i in rowData){
 
@@ -110,11 +110,13 @@ var TM = {
 
 				for(var p in item){
 
-					var trCopy = tr.clone();
+					var trCopy = tr.clone(),
+						inputs = trCopy.find('input'),
+						td = inputs.parent();
 
 					insertRow(td, item[p]);
 
-					trCopy.find('input').each(function(){
+					inputs.each(function(){
 						var input = $(this);
 						input.attr('name', input.attr('name') + '[' + p + ']');
 					})
@@ -238,7 +240,7 @@ var TM = {
 
 			var tr = $('<tr>').append(
 				$('<td>').html($('<span>', {'class': 'ui-icon ui-icon-clock'})).width(16),
-				$('<td>').text(start).width('23%'),
+				$('<td>', {'class': 'tahoma'}).text(start).width('23%'),
 				$('<td>').html($('<span>', {'class': 'ui-icon ui-icon-arrowthick-1-w'})).width(20),
 				$('<td>', {'class': 'td-title'}).text(meet.title)
 			)

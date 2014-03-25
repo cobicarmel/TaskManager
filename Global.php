@@ -2,7 +2,15 @@
 
 require 'DB.class.php';
 
+require 'local/detect.lib.php';
+
+require 'Authorization.class.php';
+
+require 'DBAccess.class.php';
+
 require 'Config.lib.php';
+
+require 'Settings.class.php';
 
 require 'Time.class.php';
 

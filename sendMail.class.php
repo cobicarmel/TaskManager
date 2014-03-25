@@ -4,21 +4,25 @@ require('../PHPMailer/class.phpmailer.php');
 
 class sendMail{
 
-	var $mail;
+	private $mail;
 
-	var $user;
+	private $user;
 
-	var $clients;
+	private $clients;
 
-	var $output;
+	private $output;
 
-	var $message;
+	private $message;
+
+	private $config;
 
 	function __construct(){
 
 		$this -> mail = new PHPMailer();
 
 		$this -> output = new DBOutput;
+
+		$this -> config = (new Settings) -> listConfig();
 
 		$this -> setUser();
 
@@ -94,13 +98,13 @@ class sendMail{
 
 		$this -> mail -> CharSet = 'UTF-8';
 		$this -> mail -> IsHTML(true);
-		$this -> mail -> SetFrom($this -> user, COMPANY_NAME);
+		$this -> mail -> SetFrom($this -> user, $this -> config['mail_sender_name']);
 		$this -> mail -> Subject = $this -> message['subject'];
 	}
 
 	private function setUser(){
-		$this -> user = 'jzaltzberg@gmail.com';
-		$this -> mail -> Password = '1712Hgec';
+		$this -> user = $this -> config['mail_sender_address'];
+		$this -> mail -> Password = $this -> config['mail_sender_pass'];
 	}
 
 	function send(){

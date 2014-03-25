@@ -2,13 +2,13 @@
 
 class Users{
 
-	var $users;
+	private $users;
 
-	var $input;
+	private $input;
 
-	var $output;
+	private $output;
 
-	var $userId;
+	private $userId;
 
 	function __construct(){
 		$this -> input = new DBInput;

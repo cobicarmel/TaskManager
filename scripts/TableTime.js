@@ -2,6 +2,8 @@
 
 var tableTime = function(ELEM, INDEX){
 
+	this.isFirstRun = true;
+
 	this.onReady = null;
 
 	this.readyState = 0;
@@ -26,9 +28,9 @@ var tableTime = function(ELEM, INDEX){
 
 		TABLE_TIME.Agenda.setTab = $('.sab-system').eq(INDEX);
 
-		TABLE_TIME.Agenda.getAll();
-
 		TABLE_TIME.createTable();
+
+		TABLE_TIME.Agenda.getAll(TABLE_TIME.setDay);
 
 		TABLE_TIME.addEvents();
 
@@ -118,17 +120,29 @@ var tableTime = function(ELEM, INDEX){
 	this.applyChanges = function(){
 
 		TABLE_TIME.fillTable();
+
 		TABLE_TIME.showDateTitle();
+
 		TM.changeTab.apply(TABLE_TIME.menuTab);
+
 		TABLE_TIME.Agenda.applyChanges();
-
-		ELEM.find('.tt-content-part.now').removeClass('now');
-
-		if(TABLE_TIME.isToDay())
-			TABLE_TIME.scrollToNow();
 
 		if(! INDEX)
 			TM.showSoonMeetings();
+
+		ELEM.find('.tt-content-part.now').removeClass('now');
+
+		if(TABLE_TIME.isToday()){
+
+			var date = new Date;
+
+			TABLE_TIME.getHourPart(date).addClass('now');
+
+			if(TABLE_TIME.isFirstRun){
+				TABLE_TIME.scrollToTime(date);
+				TABLE_TIME.isFirstRun = false;
+			}
+		}
 	}
 
 	this.createHour = function(hour){
@@ -304,7 +318,7 @@ var tableTime = function(ELEM, INDEX){
 		return clone.remove(), height;
 	}
 
-	this.isToDay = function(){
+	this.isToday = function(){
 		var date = new Date(TABLE_TIME.date);
 		return date.setHours(0,0,0,0) == new Date().setHours(0,0,0,0);
 	}
@@ -366,6 +380,7 @@ var tableTime = function(ELEM, INDEX){
 
 				if(! $.isEmptyObject(data)){
 					var typeInfo = Config.tasktypes[data.tasktype];
+
 					param.place = typeInfo.place;
 					param.tasktype = data.tasktype;
 					param.title = typeInfo.title;
@@ -390,14 +405,6 @@ var tableTime = function(ELEM, INDEX){
 		TABLE_TIME.setDay(date);
 	}
 
-	this.scrollToNow = function(){
-
-		var now = new Date(),
-			hourPart = TABLE_TIME.getHourPart(now).addClass('now');
-
-		TABLE_TIME.scrollToTime(now);
-	}
-
 	this.scrollToTime = function(date){
 		ELEM.find('#tt-body')[0].scrollTop = TABLE_TIME.getPartTop(date);
 	}
@@ -406,7 +413,7 @@ var tableTime = function(ELEM, INDEX){
 
 		var goReady = $.isFunction(ready);
 
-		if(date)
+		if(date instanceof Date)
 			TABLE_TIME.date = typeof date == 'string' ? date.toDate() : date;
 		else
 			TABLE_TIME.date = new Date();
@@ -510,6 +517,8 @@ var tableTime = function(ELEM, INDEX){
 			title: LOCAL[28]
 		}
 
+		switch1:
+
 		switch(type){
 			case 'different':
 				options.content = LOCAL[36];
@@ -523,6 +532,14 @@ var tableTime = function(ELEM, INDEX){
 			case 'free':
 				return fn();
 			default:
+				if(! type)
+					switch(Config.default.undefined_time){
+						case 0:
+							options.content = LOCAL[90];
+							break switch1;
+						case 1:
+							return fn();
+					}
 				return TABLE_TIME.Task.confirmCreate(type ? 'static' : 'undefined', fn);
 		}
 
@@ -536,6 +553,8 @@ var tableTime = function(ELEM, INDEX){
 			content: LOCAL[45]
 		}
 
+		switch1:
+
 		switch(type){
 			case 'different':
 				options.content += LOCAL[46];
@@ -547,6 +566,14 @@ var tableTime = function(ELEM, INDEX){
 				options.content += LOCAL[48];
 				break;
 			default:
+				if(! type)
+					switch(Config.default.undefined_time){
+						case 0:
+							options.content += LOCAL[90];
+							break switch1;
+						case 1:
+							return fn();
+					}
 				return TABLE_TIME.Task.confirmCreate(type ? 'staticgroup' : 'undefinedgroup', fn);
 		}
 

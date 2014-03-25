@@ -76,7 +76,7 @@ form table{
 	text-align: right;
 }
 form tr {
-	height: 40px;
+	height: 30px;
 }
 .number, .dec-number{
 	direction: ltr;
@@ -112,13 +112,14 @@ form tr {
 	text-indent: 10px;
 }
 #app{
+	position: relative;
 	height: 620px;
-	width: 1000px;
+	width: 1100px;
 	background: linear-gradient(to right,rgba(165, 190, 207, 0.37) 0%, rgba(216, 221, 229, 0.47) 100%);
 	box-shadow: 0pt 2px 5px rgba(129, 176, 192, 0.7), 0px 0px 8px 5px rgba(255, 255, 255, 0.4) inset;
 	border: 1px solid #eee;
 }
-#app > * {
+#appcenter, #appside{
 	border: 1px solid #DDD;
 	float: left;
 	height: 98%;
@@ -143,6 +144,11 @@ form tr {
 }
 .cmd-icon:hover{
 	opacity: 1;
+}
+.inline-input, #general-settings td:last-child > *{
+	border: none;
+	box-shadow: none;
+	outline: none;
 }
 .ac-tab {
 	position: absolute;
@@ -233,7 +239,7 @@ form tr {
 	position: absolute;
     right: 14px;
 }
-.ab-part {
+.ab-part{
 	width: 100%;
 	max-width: 100%;
 	position: absolute;
@@ -320,13 +326,13 @@ form tr {
 }
 .ttm-time {
 	color: #80397F;
-	font-family: 'Segoe UI Semibold' arial;
+	font-family: 'Segoe UI Semibold', arial;
 	font-size: 14px;
 	width: 20%;
 }
 .ttm-title {
 	width: 50%;
-	overflow: hidden;
+	line-height: 1;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
@@ -347,10 +353,7 @@ form tr {
 	margin-top: 13px;
 }
 #nm-date input{
-	border: none;
-	box-shadow: none;
 	width: 77%;
-	outline: none;
 	font-size: 12px;
 	color: #15C;
 	direction: ltr;
@@ -398,7 +401,6 @@ form tr {
 }
 #clients form button{
 	width: 100%;
-	height: 74%;
 }
 .phone{
 	width: 73%;
@@ -452,6 +454,7 @@ form tr {
 	text-align: center;
 	table-layout: fixed;
 	width: 100%;
+	clear: both;
 }
 #search-client input[type="reset"]{
 	width: initial;
@@ -573,20 +576,27 @@ form tr {
 	width: 30% !important;
 }
 #cd-edit{
-	width: 103%;
 	overflow: auto;
+}
+#edit-client, #edit-client table{
+	height: 100%;
 }
 #cd-blanks .data-table{
 	margin-top: 10px;
 	font-size: 15px;
 }
-.cdc-data-box {
+.data-box {
 	border: 1px solid #E0E0E0;
 	border-top: 4px solid #76a7fa;
 	margin-top: 14px;
 	border-radius: 3px;
 	padding: 8px 0 13px;
 	background-color: #FFF;
+}
+.db-caption{
+	text-indent: 10px;
+	margin: 0 8px 5px;
+	border-bottom: 1px solid #E7E7E7;
 }
 .cdc-data{
 	width: 100%;
@@ -703,6 +713,7 @@ form tr {
 }
 #as-datetime{
 	height: 16%;
+	cursor: pointer;
 }
 #user{
 	height: 3.8%;
@@ -730,6 +741,9 @@ form tr {
 #user-label:after{
 	border-right-color: #E0E7F9;
 	left: -12px;
+}
+#user-name{
+	float: right;
 }
 #logout {
 	height: 84%;
@@ -920,6 +934,7 @@ form tr {
 }
 #settings-body > div{
 	height: 100%;
+	position: relative;
 	display: none;
 }
 .navigate-box{
@@ -1028,4 +1043,25 @@ form tr {
 }
 #stt-duration{
 	box-shadow: none;
+}
+#general-settings{
+	height: 90%;
+	display: block;
+	text-align: right;
+}
+#general-settings .data-box{
+    float: right;
+    width: 48%;
+    margin: 15px 5px;
+}
+#general-settings table{
+	table-layout: auto;
+	padding-right: 8px;
+	white-space: nowrap;
+}
+#gs-boxes{
+	height: 94%;
+}
+#sg-submit{
+	text-align: center;
 }

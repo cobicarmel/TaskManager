@@ -4,15 +4,15 @@ require_once 'DB.class.php';
 
 class Authorization{
 
-	var $cookies = [
+	private $cookies = [
 		'username' => 'uname',
 		'password' => 'upass',
 		'area' => 'uns'
 	];
 
-	var $data;
+	private $data;
 
-	var $userClass;
+	public $userClass;
 
 	static function cryptPass($pass){
 		return md5(md5(gzcompress($pass)));

@@ -19,7 +19,7 @@
 			<div id="nm-head">
 				<p id="nm-title" class="tahoma form-title"></p>
 				<div id="nm-date">
-					<input name="strdate">
+					<input name="strdate" class="inline-input">
 					<div id="nm-calendar" class="ui-icon ui-icon-calendar"></div>
 				</div>
 			</div>

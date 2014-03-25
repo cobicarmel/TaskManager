@@ -7,7 +7,7 @@
 	<div id="user-label" class="caption">
 		<span class="ui-icon ui-icon-person"></span>
 	</div>
-	<span id="user-name"><?=USERNAME?></span>
+	<div id="user-name"><?=USERNAME?></div>
 	<div id="logout" class="caption">
 		<a href="login/login.lib.php?logout"><?=$LOCAL[67]?></a>
 	</div>
@@ -23,7 +23,7 @@
 	</div>
 </div>
 <div id="menu" class="as-bar">
-	<?foreach($default['table_times'] as $i => $title){?>
+	<?foreach($config['default']['table_times'] as $i => $title){?>
 		<div class="menu-tab" tab="table-time-<?=$i?>"><?=$title?></div>
 	<?}?>
 	<div class="menu-tab" tab="client"><?=$LOCAL[2]?></div>

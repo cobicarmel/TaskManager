@@ -242,11 +242,11 @@ var Agenda = function(TABLE_TIME){
 		self.agendaForm('update', data.day, data.id);
 	}
 
-	this.getAll = function(){
+	this.getAll = function(callback){
 
 		TABLE_TIME.apiRequest('Agenda', 'getall', function(res){
 			self.days = res[0];
-			TABLE_TIME.setDay();
+			callback && callback();
 			self.writeSettings();
 		})
 	}
@@ -331,7 +331,10 @@ var Agenda = function(TABLE_TIME){
 	}
 
 	this.rewrite = function(data){
-		self.days = data[0];
+
+		if(data)
+			self.days = data[0];
+
 		self.writeData();
 		self.writeSettings();
 		self.applyChanges();

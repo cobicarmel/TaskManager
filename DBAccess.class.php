@@ -2,7 +2,7 @@
 
 class DBAccess{
 
-	var $actions;
+	private $actions;
 
 	function __construct(){
 		$this -> output = new DBOutput;

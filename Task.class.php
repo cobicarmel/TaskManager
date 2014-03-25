@@ -60,7 +60,7 @@ class Task{
 
 		$this -> input -> query('insert', 'tasktypes', $_POST);
 
-		$this -> getTaskTypes();
+		$this -> listTaskTypes();
 	}
 
 	function changeTime(){
@@ -114,7 +114,7 @@ class Task{
 
 		$this -> input -> query('update', 'tasktypes', $_POST, "where id = $_POST[id]");
 
-		$this -> getTaskTypes();
+		$this -> listTaskTypes();
 	}
 
 	function getTasks($column, $values){
@@ -126,15 +126,6 @@ class Task{
 		$this -> toClient();
 	}
 
-	function getTaskTypes(){
-
-		$query = $this -> output -> query('select * from tasktypes');
-
-		$query = Database::groupArray('id', $query);
-
-		Database::addResponse($query);
-	}
-
 	function getDay(){
 
 		$cdate = $this -> currentDate;
@@ -142,6 +133,15 @@ class Task{
 		$date = explode(' ', DTime::clientToDB($cdate ? $cdate : $_POST['date']))[0];
 
 		$this -> getTasks("Date(starttime) = '$date' || Date(endtime)", $date);
+	}
+
+	function getTaskTypes(){
+		$query = $this -> output -> query('select * from tasktypes');
+		return Database::groupArray('id', $query);
+	}
+
+	function listTaskTypes(){
+		Database::addResponse($this -> getTaskTypes());
 	}
 
 	function removeTask(){
@@ -159,6 +159,6 @@ class Task{
 
 		$this -> input -> query('remove', 'tasktypes', null, "where id = $_POST[id]");
 
-		$this -> getTaskTypes();
+		$this -> listTaskTypes();
 	}
 }

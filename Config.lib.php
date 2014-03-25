@@ -1,13 +1,5 @@
 <?
 
-/** Requires **/
-
-require 'local/detect.lib.php';
-
-require 'Authorization.class.php';
-
-require 'DBAccess.class.php';
-
 /** General config **/
 
 date_default_timezone_set('Asia/Jerusalem');
