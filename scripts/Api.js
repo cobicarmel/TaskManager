@@ -24,16 +24,9 @@ var Api = {
 		TM.dialog.show({title: LOCAL[23], content: LOCAL[content]});
 	},
 
-	isAllowed: function(subject, action){
-
-		subject = Config.actions[subject];
-
-		return typeof subject == 'object' && (subject.indexOf(action) + 1);
-	},
-
 	send: function(subject, action, params, success){
 
-		if(! Api.isAllowed(subject, action))
+		if(! Access.hasAction(subject, action))
 			throw new Error('The action ' + action + '@' + subject + ' denied for this user');
 
 		if(typeof params == 'function')

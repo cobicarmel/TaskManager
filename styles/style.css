@@ -57,6 +57,10 @@ h4{
 button{
 	cursor: pointer;
 }
+textarea{
+	height: 70px;
+	font-family: alef;
+}
 form input, form textarea, form select{
 	border: none;
 	box-sizing: border-box;
@@ -75,8 +79,8 @@ form table{
 	table-layout: fixed;
 	text-align: right;
 }
-form tr {
-	height: 30px;
+form tbody tr {
+	height: 38px;
 }
 .number, .dec-number{
 	direction: ltr;
@@ -85,7 +89,7 @@ form tr {
 	font-family: Tahoma;
 	font-size: 0.85em;
 }
-#templates, #ac-dialog, .sm-option input, .sg-temp{
+#templates, #ac-dialog, .sm-option input, .group-temp{
 	display: none;
 }
 .abs-form{
@@ -250,11 +254,12 @@ form tr {
 .agenda-static:before{
 	content: attr(title);
 	position: absolute;
-	width: 671px;
+	width: 740px;
 	height: 100%;
-	background: rgba(196, 118, 233, .1);
+	background-image: linear-gradient(to bottom, rgba(196, 118, 233, 0.1), rgba(0, 0, 0, 0), rgba(196, 118, 233, 0.1));
 	box-shadow: inset -1px 1px 15px rgba(0, 0, 0, .1);
 	line-height: 1.5;
+	font-size: 18px;
 }
 #tt-hours {
 	width: 98%;
@@ -337,7 +342,7 @@ form tr {
 	white-space: nowrap;
 }
 #new-meeting{
-	width: 69%;
+	width: 56%;
 	height: 54%;
 	z-index: 1;
 }
@@ -366,11 +371,7 @@ form tr {
 	color: rgb(83, 83, 121);
 }
 .second-label{
-	padding-right: 5px;
-}
-#new-meeting textarea{
-	height: 60px;
-	font-family: alef;
+	padding-right: 10px;
 }
 #filter-meets{
 	width: 60%;
@@ -577,9 +578,6 @@ form tr {
 }
 #cd-edit{
 	overflow: auto;
-}
-#edit-client, #edit-client table{
-	height: 100%;
 }
 #cd-blanks .data-table{
 	margin-top: 10px;
@@ -818,7 +816,7 @@ form tr {
 	border: 1px solid #F3F3F3;
 	cursor: pointer;
 	position: relative;
-	padding: 4.75% 0;
+	padding: 4.4% 0;
 }
 .menu-tab:hover, .menu-tab.active{
 	background-color: #B3C8FF;
@@ -1021,28 +1019,44 @@ form tr {
 #agenda-edit{
 	width: 40%;
 }
-.sg-list td .fa{
+.group-list td .fa{
 	font-size: 13px;
 	cursor: pointer;
 }
-.sg-add{
+.group-add{
 	color: #15C;
 	margin: 10px 12px 5px;
 	cursor: pointer;
 	font-size: 14px;
 	float: right;
 }
-.sg-add:hover{
+.group-add:hover{
 	text-decoration: underline;
 }
-.sg-edit{
+.group-edit{
 	width: 44%;
 }
-.sg-edit table{
+.group-edit table{
 	margin-top: 10px;
 }
 #stt-duration{
 	box-shadow: none;
+}
+#set-access{
+	margin-top: 10px;
+	width: 88%;
+	height: 98%;
+}
+#set-access td{
+	position: relative;
+}
+#sa-tables{
+	overflow-y: auto;
+	overflow-x: hidden;
+	height: 95%;
+}
+#sa-tables tr{
+	height: 28px;
 }
 #general-settings{
 	height: 90%;
@@ -1062,6 +1076,28 @@ form tr {
 #gs-boxes{
 	height: 94%;
 }
-#sg-submit{
+#group-submit{
 	text-align: center;
+}
+#group-reminders{
+	height: 100%;
+}
+#reminders-caption {
+	height: 8%;
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
+}
+#reminders-caption > div {
+	float: right;
+}
+#reminders-title {
+	font-size: 32px;
+	color: #5798D5;
+	text-shadow: 1px 0px 2px #FFF;
+}
+#reminders-caption .fa-bell {
+	padding: 2%;
+}
+#reminders-body {
+	height: 88%;
+	padding: 10px 15px;
 }

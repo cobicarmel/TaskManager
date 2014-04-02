@@ -41,6 +41,6 @@ define('ACCESS', (int) $user['permission']);
 
 /** getting all allowed actions for this user **/
 
-$dbaccess = new DBAccess;
+$dbaccess = new Access;
 
 $recognizedUsers = $author -> userClass -> getRecognized();

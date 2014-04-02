@@ -128,8 +128,9 @@ var Client = {
 		Client.edit(client);
 
 		Client.history.show();
-		
-		Client.addPayment();
+
+		if(Access.hasAction('Payment'))
+			Client.addPayment();
 	},
 
 	edit: function(client){

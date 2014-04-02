@@ -3,9 +3,11 @@ require 'Global.php';
 
 require 'Task.class.php';
 
+require 'Reminders.class.php';
+
 $config = [
-	'actions' => $dbaccess -> listActions(),
 	'default' => (new Settings) -> listConfig(),
+	'reminders' => (new Reminders) -> getAll(),
 	'tasktypes' => (new Task) -> getTaskTypes(),
 	'users' => $recognizedUsers
 ];
@@ -40,6 +42,9 @@ $config = [
 		<div class="ac-tab" tab="client">
 			<?require 'Client.php';?>
 		</div>
+		<div class="ac-tab" tab="reminders">
+			<?require 'Reminders.php';?>
+		</div>
 		<div class="ac-tab" tab="settings">
 			<?require 'Settings.php';?>
 		</div>
@@ -67,9 +72,14 @@ $config = [
 <script src="scripts/Client.js"></script>
 <script src="scripts/Payment.js"></script>
 <script src="scripts/Settings.js"></script>
+<script src="scripts/Reminders.js"></script>
 <script src="scripts/Api.js"></script>
+<script src="scripts/Access.js"></script>
 <script src="scripts/jquery-plugins.js"></script>
 <script src="scripts/TaskManager.js"></script>
 <script src="scripts/script.js"></script>
-<script>var Config = <?=json_encode($config)?></script>
+<script>
+var Config = <?=json_encode($config)?>;
+Access.actions = <?=json_encode($dbaccess -> listActions())?>;
+</script>
 </html>

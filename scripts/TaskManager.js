@@ -31,6 +31,143 @@ var TM = {
 			Client.init();
 	},
 
+	createGroup: function(SUBJECT, NAME, onUpdate){
+
+		var self = this;
+
+		this.tab = $('#group-' + NAME);
+
+		this.form = this.tab.find('.group-edit');
+
+		this.tbody = this.tab.find('.group-list tbody');
+
+		this.trTemp = this.tab.find('.group-temp tr');
+
+		this.add = function(){
+
+			self.form[0].reset();
+
+			self.showForm(80, {action: 'add', id: null});
+		}
+
+		this.applyChanges = function(data){
+
+			if(data)
+				Config[NAME] = data[0];
+
+			self.list();
+
+			onUpdate && onUpdate();
+		}
+
+		this.attachEvents = function(){
+
+			self.tab.find('.group-add').click(self.add);
+
+			self.tbody.on('click', '.fa-pencil', self.edit);
+
+			self.tbody.on('click', '.fa-times', self.remove);
+
+			self.form.submit(self.submitForm);
+		}
+
+		this.edit = function(){
+
+			var data = self.getTrType.call(this);
+
+			TM.fillEditForm(self.form, data.type);
+
+			self.showForm(9, {action: 'edit', id: data.id});
+		}
+
+		this.getTrType = function(){
+
+			var tr = $(this).parents('tr'),
+				id = tr.data('id'),
+				type = Config[NAME][id];
+
+			return {id: id, type: type};
+		}
+
+		this.init = function(){
+
+			self.list();
+
+			self.attachEvents();
+		}
+
+		this.list = function(){
+
+			var tbody = self.tbody.empty();
+
+			for(var id in Config[NAME]){
+
+				var tr = self.trTemp.clone(),
+					data = Config[NAME][id];
+
+				tr.data('id', id);
+
+				for(var item in data){
+					var value = typeof data[item] == 'string' ? data[item] : data[item][Object.keys(data[item])];
+					tr.children('.group-' + item).text(value);
+				}
+
+				tbody.append(tr);
+			}
+		}
+
+		this.remove = function(){
+
+			var data = self.getTrType.call(this);
+
+			Api.confirm(40, LOCAL[56].replace('%1', data.type.title), function(){
+
+				TM.popup('loading', 83);
+
+				Api.send(SUBJECT, 'remove' + NAME, {id: data.id}, function(res){
+
+					TM.popup('success', 84);
+
+					self.applyChanges(res);
+				})
+			})
+		}
+
+		this.showForm = function(button, data){
+
+			var form = self.form;
+
+			form.data(data);
+
+			form.find('button').text(LOCAL[button]);
+
+			form.show().position({of: '#appcenter'});
+		}
+
+		this.submitForm = function(e){
+
+			var form = self.form,
+				data = form.data(),
+				params = form.serializeObject();
+
+			params.id = data.id;
+
+			TM.submitForm.call(this, e, function(){
+
+				TM.popup('loading', 85);
+
+				Api.send(SUBJECT, data.action + NAME, params, function(res){
+
+					TM.popup('success', 86);
+
+					form.hide();
+
+					self.applyChanges(res);
+				})
+			})
+		}
+	},
+
 	dialog: {
 
 		close: function(){
@@ -204,7 +341,7 @@ var TM = {
 		var time = $('#dt-time');
 
 		if(time.text() == '23:59:59' && ! date.getHours())
-			tableTime.next();
+			TM.tableTimes[0].next();
 
 		time.text(date.toLocaleTimeString());
 

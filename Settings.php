@@ -7,9 +7,15 @@
 		<?if($dbaccess -> hasAction('Users')){?>
 			<input type="radio" name="st-radio" id="st-radio3"></input>
 			<label for="st-radio3"><?=$LOCAL[89]?></label>
+		<?}
+		if($dbaccess -> hasAction('Settings', 'changesettings')){?>
+			<input type="radio" name="st-radio" id="st-radio4"></input>
+			<label for="st-radio4"><?=$LOCAL[121]?></label>
+		<?}
+		if($dbaccess -> hasAction('Settings', 'changesettings')){?>
+			<input type="radio" name="st-radio" id="st-radio5"></input>
+			<label for="st-radio5"><?=$LOCAL[71]?></label>
 		<?}?>
-		<input type="radio" name="st-radio" id="st-radio4"></input>
-		<label for="st-radio4"><?=$LOCAL[71]?></label>
 	</div>
 	<div id="settings-body">
 		<div class="set-tab" tab="st-radio1">
@@ -38,9 +44,9 @@
 			<?}?>
 			</div>
 		</div>
-		<div id="set-group-tasktypes" class="set-tab" tab="st-radio2">
-			<div class="sg-add"><?=$LOCAL[90]?></div>
-			<table class="sg-list data-table">
+		<div id="group-tasktypes" class="set-tab" tab="st-radio2">
+			<div class="group-add"><?=$LOCAL[90]?></div>
+			<table class="group-list data-table">
 				<thead>
 					<tr>
 						<th><?=$LOCAL[84]?></th>
@@ -51,7 +57,7 @@
 				</thead>
 				<tbody></tbody>
 			</table>
-			<form class="sg-edit abs-form">
+			<form class="group-edit abs-form">
 				<div class="ui-icon ui-icon-close f-close" title="<?=$LOCAL[14]?>"></div>
 				<table>
 					<tr>
@@ -76,11 +82,11 @@
 				</table>
 				<button class="ui-state-default"></button>
 			</form>
-			<table class="sg-temp">
+			<table class="group-temp">
 				<tr>
-					<td class="sg-title"></td>
-					<td class="sg-place"></td>
-					<td class="sg-duration tahoma"></td>
+					<td class="group-title"></td>
+					<td class="group-place"></td>
+					<td class="group-duration tahoma"></td>
 					<td>
 						<div class="fa fa-pencil" title="<?=$LOCAL[88]?>"></div>
 					</td>
@@ -91,9 +97,9 @@
 			</table>
 		</div>
 		<?if($dbaccess -> hasAction('Users')){?>
-		<div id="set-group-users" class="set-tab" tab="st-radio3">
-			<div class="sg-add"><?=$LOCAL[91]?></div>
-			<table class="sg-list data-table">
+		<div id="group-users" class="set-tab" tab="st-radio3">
+			<div class="group-add"><?=$LOCAL[91]?></div>
+			<table class="group-list data-table">
 				<thead>
 					<tr>
 						<th><?=$LOCAL[29]?></th>
@@ -104,7 +110,7 @@
 				</thead>
 				<tbody></tbody>
 			</table>
-			<form id="se-user" class="sg-edit abs-form">
+			<form id="se-user" class="group-edit abs-form">
 				<div class="ui-icon ui-icon-close f-close" title="<?=$LOCAL[14]?>"></div>
 				<table>
 					<tr>
@@ -153,11 +159,11 @@
 				</table>
 				<button class="ui-state-default"></button>
 			</form>
-			<table class="sg-temp">
+			<table class="group-temp">
 				<tr>
-					<td class="sg-username"></td>
-					<td class="sg-phone tahoma number"></td>
-					<td class="sg-email"></td>
+					<td class="group-username"></td>
+					<td class="group-phone tahoma number"></td>
+					<td class="group-email"></td>
 					<td>
 						<div class="fa fa-pencil" title="<?=$LOCAL[88]?>"></div>
 					</td>
@@ -167,8 +173,19 @@
 				</tr>
 			</table>
 		</div>
-		<?}?>
+		<?}
+		if($dbaccess -> hasAction('Settings', 'changesettings')){?>
 		<div class="set-tab" tab="st-radio4">
+			<form id="set-access">
+				<div id="sa-tables">
+				<?$dbaccess -> writeSettings()?>
+				</div>
+				<div id="sa-submit">
+					<button class="ui-state-default"><?=$LOCAL[44]?></button>
+				</div>
+			</form>
+		</div>
+		<div class="set-tab" tab="st-radio5">
 			<form id="general-settings" class="abs-form auto-center">
 				<div id="gs-boxes">
 					<div class="data-box">
@@ -177,7 +194,7 @@
 							<tr>
 								<td><?=$LOCAL[102]?></td>
 								<td>
-									<input name="meeting_duration" placeholder="<?=$LOCAL[103]?>" type="number" min="10">
+									<input name="meeting_duration" placeholder="<?=$LOCAL[103]?>" type="number" min="10" required>
 								</td>
 							</tr>
 							<tr>
@@ -236,10 +253,11 @@
 					</table>
 				</div>
 				</div>
-				<div id="sg-submit">
+				<div id="group-submit">
 					<button class="ui-state-default"><?=$LOCAL[44]?></button>
 				</div>
 			</form>
 		</div>
+		<?}?>
 	</div>
 </div>

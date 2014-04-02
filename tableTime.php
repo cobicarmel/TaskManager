@@ -29,7 +29,7 @@
 					<td>
 						<select name="starttime" id="starttime"></select>
 					</td>
-					<td class="form-label" style="padding-right: 10px"><?=$LOCAL[5]?>:</td>
+					<td class="form-label second-label"><?=$LOCAL[5]?>:</td>
 					<td>
 						<select name="endtime" id="endtime"></select>
 					</td>

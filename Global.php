@@ -6,7 +6,7 @@ require 'local/detect.lib.php';
 
 require 'Authorization.class.php';
 
-require 'DBAccess.class.php';
+require 'Access.class.php';
 
 require 'Config.lib.php';
 

@@ -45,21 +45,27 @@ $(function(){
 		return form;
 	})
 
-	$('#calendar, .p-date, #cdp-reports input').datepicker();
-
 	$('#fm-multi-check').multiCheck('#filter-meets tbody input');
 
 	$('#settings-toolbar').buttonset({icons: {primary: 'ui-icon-gear'}});
 
 	Settings.navAgenda.setActive();
 
-	$('#ae-starttime, #ae-endtime').timepicker(null, 5);
+	$('#ae-starttime, #ae-endtime, #rf-time').timepicker(null, 5);
 
 	Settings.buildGroups();
 
+	Reminders.buildGroups();
+
 	Settings.listTasktypes();
 
-	TM.fillEditForm($('#general-settings'), Config.default);
+	$('#calendar, .p-date, #cdp-reports input, #rf-date').datepicker();
+
+	if(Access.hasAction('Settings', 'changesettings')){
+		TM.fillEditForm($('#general-settings'), Config.default);
+		$('#sa-tables').accordion($.extend({}, Config.accordion, {active: 0}));
+		Access.writeSettings();
+	}
 
 	$('#stt-duration').spinner({
 		max: 300,
@@ -126,6 +132,20 @@ $(function(){
 
 	$('#general-settings').on('submit', function(e){
 		TM.submitForm.call(this, e, Settings.submitSettings);
+	})
+
+	$('#set-access').submit(Access.changeAccess);
+
+	$('#sa-tables input').on('change', function(){
+
+		var checked = this.checked,
+			$this = $(this),
+			siblings = $this.parents('tr').find('input'),
+			index = siblings.index(this),
+			nexts = siblings.slice(index + 1),
+			prevs = siblings.slice(0, index);
+
+			(checked ? prevs : nexts).prop('checked', checked);
 	})
 
 	/** Live events **/

@@ -12,9 +12,18 @@ abstract class Database{
 
 	static $sql;
 
-	static function createSql($dbname){
+	/**
+	 *
+	 * creating new implementation of mysqli, with Database configuration
+	 *
+	 * @param string $db_name name of the database
+	 *
+	 * @return bool
+	 */
 
-		self::$sql = new mysqli(self::$host, self::$dbuser, self::$dbpass, $dbname);
+	static function createSql($db_name){
+
+		self::$sql = new mysqli(self::$host, self::$dbuser, self::$dbpass, $db_name);
 
 		if(! self::$sql)
 			return;

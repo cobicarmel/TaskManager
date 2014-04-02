@@ -27,6 +27,8 @@
 		<div class="menu-tab" tab="table-time-<?=$i?>"><?=$title?></div>
 	<?}?>
 	<div class="menu-tab" tab="client"><?=$LOCAL[2]?></div>
-	<div class="menu-tab" tab=""><?=$LOCAL[50]?></div>
-	<div class="menu-tab" tab="settings"><?=$LOCAL[3]?></div>
+	<div class="menu-tab" tab="reminders"><?=$LOCAL[50]?></div>
+	<?if($dbaccess -> hasAction('Settings', 'changesettings')){?>
+		<div class="menu-tab" tab="settings"><?=$LOCAL[3]?></div>
+	<?}?>
 </div>
