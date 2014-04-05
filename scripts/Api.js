@@ -103,6 +103,17 @@ var Api = {
 
 					return password != this.value ? 87 : true;
 				}
+			}],
+
+			'reminders-edit': [{
+				type: ['strdate'],
+				check: function(){
+
+					var date = this.value.toDate($('#rf-time').val()),
+						now = new Date;
+
+					return date <= now ? 91 : true;
+				}
 			}]
 		},
 

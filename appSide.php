@@ -7,7 +7,7 @@
 	<div id="user-label" class="caption">
 		<span class="ui-icon ui-icon-person"></span>
 	</div>
-	<div id="user-name"><?=USERNAME?></div>
+	<div id="user-name"><?=USER_NAME?></div>
 	<div id="logout" class="caption">
 		<a href="login/login.lib.php?logout"><?=$LOCAL[67]?></a>
 	</div>

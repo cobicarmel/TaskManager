@@ -67,6 +67,7 @@ class Access{
 			'Payment' => 51,
 			'Settings' => 3,
 			'sendMail' => 30,
+			'Reminders' => 50,
 			'Task' => 8,
 			'Users' => 89
 		];

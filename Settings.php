@@ -1,19 +1,19 @@
 <div id="settings">
 	<div id="settings-toolbar">
-		<input type="radio" name="st-radio" id="st-radio1"></input>
+		<input type="radio" name="st-radio" id="st-radio1">
 		<label for="st-radio1"><?=$LOCAL[1]?></label>
-		<input type="radio" name="st-radio" id="st-radio2"></input>
+		<input type="radio" name="st-radio" id="st-radio2">
 		<label for="st-radio2"><?=$LOCAL[72]?></label>
 		<?if($dbaccess -> hasAction('Users')){?>
-			<input type="radio" name="st-radio" id="st-radio3"></input>
+			<input type="radio" name="st-radio" id="st-radio3">
 			<label for="st-radio3"><?=$LOCAL[89]?></label>
 		<?}
 		if($dbaccess -> hasAction('Settings', 'changesettings')){?>
-			<input type="radio" name="st-radio" id="st-radio4"></input>
+			<input type="radio" name="st-radio" id="st-radio4">
 			<label for="st-radio4"><?=$LOCAL[121]?></label>
 		<?}
 		if($dbaccess -> hasAction('Settings', 'changesettings')){?>
-			<input type="radio" name="st-radio" id="st-radio5"></input>
+			<input type="radio" name="st-radio" id="st-radio5">
 			<label for="st-radio5"><?=$LOCAL[71]?></label>
 		<?}?>
 	</div>
@@ -188,70 +188,88 @@
 		<div class="set-tab" tab="st-radio5">
 			<form id="general-settings" class="abs-form auto-center">
 				<div id="gs-boxes">
-					<div class="data-box">
-						<h4 class="db-caption"><?=$LOCAL[8]?></h4>
-						<table>
-							<tr>
-								<td><?=$LOCAL[102]?></td>
-								<td>
-									<input name="meeting_duration" placeholder="<?=$LOCAL[103]?>" type="number" min="10" required>
-								</td>
-							</tr>
-							<tr>
-								<td><?=$LOCAL[104]?></td>
-								<td>
-									<select name="undefined_time">
-										<option value="0"><?=$LOCAL[107]?></option>
-										<option value="1"><?=$LOCAL[106]?></option>
-										<option value="2"><?=$LOCAL[105]?></option>
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<td><?=$LOCAL[108]?></td>
-								<td>
-									<select name="interactive_meet">
-										<option value="0"><?=$LOCAL[111]?></option>
-										<option value="1"><?=$LOCAL[110]?></option>
-										<option value="2"><?=$LOCAL[109]?></option>
-									</select>
-								</td>
-							</tr>
-						</table>
+					<div class="gs-column">
+						<div class="data-box">
+							<h4 class="db-caption"><?=$LOCAL[8]?></h4>
+							<table>
+								<tr>
+									<td><?=$LOCAL[102]?></td>
+									<td>
+										<input name="meeting_duration" placeholder="<?=$LOCAL[103]?>" type="number" min="10" required>
+									</td>
+								</tr>
+								<tr>
+									<td><?=$LOCAL[104]?></td>
+									<td>
+										<select name="undefined_time">
+											<option value="0"><?=$LOCAL[107]?></option>
+											<option value="1"><?=$LOCAL[106]?></option>
+											<option value="2"><?=$LOCAL[105]?></option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td><?=$LOCAL[108]?></td>
+									<td>
+										<select name="interactive_meet">
+											<option value="0"><?=$LOCAL[111]?></option>
+											<option value="1"><?=$LOCAL[110]?></option>
+											<option value="2"><?=$LOCAL[109]?></option>
+										</select>
+									</td>
+								</tr>
+							</table>
+						</div>
+						<div class="data-box">
+							<h4 class="db-caption"><?=$LOCAL[50]?></h4>
+							<table>
+								<tr>
+									<td><?=$LOCAL[145]?></td>
+									<td>
+										<select name="reminders_audio">
+											<option value="0"><?=$LOCAL[146]?></option>
+											<option value="1"><?=$LOCAL[147]?></option>
+										</select>
+									</td>
+								</tr>
+							</table>
+						</div>
 					</div>
-					<div class="data-box">
-					<h4 class="db-caption"><?=$LOCAL[30]?></h4>
-					<table>
-						<tr>
-							<td><?=$LOCAL[112]?></td>
-							<td>
-								<select name="meet_cancel_mail">
-									<option value="0"><?=$LOCAL[113]?></option>
-									<option value="1"><?=$LOCAL[114]?></option>
-									<option value="2"><?=$LOCAL[115]?></option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td><?=$LOCAL[116]?></td>
-							<td>
-								<input name="mail_sender_address" type="email" placeholder="<?=$LOCAL[118]?>">
-							</td>
-						</tr>
-						<tr>
-							<td><?=$LOCAL[117]?></td>
-							<td>
-								<input name="mail_sender_pass" type="password" placeholder="<?=$LOCAL[120]?>">
-							</td>
-						</tr>
-						<tr>
-							<td><?=$LOCAL[119]?></td>
-							<td>
-								<input name="mail_sender_name">
-							</td>
-						</tr>
-					</table>
-				</div>
+					<div class="gs-column">
+						<div class="data-box">
+							<h4 class="db-caption"><?=$LOCAL[30]?></h4>
+							<table>
+								<tr>
+									<td><?=$LOCAL[112]?></td>
+									<td>
+										<select name="meet_cancel_mail">
+											<option value="0"><?=$LOCAL[113]?></option>
+											<option value="1"><?=$LOCAL[114]?></option>
+											<option value="2"><?=$LOCAL[115]?></option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td><?=$LOCAL[116]?></td>
+									<td>
+										<input name="mail_sender_address" type="email" placeholder="<?=$LOCAL[118]?>">
+									</td>
+								</tr>
+								<tr>
+									<td><?=$LOCAL[117]?></td>
+									<td>
+										<input name="mail_sender_pass" type="password" placeholder="<?=$LOCAL[120]?>">
+									</td>
+								</tr>
+								<tr>
+									<td><?=$LOCAL[119]?></td>
+									<td>
+										<input name="mail_sender_name">
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
 				</div>
 				<div id="group-submit">
 					<button class="ui-state-default"><?=$LOCAL[44]?></button>

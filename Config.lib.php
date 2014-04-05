@@ -35,7 +35,9 @@ if(gettype($user) != 'array'){
 if(isset($_GET['login']))
 	header('location: ' . $_SERVER['PHP_SELF']);
 
-define('USERNAME', $user['username']);
+define('USER_NAME', $user['username']);
+
+define('USER_ID', $user['id']);
 
 define('ACCESS', (int) $user['permission']);
 

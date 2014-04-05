@@ -79,7 +79,15 @@ abstract class Database{
 			return self::$response;
 	}
 
-	static function groupArray($key, $array){
+	/**
+	 * @param string $key
+	 * @param array  $array
+	 * @param bool   $addBack [optional]
+	 *
+	 * @return array
+	 */
+
+	static function groupArray($key, $array, $addBack = false){
 
 		$result = [];
 
@@ -97,7 +105,8 @@ abstract class Database{
 
 			$title = $v[$key];
 
-			unset($v[$key]);
+			if(! $addBack)
+				unset($v[$key]);
 
 			if(isset($result[$title])){
 

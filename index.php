@@ -52,6 +52,26 @@ $config = [
 			<div id="popup-img"></div>
 			<div id="popup-title"></div>
 		</div>
+		<div id="reminder-popup">
+			<div class="ui-icon ui-icon-close f-close" title="<?=$LOCAL[14]?>"></div>
+			<div id="rp-head">
+				<div id="rp-strtime" class="tahoma"></div>
+				<div id="rp-bell" class="fa fa-bell"></div>
+			</div>
+			<div id="rp-title"></div>
+			<div id="rp-actions">
+				<div class="rpa-action">
+					<div class="rpa-title"><?=$LOCAL[134]?></div>
+					<input id="rp-minutes" class="number" value="5" type="number" min="1" max="99">
+					<div><?=$LOCAL[136]?></div>
+					<div id="rp-later" class="fa fa-arrow-circle-o-left"></div>
+				</div>
+				<div class="rpa-action">
+					<div class="rpa-title"><?=$LOCAL[135]?></div>
+					<div id="rp-edit" class="fa fa-arrow-circle-o-left"></div>
+				</div>
+			</div>
+		</div>
 		<?require 'Templates.php'?>
 	</div>
 	<div id="appside">

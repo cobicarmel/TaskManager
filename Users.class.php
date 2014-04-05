@@ -17,7 +17,7 @@ class Users{
 
 	private function getUsers(){
 		$query = $this -> output -> query('select * from users');
-		$this -> users = Database::groupArray('id', $query);
+		$this -> users = Database::groupArray('id', $query, true);
 	}
 
 	private function parseInData(){

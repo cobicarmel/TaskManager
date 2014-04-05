@@ -2,20 +2,36 @@
 
 class Reminders{
 
+	private  $id;
+
 	private $input;
 
 	private $output;
 
-	private  $data;
+	private $data;
 
 	function __construct(){
 		$this -> input = new DBInput;
 		$this -> output = new DBOutput;
-		$this -> getReminders();
 	}
 
 	private function parseInData(){
 
+		if(isset($_POST['id'])){
+			$this -> id = $_POST['id'];
+			unset($_POST['id']);
+		}
+
+		if(empty($_POST['strdate']))
+			return;
+
+		$_POST['custom_pre'] = null;
+
+		$datetime = $_POST['strdate'] . ' ' . $_POST['strtime'];
+
+		unset($_POST['strdate'], $_POST['strtime']);
+
+		$_POST['date'] = DTime::clientToDB($datetime);
 	}
 
 	private function parseOutData(){
@@ -26,22 +42,27 @@ class Reminders{
 
 		foreach($data as $key => $value){
 			$datetime = DTime::DBToClient($value['date']);
-			$data[$key]['date'] = $datetime[0];
-			$data[$key]['time'] = $datetime[1];
+			$data[$key]['strdate'] = $datetime[0];
+			$data[$key]['strtime'] = $datetime[1];
 		}
 	}
 
-	private function getReminders(){
-		$this -> data = $this -> output -> query('select * from reminders');
-		$this -> parseOutData();
+	function addReminders(){
+		$this -> parseInData();
+		$_POST['user_id'] = USER_ID;
+		$this -> input -> query('insert', 'reminders', $_POST);
+		Database::addResponse($this -> getAll());
 	}
 
 	function editReminders(){
 		$this -> parseInData();
-		$this -> input -> query('update', 'reminders', $_POST, "where id = {$this -> userId}");
+		$this -> input -> query('update', 'reminders', $_POST, "where id = {$this -> id} && user_id = " . USER_ID);
+		Database::addResponse($this -> getAll());
 	}
 
 	function getAll(){
+		$this -> data = $this -> output -> query('select * from reminders where user_id = ' . USER_ID);
+		$this -> parseOutData();
 		return $this -> data;
 	}
 }

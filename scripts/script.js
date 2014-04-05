@@ -55,7 +55,7 @@ $(function(){
 
 	Settings.buildGroups();
 
-	Reminders.buildGroups();
+	Reminders.init();
 
 	Settings.listTasktypes();
 
@@ -122,6 +122,12 @@ $(function(){
 
 	$('#as-datetime').click(TM.tableTimes[0].setDay);
 
+	$('#rp-later').click(Reminders.changePreTime);
+
+	$('#rp-edit').click(Reminders.goToReminder);
+
+	$('.reminder-mark').click(Reminders.changeStatus);
+
 	$('.f-close').on('click', function(){
 		$(this).parent().hide();
 	})
@@ -146,6 +152,10 @@ $(function(){
 			prevs = siblings.slice(0, index);
 
 			(checked ? prevs : nexts).prop('checked', checked);
+	})
+
+	$('#rp-actions .fa').on('click', function(){
+		$('#reminder-popup').hide();
 	})
 
 	/** Live events **/

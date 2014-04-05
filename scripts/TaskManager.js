@@ -2,6 +2,8 @@
 
 var TM = {
 
+	groups: {},
+
 	tableTimes: [],
 
 	addMultiObj: function(obj, keys, value){
@@ -55,9 +57,9 @@ var TM = {
 			if(data)
 				Config[NAME] = data[0];
 
-			self.list();
-
 			onUpdate && onUpdate();
+
+			self.list();
 		}
 
 		this.attachEvents = function(){
@@ -108,8 +110,8 @@ var TM = {
 				tr.data('id', id);
 
 				for(var item in data){
-					var value = typeof data[item] == 'string' ? data[item] : data[item][Object.keys(data[item])];
-					tr.children('.group-' + item).text(value);
+					var value = $.isPlainObject(data[item]) ? data[item][Object.keys(data[item])] : data[item];
+					tr.children('.group-' + item).html(value);
 				}
 
 				tbody.append(tr);
@@ -135,7 +137,11 @@ var TM = {
 
 		this.showForm = function(button, data){
 
-			var form = self.form;
+			var form = self.form,
+				mainTab = form.parents('.ac-tab').attr('tab'),
+				menuTab = $('.menu-tab[tab=' + mainTab + ']');
+
+			menuTab.click();
 
 			form.data(data);
 
@@ -166,6 +172,8 @@ var TM = {
 				})
 			})
 		}
+
+		TM.groups[NAME] = this;
 	},
 
 	dialog: {
