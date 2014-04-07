@@ -75,9 +75,9 @@ var Payment = function(CLIENT){
 			var data = payments[p];
 
 			var tr = $('<tr>').data('index', self.payments.indexOf(data)).append(
-				$('<td>').html(
+				Access.hasAction('Payment', 'removepayment') ? $('<td>').html(
 					$('<div>', {'class': 'ui-icon ui-icon-trash', title: LOCAL[69]})
-				),
+				) : null,
 				$('<td>').text(data.date),
 				$('<td>').text(data.sum),
 				$('<td>').text(data.title)

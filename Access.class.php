@@ -89,13 +89,13 @@ class Access{
 					<tr id="sa-tr<?=$action['id']?>">
 						<td><?=$LOCAL[$action['title']]?></td>
 						<td>
-							<input type="checkbox" class="auto-center inline-input">
+							<input type="checkbox" class="inline-input">
 						</td>
 						<td>
-							<input type="checkbox" class="auto-center inline-input">
+							<input type="checkbox" class="inline-input">
 						</td>
 						<td>
-							<input type="checkbox" class="auto-center inline-input">
+							<input type="checkbox" class="inline-input">
 						</td>
 					</tr>
 				<?}?>

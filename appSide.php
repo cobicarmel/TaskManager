@@ -23,12 +23,20 @@
 	</div>
 </div>
 <div id="menu" class="as-bar">
-	<?foreach($config['default']['table_times'] as $i => $title){?>
-		<div class="menu-tab" tab="table-time-<?=$i?>"><?=$title?></div>
-	<?}?>
-	<div class="menu-tab" tab="client"><?=$LOCAL[2]?></div>
-	<div class="menu-tab" tab="reminders"><?=$LOCAL[50]?></div>
-	<?if($dbaccess -> hasAction('Settings', 'changesettings')){?>
+	<?
+	if($dbaccess -> hasAction('Task')){
+		foreach($config['default']['table_times'] as $i => $title){ ?>
+			<div class="menu-tab" tab="table-time-<?=$i?>"><?=$title?></div>
+	<? }
+	}
+	if($dbaccess -> hasAction('Client')){ ?>
+		<div class="menu-tab" tab="client"><?=$LOCAL[2]?></div>
+
+	<? }
+	if($dbaccess -> hasAction('Reminders')){ ?>
+		<div class="menu-tab" tab="reminders"><?=$LOCAL[50]?></div>
+	<? }
+	if($dbaccess -> hasAction('Settings')) {?>
 		<div class="menu-tab" tab="settings"><?=$LOCAL[3]?></div>
-	<?}?>
+	<? } ?>
 </div>

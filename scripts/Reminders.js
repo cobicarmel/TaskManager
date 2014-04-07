@@ -5,7 +5,6 @@ var Reminders = {
 	$popup: $('#reminder-popup'),
 
 	buildGroups: function(){
-
 		(new TM.createGroup('Reminders', 'reminders', Reminders.refresh)).init();
 	},
 
@@ -37,11 +36,12 @@ var Reminders = {
 				id: $this.parents('tr').data('id')
 			};
 
-		Api.send('Reminders', 'editreminders', params, function(){
-			Reminders.refresh();
-			TM.groups.reminders.list();
-		});
+		TM.popup('loading', 96);
 
+		Api.send('Reminders', 'editreminders', params, function(res){
+			TM.popup();
+			TM.groups.reminders.applyChanges(res);
+		});
 	},
 
 	getSoonReminders: function(){
@@ -86,7 +86,7 @@ var Reminders = {
 
 			reminder.status = + reminder.status;
 
-			var $statIcon = $('<div>', {class: 'reminder-status auto-center'}),
+			var $statIcon = $('<div>', {class: 'reminder-status'}),
 				$markAs = $('<div>', {class: 'reminder-mark'}).data('status', reminder.status),
 				markText = 94,
 				color,
@@ -99,12 +99,12 @@ var Reminders = {
 			}
 			else{
 				if(reminder.date < new Date){
-					color = 'yellow';
-					title = 93;
-				}
-				else{
 					color = 'red';
 					title = 91;
+				}
+				else{
+					color = 'yellow';
+					title = 93;
 				}
 			}
 

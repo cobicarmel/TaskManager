@@ -1,5 +1,5 @@
 <?
-require 'Global.php';
+require 'Global.lib.php';
 
 require 'Task.class.php';
 
@@ -34,20 +34,29 @@ $config = [
 		<div class="ac-tab" tab="calendar">
 			<div id="calendar"></div>
 		</div>
-		<?foreach($config['default']['table_times'] as $i => $title){?>
-			<div class="ac-tab" tab="table-time-<?=$i?>">
-				<?require 'TableTime.php';?>
+		<?
+		if($dbaccess -> hasAction('Task')){
+			foreach($config['default']['table_times'] as $i => $title){?>
+				<div class="ac-tab" tab="table-time-<?=$i?>">
+					<? require 'TableTime.php' ?>
+				</div>
+			<? }
+		}
+		if($dbaccess -> hasAction('Client')){ ?>
+			<div class="ac-tab" tab="client">
+				<?require 'Client.php';?>
 			</div>
-		<?}?>
-		<div class="ac-tab" tab="client">
-			<?require 'Client.php';?>
-		</div>
-		<div class="ac-tab" tab="reminders">
-			<?require 'Reminders.php';?>
-		</div>
-		<div class="ac-tab" tab="settings">
-			<?require 'Settings.php';?>
-		</div>
+		<? }
+		if($dbaccess -> hasAction('Reminders')){ ?>
+			<div class="ac-tab" tab="reminders">
+				<?require 'Reminders.php';?>
+			</div>
+		<? }
+		if($dbaccess -> hasAction('Settings')) { ?>
+			<div class="ac-tab" tab="settings">
+				<?require 'Settings.php';?>
+			</div>
+		<? } ?>
 		<div id="popup">
 			<div id="popup-img"></div>
 			<div id="popup-title"></div>

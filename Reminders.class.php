@@ -65,4 +65,10 @@ class Reminders{
 		$this -> parseOutData();
 		return $this -> data;
 	}
+
+	function removeReminders(){
+		$this -> parseInData();
+		$this -> input -> query('remove', 'reminders', null, "where id = {$this -> id} && user_id = " . USER_ID);
+		Database::addResponse($this -> getAll());
+	}
 }

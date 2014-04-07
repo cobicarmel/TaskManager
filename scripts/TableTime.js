@@ -429,7 +429,10 @@ var tableTime = function(ELEM, INDEX){
 		TABLE_TIME.VBoard.addDay(TABLE_TIME.strDate);
 
 		TABLE_TIME.onReady = function(){
-			console.log('TableTime updated');
+
+			if(TM.getMultiObj(window, 'console'))
+				console.log('TableTime updated');
+
 			goReady && ready();
 
 			if(! dontMove)

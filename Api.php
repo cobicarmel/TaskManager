@@ -1,6 +1,6 @@
 <?
 
-require 'Global.php';
+require 'Global.lib.php';
 
 /** checking user permissions for specify action **/
 

@@ -6,12 +6,16 @@ $(function(){
 
 	setInterval(TM.showDateTime, 200);
 
-	$($('.table-time').get().reverse()).each(function(index){
-		var elem = $(this);
-		TM.tableTimes.unshift(new tableTime(elem, elem.index('.table-time')).init());
-	})
+	if(Access.hasAction('Agenda'))
 
-	Client.getAll();
+		$($('.table-time').get().reverse()).each(function(index){
+			var elem = $(this);
+			TM.tableTimes.unshift(new tableTime(elem, elem.index('.table-time')).init());
+		})
+
+	if(Access.hasAction('Client'))
+
+		Client.getAll();
 
 	Config.accordion = {
 		heightStyle: 'content',
@@ -120,13 +124,12 @@ $(function(){
 
 	$('.nav-arrows-wrap div').click(Settings.navAgenda.navigate);
 
-	$('#as-datetime').click(TM.tableTimes[0].setDay);
+	if(TM.tableTimes[0])
+		$('#as-datetime').click(TM.tableTimes[0].setDay);
 
 	$('#rp-later').click(Reminders.changePreTime);
 
 	$('#rp-edit').click(Reminders.goToReminder);
-
-	$('.reminder-mark').click(Reminders.changeStatus);
 
 	$('.f-close').on('click', function(){
 		$(this).parent().hide();
