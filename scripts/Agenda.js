@@ -276,9 +276,7 @@ var Agenda = function(TABLE_TIME){
 				}
 			}
 
-		TM.sortObjects(agenda, ['starttime']);
-
-		return agenda;
+		return TM.sortObjects(agenda, ['starttime']);
 	}
 
 	this.getSpecial = function(callback){

@@ -8,10 +8,17 @@ var TM = {
 
 	addMultiObj: function(obj, keys, value){
 
-		var firstKey = keys.splice(0, 1);
+		if(! keys.length)
+			return $.extend(obj, value);
 
-		if(typeof obj[firstKey] == 'object')
-			obj[firstKey] = addMultiObj(obj[firstKey], keys, value);
+		var firstKey = keys.splice(0, 1)[0];
+
+		if(keys.length || typeof obj[firstKey] == 'object'){
+			if(! obj[firstKey])
+				obj[firstKey]  = {};
+
+			obj[firstKey] = TM.addMultiObj(obj[firstKey], keys, value);
+		}
 		else
 			obj[firstKey] = value;
 
@@ -33,11 +40,11 @@ var TM = {
 			Client.init();
 	},
 
-	createGroup: function(SUBJECT, NAME, onUpdate){
+	createGroup: function(options){
 
 		var self = this;
 
-		this.tab = $('#group-' + NAME);
+		this.tab = $('#group-' + options.name);
 
 		this.form = this.tab.find('.group-edit');
 
@@ -55,9 +62,9 @@ var TM = {
 		this.applyChanges = function(data){
 
 			if(data)
-				Config[NAME] = data[0];
+				Config[options.name] = data[0];
 
-			onUpdate && onUpdate();
+			options.onUpdate && options.onUpdate();
 
 			self.list();
 		}
@@ -88,7 +95,7 @@ var TM = {
 
 			var tr = $(this).parents('tr'),
 				id = tr.data('id'),
-				type = Config[NAME][id];
+				type = Config[options.name][id];
 
 			return {id: id, type: type};
 		}
@@ -104,10 +111,10 @@ var TM = {
 
 			var tbody = self.tbody.empty();
 
-			for(var id in Config[NAME]){
+			for(var id in Config[options.name]){
 
 				var tr = self.trTemp.clone(),
-					data = Config[NAME][id];
+					data = Config[options.name][id];
 
 				tr.data('id', id);
 
@@ -117,6 +124,23 @@ var TM = {
 				}
 
 				tbody.append(tr);
+			}
+
+			var table = tbody.parents('table');
+
+			if(id){
+				if(table.data('tablesorter'))
+					table.trigger('update');
+				else{
+					var obj = {},
+						columnsCount = table.find('tr').first().children().length;
+
+					obj[columnsCount - 1] = {sorter: false};
+
+					TM.addMultiObj(options, ['tablesorter', 'headers'], obj);
+
+					table.tablesorter(options.tablesorter);
+				}
 			}
 		}
 
@@ -128,7 +152,7 @@ var TM = {
 
 				TM.popup('loading', 83);
 
-				Api.send(SUBJECT, 'remove' + NAME, {id: data.id}, function(res){
+				Api.send(options.subject, 'remove' + options.name, {id: data.id}, function(res){
 
 					TM.popup('success', 84);
 
@@ -164,7 +188,7 @@ var TM = {
 
 				TM.popup('loading', 85);
 
-				Api.send(SUBJECT, data.action + NAME, params, function(res){
+				Api.send(SUBJECT, data.action + options.name, params, function(res){
 
 					TM.popup('success', 86);
 
@@ -175,7 +199,7 @@ var TM = {
 			})
 		}
 
-		TM.groups[NAME] = this;
+		TM.groups[options.name] = this;
 	},
 
 	dialog: {
@@ -378,7 +402,8 @@ var TM = {
 			elem.unClear();
 
 		soon.splice(Config.default.soon_mount);
-		TM.sortObjects(soon, ['start', 'date']);
+
+		soon = TM.sortObjects(soon, ['start', 'date']);
 
 		for(var i in soon){
 
@@ -405,13 +430,27 @@ var TM = {
 		return soon;
 	},
 
-	sortObjects: function(array, by){
+	sortObjects: function(data, by){
+
+		var isArray = $.isArray(data),
+			array;
+
+		if(isArray)
+			array = data;
+		else
+			array = $.map(data, function(values, key){
+				values.key = key;
+				return values;
+			});
+
 		array.sort(function(a, b){
 			var Avalue = TM.getMultiObj(a, by),
 				Bvalue = TM.getMultiObj(b, by);
 
 			return Avalue < Bvalue ? -1 : Avalue > Bvalue ? 1 : 0;
 		})
+
+		return array;
 	},
 
 	submitForm: function(event, callback){

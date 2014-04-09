@@ -5,7 +5,24 @@ var Reminders = {
 	$popup: $('#reminder-popup'),
 
 	buildGroups: function(){
-		(new TM.createGroup('Reminders', 'reminders', Reminders.refresh)).init();
+
+		var options = {
+			name: 'reminders',
+			onUpdate: Reminders.refresh,
+			subject: 'Reminders',
+			tablesorter: {
+				sortList: [[1,1]],
+				headers: {
+					0: {
+						sorter: false
+					}
+				}
+			}
+		}
+
+		var group = new TM.createGroup(options);
+
+		group.init();
 	},
 
 	changePreTime: function(){

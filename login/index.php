@@ -32,14 +32,19 @@ $attempt = isset($_GET['login']) ? $_GET['login'] : null;
 					</p>
 					<?if($attempt == 'nouser'){?>
 						<div id="login-failed"><?=$LOCAL[7]?></div>
-					<?}?>
-					<p>
-						<label><?=$LOCAL[8]?>:</label>
-						<input name="uns" required placeholder="<?=$LOCAL[9]?>">
-					</p>
-					<?if($attempt == 'noarea'){?>
-						<div id="login-failed"><?=$LOCAL[10]?></div>
-					<?}?>
+					<?}
+					if(0){?>
+						<p>
+							<label><?=$LOCAL[8]?>:</label>
+							<input name="uns" required placeholder="<?=$LOCAL[9]?>">
+						</p>
+						<?if($attempt == 'noarea'){?>
+							<div id="login-failed"><?=$LOCAL[10]?></div>
+						<?}
+					}
+					else{ ?>
+						<input type="hidden" name="uns" value="taskmanager">
+					<? } ?>
 					<div id="keepme">
 						<input  id="keep-login" type="checkbox" name="keepme">
 						<label for="keep-login"><?=$LOCAL[4]?></label>

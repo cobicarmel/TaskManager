@@ -4,12 +4,6 @@ abstract class Database{
 
 	private static $response = [];
 
-	private static $host = 'localhost';
-
-	private static $dbuser = 'root';
-
-	private static $dbpass = '';
-
 	static $sql;
 
 	/**
@@ -23,10 +17,10 @@ abstract class Database{
 
 	static function createSql($db_name){
 
-		self::$sql = new mysqli(self::$host, self::$dbuser, self::$dbpass, $db_name);
+		self::$sql = new mysqli(DB_HOST, DB_USER, DB_PASS, $db_name);
 
 		if(! self::$sql)
-			return;
+			return false;
 
 		self::$sql -> set_charset('utf8');
 
@@ -242,7 +236,7 @@ class DBInput extends DBAction{
 
 		$queryText = $this -> $type() . ' ' . $where;
 
-		$queryText = str_replace("''", "null", $queryText);
+		$queryText = str_replace(["''", '\\'], ["null", '\\\\'], $queryText);
 
 		$this -> makeQuery($queryText);
 	}

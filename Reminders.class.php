@@ -61,7 +61,7 @@ class Reminders{
 	}
 
 	function getAll(){
-		$this -> data = $this -> output -> query('select * from reminders where user_id = ' . USER_ID);
+		$this -> data = $this -> output -> query('select * from reminders where user_id = ' . USER_ID . ' order by date');
 		$this -> parseOutData();
 		return $this -> data;
 	}

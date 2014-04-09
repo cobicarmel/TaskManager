@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 03, 2014 at 12:22 AM
+-- Generation Time: Apr 08, 2014 at 02:20 AM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.9
 
@@ -33,21 +33,21 @@ CREATE TABLE IF NOT EXISTS `action_authorized` (
   `title` tinyint(3) unsigned NOT NULL,
   `access` tinyint(2) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=35 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=37 ;
 
 --
 -- Dumping data for table `action_authorized`
 --
 
 INSERT INTO `action_authorized` (`id`, `subject`, `action`, `title`, `access`) VALUES
-(1, 'Agenda', 'getall,getspecial', 124, 3),
-(2, 'Client', 'getall,search', 124, 3),
-(3, 'Task', 'getday', 124, 3),
+(1, 'Agenda', 'getall,getspecial', 124, 4),
+(2, 'Client', 'getall,search', 124, 4),
+(3, 'Task', 'getday', 124, 4),
 (5, 'Task', 'createtask', 49, 3),
 (7, 'Client', 'newclient', 49, 3),
 (8, 'Task', 'clienthistory', 126, 3),
 (9, 'Payment', 'getpayments', 124, 2),
-(10, 'Client', 'remove', 46, 3),
+(10, 'Client', 'remove', 46, 2),
 (11, 'Payment', 'addpayment', 49, 2),
 (12, 'Payment', 'editpayment', 88, 2),
 (13, 'Payment', 'removepayment', 46, 2),
@@ -59,14 +59,16 @@ INSERT INTO `action_authorized` (`id`, `subject`, `action`, `title`, `access`) V
 (22, 'Task', 'edittasktypes', 128, 3),
 (23, 'Task', 'removetasktypes', 129, 3),
 (24, 'Agenda', 'addagenda,updateagenda', 49, 3),
-(27, 'Users', 'editusers', 88, 2),
-(28, 'Users', 'addusers', 49, 2),
+(27, 'Users', 'editusers', 88, 3),
+(28, 'Users', 'addusers', 49, 3),
 (29, 'Users', 'removeusers', 46, 2),
-(30, 'sendMail', 'send', 123, 2),
+(30, 'sendMail', 'send', 123, 3),
 (31, 'Settings', 'changesettings', 130, 2),
-(32, 'Agenda', 'remove', 46, 2),
+(32, 'Agenda', 'remove', 46, 3),
 (33, 'Access', 'changeaccess', 121, 2),
-(34, 'Reminders', 'editreminders', 88, 3);
+(34, 'Reminders', 'editreminders', 88, 3),
+(35, 'Reminders', 'addreminders', 49, 3),
+(36, 'Reminders', 'removereminders', 46, 2);
 
 -- --------------------------------------------------------
 
@@ -142,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `config` (
   `value` tinytext NOT NULL,
   PRIMARY KEY (`id`),
   KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
 
 --
 -- Dumping data for table `config`
@@ -156,10 +158,11 @@ INSERT INTO `config` (`id`, `name`, `value`) VALUES
 (10, 'meet_cancel_mail', '"2"'),
 (11, 'soon_mount', '3'),
 (12, 'undefined_time', '"2"'),
-(13, 'interactive_meet', '"1"'),
+(13, 'interactive_meet', '"2"'),
 (14, 'mail_sender_address', '"jzaltzberg@gmail.com"'),
 (15, 'mail_sender_pass', '"1712Hgec"'),
-(16, 'mail_sender_name', '"TaskManager"');
+(16, 'mail_sender_name', '"TaskManager"'),
+(17, 'reminders_audio', '"1"');
 
 -- --------------------------------------------------------
 
@@ -261,18 +264,25 @@ CREATE TABLE IF NOT EXISTS `reminders` (
   `title` tinytext,
   `content` text,
   `date` datetime NOT NULL,
-  `status` enum('0','1','2') NOT NULL,
+  `status` enum('0','1','2') NOT NULL DEFAULT '0',
   `client_id` int(10) unsigned DEFAULT NULL,
   `task_id` int(10) unsigned DEFAULT NULL,
+  `user_id` tinyint(4) NOT NULL,
+  `pre` varchar(8) DEFAULT NULL,
+  `custom_pre` varchar(15) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `reminders`
 --
 
-INSERT INTO `reminders` (`id`, `title`, `content`, `date`, `status`, `client_id`, `task_id`) VALUES
-(1, 'חשוב מאוד!!!1', 'פגישה חשובה ביותר, אסור לפספס', '2014-04-01 01:05:00', '0', NULL, NULL);
+INSERT INTO `reminders` (`id`, `title`, `content`, `date`, `status`, `client_id`, `task_id`, `user_id`, `pre`, `custom_pre`) VALUES
+(2, 'נסיעה', NULL, '2014-04-03 05:00:00', '0', NULL, NULL, 3, '30', NULL),
+(4, 'עוד תזכורת', NULL, '2014-04-04 22:35:00', '1', NULL, NULL, 2, '900000', '1396567439549'),
+(5, 'ביטוח לאומי', 'הוצאת דו"ח רבעוני', '2014-04-04 02:15:00', '1', NULL, NULL, 2, '300000', NULL),
+(6, 'ביטוח לאומי', NULL, '2014-04-05 21:30:00', '0', NULL, NULL, 2, '300000', NULL),
+(7, 'SO fiddle', NULL, '2014-04-05 23:00:00', '0', NULL, NULL, 2, '0', NULL);
 
 -- --------------------------------------------------------
 
@@ -311,7 +321,7 @@ CREATE TABLE IF NOT EXISTS `tasks` (
   `client_id` int(10) unsigned DEFAULT NULL,
   `system` tinyint(1) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=20 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
 
 --
 -- Dumping data for table `tasks`
@@ -323,7 +333,9 @@ INSERT INTO `tasks` (`id`, `title`, `content`, `place`, `starttime`, `endtime`, 
 (16, ' בני ברק', NULL, ' בני ברק', '2014-03-25 18:10:00', '2014-03-25 18:55:00', 1, 0),
 (17, 'פרופ'' וייצמן', NULL, 'רח'' וייצמן 14 קומה 15 חדר 15', '2014-03-24 17:20:00', '2014-03-24 18:05:00', 2, 1),
 (18, 'ביטוח לאומי', NULL, NULL, '2014-03-28 06:00:00', '2014-03-28 06:45:00', NULL, 0),
-(19, ' בני ברק', NULL, ' בני ברק', '2014-04-01 15:00:00', '2014-04-01 15:45:00', NULL, 0);
+(19, ' בני ברק', NULL, ' בני ברק', '2014-04-01 15:00:00', '2014-04-01 15:45:00', NULL, 0),
+(20, 'פגישה', NULL, NULL, '2014-04-05 02:05:00', '2014-04-05 02:50:00', NULL, 0),
+(22, 'קבלת קהל', NULL, NULL, '2014-04-05 23:20:00', '2014-04-06 00:05:00', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -380,8 +392,9 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `permission`, `phone`, `email`) VALUES
-(1, 'לייבל', 'c17672c95122be1262282cc9918bdca5', 2, '050-23464867', 'tamaryaalom7@gmail.com'),
-(2, 'קובי', 'c85f975261c91b72f5fd88a8f7e61653', 1, '052-7139161', '');
+(1, 'לייבל', 'c17672c95122be1262282cc9918bdca5', 3, '050-23464867', 'tamaryaalom7@gmail.com'),
+(2, 'קובי', 'c85f975261c91b72f5fd88a8f7e61653', 1, '052-7139161', ''),
+(3, 'רותי', 'c17672c95122be1262282cc9918bdca5', 4, NULL, NULL);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

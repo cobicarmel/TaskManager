@@ -458,6 +458,25 @@ audio, #templates, #ac-dialog, .sm-option input, .group-temp{
 	width: 100%;
 	clear: both;
 }
+.data-table .header{
+	cursor: pointer;
+	position: relative;
+}
+.data-table .header:after {
+	content: '\f0dc';
+	font-family: fontawesome;
+	font-size: 11px;
+	color: #74C2FF;
+	position: absolute;
+	left: 4px;
+	top: 8px;
+}
+.data-table .headerSortDown:after {
+	content: '\f0dd';
+}
+.data-table .headerSortUp:after {
+	content: '\f0de';
+}
 .data-table td{
 	position: relative;
 }

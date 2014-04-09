@@ -51,7 +51,7 @@
 					<tr>
 						<th><?=$LOCAL[84]?></th>
 						<th><?=$LOCAL[85]?></th>
-						<th style="width: 10%"><?=$LOCAL[86]?></th>
+						<th style="width: 13%"><?=$LOCAL[86]?></th>
 						<th style="width: 12%" colspan="2"><?=$LOCAL[87]?></th>
 					</tr>
 				</thead>

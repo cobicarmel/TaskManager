@@ -16,6 +16,12 @@ define('COMPANY_NAME', 'TaskManager');
 
 define('DB_AREA', 'taskmanager_');
 
+define('DB_HOST', 'localhost');
+
+define('DB_USER', 'root');
+
+define('DB_PASS', '');
+
 $author = new Authorization;
 
 $user = $author -> createWorkSpace();

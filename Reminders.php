@@ -8,7 +8,8 @@
 		<table class="group-list data-table">
 			<thead>
 				<tr>
-					<th colspan="2" style="width: 15%"><?=$LOCAL[32]?></th>
+					<th style="width: 1px"></th>
+					<th style="width: 15%"><?=$LOCAL[32]?></th>
 					<th style="width: 10%"><?=$LOCAL[7]?></th>
 					<th><?=$LOCAL[132]?></th>
 					<th style="width: 24%" colspan="4"><?=$LOCAL[87]?></th>
@@ -62,7 +63,7 @@
 		</form>
 		<table class="group-temp">
 			<tr>
-				<td style="width: 1px" class="group-status"></td>
+				<td class="group-status"></td>
 				<td class="group-strdate"></td>
 				<td class="group-strtime"></td>
 				<td class="group-title"></td>

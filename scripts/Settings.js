@@ -4,19 +4,25 @@ var Settings = {
 
 	buildGroups: function(){
 
-		var tasktypes = new TM.createGroup('Task', 'tasktypes', function(){
+		var tasktypes = new TM.createGroup({
+			name: 'tasktypes',
+			subject: 'Task',
+			onUpdate: function(){
+				Settings.listTasktypes();
 
-			Settings.listTasktypes();
-
-			for(var tt in TM.tableTimes){
-				var agenda = TM.tableTimes[tt].Agenda;
-				agenda.getAll(agenda.rewrite);
-			}	
+				for(var tt in TM.tableTimes){
+					var agenda = TM.tableTimes[tt].Agenda;
+					agenda.getAll(agenda.rewrite);
+				}
+			}
 		})
 
 		tasktypes.init();
 
-		var users = new TM.createGroup('Users', 'users');
+		var users = new TM.createGroup({
+			name: 'users',
+			subject: 'Users'
+		});
 
 		users.init();
 	},
