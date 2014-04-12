@@ -236,7 +236,7 @@ class DBInput extends DBAction{
 
 		$queryText = $this -> $type() . ' ' . $where;
 
-		$queryText = str_replace(["''", '\\'], ["null", '\\\\'], $queryText);
+		$queryText = str_replace(["''"], ["null"], $queryText);
 
 		$this -> makeQuery($queryText);
 	}

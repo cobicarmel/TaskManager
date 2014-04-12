@@ -43,7 +43,7 @@ $attempt = isset($_GET['login']) ? $_GET['login'] : null;
 						<?}
 					}
 					else{ ?>
-						<input type="hidden" name="uns" value="taskmanager">
+						<input type="hidden" name="uns" value="main">
 					<? } ?>
 					<div id="keepme">
 						<input  id="keep-login" type="checkbox" name="keepme">

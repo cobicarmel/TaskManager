@@ -58,6 +58,12 @@
 						</select>
 					</td>
 				</tr>
+				<tr>
+					<td colspan="2" class="form-label"><?=$LOCAL[148]?>:</td>
+					<td colspan="2">
+						<select id="rf-client" name="client_id"></select>
+					</td>
+				</tr>
 			</table>
 			<button class="ui-state-default"></button>
 		</form>

@@ -18,7 +18,7 @@ if(! $dbaccess -> hasAction($subject, $action)){
 /** filtering input **/	
 
 foreach($_POST as $key => $value)
-	$_POST[$key] = str_replace("'", "\'", $value);
+	$_POST[$key] = addslashes($value);
 
 /** performing action **/
 

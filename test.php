@@ -1,2 +1,2 @@
-﻿<?=json_decode('"ask"')?>
-<script src="scripts/heDate.js"></script>
+﻿<?=addslashes("פרופ'")?>
+<!--script src="scripts/heDate.js"></script-->

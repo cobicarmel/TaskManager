@@ -29,6 +29,6 @@ class Settings{
 	function changeSettings(){
 
 		foreach($_POST as $name => $value)
-			$this -> input -> query('update', 'config', ['value' => json_encode($value)], "where name = '$name'");
+			$this -> input -> query('update', 'config', ['value' => addslashes(json_encode($value))], "where name = '$name'");
 	}
 }

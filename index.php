@@ -26,7 +26,7 @@ $config = [
 <body>
 <center>
 <div id="api-error"></div>
-<div id="app">
+<div id="app" class="auto-center">
 	<div id="appcenter">
 		<div id="ac-dialog">
 			<p></p>
@@ -67,7 +67,13 @@ $config = [
 				<div id="rp-strtime" class="tahoma"></div>
 				<div id="rp-bell" class="fa fa-bell"></div>
 			</div>
-			<div id="rp-title"></div>
+			<div id="rp-details">
+				<div id="rp-title"></div>
+				<div id="rp-client-wrapper">
+					<span><?=$LOCAL[149]?>:</span>
+					<div id="rp-client_id"></div>
+				</div>
+			</div>
 			<div id="rp-actions">
 				<div class="rpa-action">
 					<div class="rpa-title"><?=$LOCAL[134]?></div>

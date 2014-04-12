@@ -46,6 +46,9 @@ body{
 	font-family: alef;
 	-moz-user-select: none;
 	-webkit-user-select: none;
+	height: 100%;
+	width: 100%;
+	margin: 0;
 }
 ul{
 	margin: 0;
@@ -116,9 +119,8 @@ audio, #templates, #ac-dialog, .sm-option input, .group-temp{
 	text-indent: 10px;
 }
 #app{
-	position: relative;
-	height: 620px;
-	width: 1100px;
+	height: 650px;
+	width: 1110px;
 	background: linear-gradient(to right,rgba(165, 190, 207, 0.37) 0%, rgba(216, 221, 229, 0.47) 100%);
 	box-shadow: 0pt 2px 5px rgba(129, 176, 192, 0.7), 0px 0px 8px 5px rgba(255, 255, 255, 0.4) inset;
 	border: 1px solid #eee;
@@ -458,11 +460,11 @@ audio, #templates, #ac-dialog, .sm-option input, .group-temp{
 	width: 100%;
 	clear: both;
 }
-.data-table .header{
+.data-table .tablesorter-header:not(.sorter-false){
 	cursor: pointer;
 	position: relative;
 }
-.data-table .header:after {
+.data-table .tablesorter-header:not(.sorter-false):after {
 	content: '\f0dc';
 	font-family: fontawesome;
 	font-size: 11px;
@@ -471,11 +473,11 @@ audio, #templates, #ac-dialog, .sm-option input, .group-temp{
 	left: 4px;
 	top: 8px;
 }
-.data-table .headerSortDown:after {
-	content: '\f0dd';
+.data-table .tablesorter-headerDesc:after {
+	content: '\f0dd' !important;
 }
-.data-table .headerSortUp:after {
-	content: '\f0de';
+table.data-table th.tablesorter-headerAsc:after {
+	content: '\f0de' !important;
 }
 .data-table td{
 	position: relative;
@@ -839,7 +841,7 @@ audio, #templates, #ac-dialog, .sm-option input, .group-temp{
 	border: 1px solid #F3F3F3;
 	cursor: pointer;
 	position: relative;
-	padding: 4.4% 0;
+	padding: 4.8% 0;
 }
 .menu-tab:hover, .menu-tab.active{
 	background-color: #B3C8FF;
@@ -962,7 +964,7 @@ audio, #templates, #ac-dialog, .sm-option input, .group-temp{
 	/* padding: 0 5px; */
 }
 .nav-center{
-	width: 88.9%;	
+	width: 88.9%;
 }
 #set-agenda-nav{
 	height: 9%;
@@ -1144,7 +1146,6 @@ audio, #templates, #ac-dialog, .sm-option input, .group-temp{
 #reminder-popup{
 	display: none;
 	width: 240px;
-	height: 160px;
 	box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.3);
 	background-color: #fff;
 	z-index: 1;
@@ -1166,21 +1167,22 @@ audio, #templates, #ac-dialog, .sm-option input, .group-temp{
 	font-size: 54px;
 	margin: 10px;
 }
+#rp-details {
+	border-bottom: 2px solid #2694E8;
+	font-weight: bold;
+}
 #rp-title {
-	text-align: right;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	font-weight: bold;
-	height: 30px;
-	border-bottom: 2px solid #2694E8;
-	color: gray;
+	height: 18px;
+	text-align: right;
 }
-.rpa-action {
+.rpa-action, #rp-client-wrapper {
 	height: 25px;
 	padding-top: 5px;
 }
-.rpa-action * {
+.rpa-action *, #rp-client-wrapper * {
 	float: right;
 }
 #rp-actions .fa {

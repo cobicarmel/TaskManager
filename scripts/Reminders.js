@@ -145,8 +145,10 @@ var Reminders = {
 		var $popup = Reminders.$popup,
 			reminder = Config.reminders[id];
 
+		reminder.client_id = '&nbsp;' + Client.getFullName(reminder.client_id);
+
 		for(var d in reminder)
-			$('#rp-' + d).text(reminder[d]);
+			$('#rp-' + d).html(reminder[d]);
 
 		$popup.data('id', id)
 			.show()

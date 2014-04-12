@@ -150,7 +150,7 @@ var Client = {
 
 	fillTableTime: function(){
 
-		var select = $('.clients-list'),
+		var select = $('.clients-list, #rf-client'),
 			options = [];
 
 		for(var id in Client.all)

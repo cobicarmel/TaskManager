@@ -406,6 +406,7 @@ var tableTime = function(ELEM, INDEX){
 	}
 
 	this.scrollToTime = function(date){
+		TABLE_TIME.menuTab.click();
 		ELEM.find('#tt-body')[0].scrollTop = TABLE_TIME.getPartTop(date);
 	}
 
@@ -413,7 +414,7 @@ var tableTime = function(ELEM, INDEX){
 
 		var goReady = $.isFunction(ready);
 
-		if(date instanceof Date)
+		if(date)
 			TABLE_TIME.date = typeof date == 'string' ? date.toDate() : date;
 		else
 			TABLE_TIME.date = new Date();

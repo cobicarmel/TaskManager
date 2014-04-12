@@ -129,9 +129,19 @@ var TM = {
 			var table = tbody.parents('table');
 
 			if(id){
-				if(table.data('tablesorter'))
+
+				if(table.data('tablesorter')){
+
 					table.trigger('update');
+
+					var defaultSort = options.tablesorter.sortList;
+
+					if(defaultSort)
+						table.trigger('sorton', [defaultSort]);
+				}
+
 				else{
+
 					var obj = {},
 						columnsCount = table.find('tr').first().children().length;
 
@@ -188,7 +198,7 @@ var TM = {
 
 				TM.popup('loading', 85);
 
-				Api.send(SUBJECT, data.action + options.name, params, function(res){
+				Api.send(options.subject, data.action + options.name, params, function(res){
 
 					TM.popup('success', 86);
 
