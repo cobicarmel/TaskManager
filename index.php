@@ -71,7 +71,7 @@ $config = [
 				<div id="rp-title"></div>
 				<div id="rp-client-wrapper">
 					<span><?=$LOCAL[149]?>:</span>
-					<div id="rp-client_id"></div>
+					<div id="rp-client"></div>
 				</div>
 			</div>
 			<div id="rp-actions">

@@ -157,7 +157,7 @@ $(function(){
 			(checked ? prevs : nexts).prop('checked', checked);
 	})
 
-	$('#rp-actions .fa').on('click', function(){
+	$('#rp-actions .fa, #rp-client').on('click', function(){
 		$('#reminder-popup').hide();
 	})
 

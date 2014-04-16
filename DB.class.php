@@ -198,10 +198,6 @@ abstract class DBAction{
 
 class DBInput extends DBAction{
 
-	function __destruct(){
-		Database::addResponse('affected_rows', $this -> sql -> affected_rows);
-	}
-
 	private function insert(){
 
 		$columns = '`';
