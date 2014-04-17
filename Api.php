@@ -17,8 +17,7 @@ if(! $db_access -> hasAction($subject, $action)){
 
 /** filtering input **/	
 
-foreach($_POST as $key => $value)
-	$_POST[$key] = addslashes($value);
+Database::filterInput($_POST);
 
 /** performing action **/
 

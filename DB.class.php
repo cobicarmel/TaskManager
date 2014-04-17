@@ -66,6 +66,18 @@ abstract class Database{
 		exit;
 	}
 
+    static function filterInput(array & $input){
+
+        foreach($input as $key => $value){
+
+            if(gettype($value) == 'array')
+                self::filterInput($value);
+            else
+                $input[$key] = addslashes($value);
+        }
+
+    }
+
 	static function getResponse($print = false){
 		if($print)
 			echo json_encode(self::$response);

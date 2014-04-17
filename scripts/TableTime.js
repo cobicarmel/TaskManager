@@ -414,7 +414,7 @@ var tableTime = function(ELEM, INDEX){
 
 		var goReady = $.isFunction(ready);
 
-		if(date)
+		if(date instanceof Date || typeof date == 'string')
 			TABLE_TIME.date = typeof date == 'string' ? date.toDate() : date;
 		else
 			TABLE_TIME.date = new Date();
