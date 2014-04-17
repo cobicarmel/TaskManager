@@ -22,13 +22,17 @@ class Settings{
 		$this -> config = $config;
 	}
 
+    function changeSettings(){
+
+        foreach($_POST as $name => $value)
+            $this -> input -> query('update', 'config', ['value' => addslashes(json_encode($value))], "where name = '$name'");
+    }
+
+    function getProperty($property){
+        return isset($this -> config[$property]) ? $this -> config[$property] : null;
+    }
+
 	function listConfig(){
 		return $this -> config;
-	}
-
-	function changeSettings(){
-
-		foreach($_POST as $name => $value)
-			$this -> input -> query('update', 'config', ['value' => addslashes(json_encode($value))], "where name = '$name'");
 	}
 }

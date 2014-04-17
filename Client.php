@@ -1,5 +1,5 @@
 <div id="clients">
-	<? if($dbaccess -> hasAction('Client', 'newclient')) : ?>
+	<? if($db_access -> hasAction('Client', 'newclient')) : ?>
 	<h4><?=$LOCAL[19]?></h4>
 	<div>
 		<form id="new-client">
@@ -49,7 +49,7 @@
 		</form>
 	</div>
 	<? endif;
-	if($dbaccess -> hasAction('Client', 'search')) : ?>
+	if($db_access -> hasAction('Client', 'search')) : ?>
 	<h4><?=$LOCAL[27]?></h4>
 	<div id="search-clients"></div>
 	<h4 class="search-results"><?=$LOCAL[39]?></h4>
@@ -85,20 +85,20 @@
 						<img src="media/default_user.png" title="<?=$LOCAL[40]?>">
 					</div>
 					<div id="cdd-title"></div>
-					<? if($dbaccess -> hasAction('Client', 'remove')){ ?>
+					<? if($db_access -> hasAction('Client', 'remove')){ ?>
 						<div id="cdd-remove" title="<?=$LOCAL[46]?>" class="ui-icon ui-icon-close cmd-icon"></div>
 					<? } ?>
 				</div>
 				<div id="cdd-body">
 					<div id="cd-toolbar">
 						<div class="cdt-tab" tab="cd-card"><?=$LOCAL[41]?></div>
-						<? if($dbaccess -> hasAction('Task', 'clienthistory')){ ?>
+						<? if($db_access -> hasAction('Task', 'clienthistory')){ ?>
 							<div class="cdt-tab" tab="cd-history"><?=$LOCAL[42]?></div>
 						<? }
-						if($dbaccess -> hasAction('Client', 'edit')){ ?>
+						if($db_access -> hasAction('Client', 'edit')){ ?>
 							<div class="cdt-tab" tab="cd-edit"><?=$LOCAL[43]?></div>
 						<? }
-						if($dbaccess -> hasAction('Payment')){ ?>
+						if($db_access -> hasAction('Payment')){ ?>
 							<div class="cdt-tab" tab="cd-payments"><?=$LOCAL[51]?></div>
 						<? } ?>
 					</div>
@@ -140,7 +140,7 @@
 								</div>
 							</div>
 						</div>
-						<? if($dbaccess -> hasAction('Task', 'clienthistory')) : ?>
+						<? if($db_access -> hasAction('Task', 'clienthistory')) : ?>
 						<div id="cd-history">
 							<table class="data-table editable">
 								<thead>
@@ -152,7 +152,7 @@
 							</table>
 						</div>
 						<? endif;
-						if($dbaccess -> hasAction('Client', 'edit')) : ?>
+						if($db_access -> hasAction('Client', 'edit')) : ?>
 						<div id="cd-edit">
 							<form id="edit-client">
 								<table>
@@ -209,9 +209,9 @@
 							</form>
 						</div>
 						<? endif;
-						if($dbaccess -> hasAction('Payment')) : ?>
+						if($db_access -> hasAction('Payment')) : ?>
 						<div id="cd-payments">
-							<? if($dbaccess -> hasAction('Payment', 'addpayment')) : ?>
+							<? if($db_access -> hasAction('Payment', 'addpayment')) : ?>
 							<h4><?=$LOCAL[53]?></h4>
 							<div id="cdp-new">
 								<form id="new-payment">
@@ -272,7 +272,7 @@
 									<div style="height: 90%; overflow: auto">
 										<table id="cdp-table" class="data-table editable">
 											<thead>
-												<? if($dbaccess -> hasAction('Payment', 'removepayment')) { ?>
+												<? if($db_access -> hasAction('Payment', 'removepayment')) { ?>
 													<th style="width: 6%"></th>
 												<? } ?>
 												<th style="width: 26%"><?=$LOCAL[32]?></th>

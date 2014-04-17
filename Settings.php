@@ -4,15 +4,15 @@
 		<label for="st-radio1"><?=$LOCAL[1]?></label>
 		<input type="radio" name="st-radio" id="st-radio2">
 		<label for="st-radio2"><?=$LOCAL[72]?></label>
-		<?if($dbaccess -> hasAction('Users')){?>
+		<?if($db_access -> hasAction('Users')){?>
 			<input type="radio" name="st-radio" id="st-radio3">
 			<label for="st-radio3"><?=$LOCAL[89]?></label>
 		<?}
-		if($dbaccess -> hasAction('Settings', 'changesettings')){?>
+		if($db_access -> hasAction('Settings', 'changesettings')){?>
 			<input type="radio" name="st-radio" id="st-radio4">
 			<label for="st-radio4"><?=$LOCAL[121]?></label>
 		<?}
-		if($dbaccess -> hasAction('Settings', 'changesettings')){?>
+		if($db_access -> hasAction('Settings', 'changesettings')){?>
 			<input type="radio" name="st-radio" id="st-radio5">
 			<label for="st-radio5"><?=$LOCAL[71]?></label>
 		<?}?>
@@ -96,7 +96,7 @@
 				</tr>
 			</table>
 		</div>
-		<?if($dbaccess -> hasAction('Users')){?>
+		<?if($db_access -> hasAction('Users')){?>
 		<div id="group-users" class="set-tab" tab="st-radio3">
 			<div class="group-add"><?=$LOCAL[91]?></div>
 			<table class="group-list data-table">
@@ -174,11 +174,11 @@
 			</table>
 		</div>
 		<?}
-		if($dbaccess -> hasAction('Settings', 'changesettings')){?>
+		if($db_access -> hasAction('Settings', 'changesettings')){?>
 		<div class="set-tab" tab="st-radio4">
 			<form id="set-access">
 				<div id="sa-tables">
-				<?$dbaccess -> writeSettings()?>
+				<?$db_access -> writeSettings()?>
 				</div>
 				<div id="sa-submit">
 					<button class="ui-state-default"><?=$LOCAL[44]?></button>
@@ -232,6 +232,19 @@
 										</select>
 									</td>
 								</tr>
+                                <tr>
+                                    <td><?=$LOCAL[133]?></td>
+                                    <td>
+                                        <select name="remove_old_reminders">
+                                            <option value="0"><?=$LOCAL[151]?></option>
+                                            <option value="1"><?=$LOCAL[152] . ' ' . $LOCAL[142]?></option>
+                                            <option value="3"><?=$LOCAL[152] . ' ' . $LOCAL[153]?></option>
+                                            <option value="7"><?=$LOCAL[152] . ' ' . $LOCAL[154]?></option>
+                                            <option value="30"><?=$LOCAL[152] . ' ' . $LOCAL[155]?></option>
+                                            <option value="never"><?=$LOCAL[150]?></option>
+                                        </select>
+                                    </td>
+                                </tr>
 							</table>
 						</div>
 					</div>

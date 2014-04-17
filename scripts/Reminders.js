@@ -51,11 +51,15 @@ var Reminders = {
 			params = {
 				status: $this.data('status') ? 0 : 1,
 				id: $this.parents('tr').data('id')
-			};
+            },
+            action = 'editreminders';
+
+        if(Config.default.remove_old_reminders == 0 && params.status) // this reminder should be deleted immediately
+            action = 'removereminders';
 
 		TM.popup('loading', 96);
 
-		Api.send('Reminders', 'editreminders', params, function(res){
+		Api.send('Reminders', action, params, function(res){
 			TM.popup();
 			TM.groups.reminders.applyChanges(res);
 		});

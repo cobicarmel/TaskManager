@@ -162,7 +162,7 @@ class Client{
 
 	function getClient($id = null){
 
-		$query = 'select * from Clients';
+		$query = 'select * from clients';
 
 		if($id)
 			$query .= ' where ' . Database::parseMultiWhere('id', $id);
@@ -214,7 +214,7 @@ class Client{
 
 		$stack = [];
 
-		$query = 'select Clients.id, first_name, last_name from Clients';
+		$query = 'select clients.id, first_name, last_name from clients';
 
 		foreach($this -> multiData as $v){
 
@@ -224,7 +224,7 @@ class Client{
 
 				$stack[$v['table'] . '.' . $v['column']] = $search . '%';
 
-				$query .= " join $v[table] on Clients.id = $v[table].client_id";
+				$query .= " join $v[table] on clients.id = $v[table].client_id";
 			}
 		}
 

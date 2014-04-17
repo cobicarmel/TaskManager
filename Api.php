@@ -10,7 +10,7 @@ $action = $_POST['action'];
 
 unset($_POST['subject'], $_POST['action']);
 
-if(! $dbaccess -> hasAction($subject, $action)){
+if(! $db_access -> hasAction($subject, $action)){
 	header('HTTP/1.0 403 Forbidden');
 	exit;
 }

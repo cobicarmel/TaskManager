@@ -47,8 +47,10 @@ define('USER_ID', $user['id']);
 
 define('ACCESS', (int) $user['permission']);
 
-/** getting all allowed actions for this user **/
+/* getting all allowed actions for this user */
 
-$dbaccess = new Access;
+$db_access = new Access;
+
+/* getting visibility users */
 
 $recognizedUsers = $author -> userClass -> getRecognized();

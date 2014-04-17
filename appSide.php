@@ -24,19 +24,19 @@
 </div>
 <div id="menu" class="as-bar">
 	<?
-	if($dbaccess -> hasAction('Task')){
+	if($db_access -> hasAction('Task')){
 		foreach($config['default']['table_times'] as $i => $title){ ?>
 			<div class="menu-tab" tab="table-time-<?=$i?>"><?=$title?></div>
 	<? }
 	}
-	if($dbaccess -> hasAction('Client')){ ?>
+	if($db_access -> hasAction('Client')){ ?>
 		<div class="menu-tab" tab="client"><?=$LOCAL[2]?></div>
 
 	<? }
-	if($dbaccess -> hasAction('Reminders')){ ?>
+	if($db_access -> hasAction('Reminders')){ ?>
 		<div class="menu-tab" tab="reminders"><?=$LOCAL[50]?></div>
 	<? }
-	if($dbaccess -> hasAction('Settings')) {?>
+	if($db_access -> hasAction('Settings')) {?>
 		<div class="menu-tab" tab="settings"><?=$LOCAL[3]?></div>
 	<? } ?>
 </div>

@@ -76,7 +76,6 @@ var TM = {
 			self.tbody
 				.on('click', '.fa-pencil', self.edit)
 				.on('click', '.fa-times', self.remove)
-				.on('click', '.fa-times', self.remove)
 				.on('click', '.reminder-mark', Reminders.changeStatus);
 
 			self.form.submit(self.submitForm);

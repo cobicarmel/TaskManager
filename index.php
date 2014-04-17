@@ -26,7 +26,7 @@ $config = [
 <body>
 <center>
 <div id="api-error"></div>
-<div id="app" class="auto-center">
+<div id="app">
 	<div id="appcenter">
 		<div id="ac-dialog">
 			<p></p>
@@ -35,24 +35,24 @@ $config = [
 			<div id="calendar"></div>
 		</div>
 		<?
-		if($dbaccess -> hasAction('Task')){
+		if($db_access -> hasAction('Task')){
 			foreach($config['default']['table_times'] as $i => $title){?>
 				<div class="ac-tab" tab="table-time-<?=$i?>">
 					<? require 'TableTime.php' ?>
 				</div>
 			<? }
 		}
-		if($dbaccess -> hasAction('Client')){ ?>
+		if($db_access -> hasAction('Client')){ ?>
 			<div class="ac-tab" tab="client">
 				<?require 'Client.php';?>
 			</div>
 		<? }
-		if($dbaccess -> hasAction('Reminders')){ ?>
+		if($db_access -> hasAction('Reminders')){ ?>
 			<div class="ac-tab" tab="reminders">
 				<?require 'Reminders.php';?>
 			</div>
 		<? }
-		if($dbaccess -> hasAction('Settings')) { ?>
+		if($db_access -> hasAction('Settings')) { ?>
 			<div class="ac-tab" tab="settings">
 				<?require 'Settings.php';?>
 			</div>
@@ -115,6 +115,6 @@ $config = [
 <script src="scripts/script.js"></script>
 <script>
 var Config = <?=json_encode($config)?>;
-Access.actions = <?=json_encode($dbaccess -> listActions())?>;
+Access.actions = <?=json_encode($db_access -> listActions())?>;
 </script>
 </html>
