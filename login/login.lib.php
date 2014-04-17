@@ -1,8 +1,8 @@
 <?
 
-require '../Authorization.class.php';
+require 'config.lib.php';
 
-define('APP_BASE', '/TaskManager/');
+require '../Authorization.class.php';
 
 $auth = new Authorization;
 

@@ -55,7 +55,7 @@ var Reminders = {
             action = 'editreminders';
 
         if(Config.default.remove_old_reminders == 0 && params.status) // this reminder should be deleted immediately
-            action = 'removereminders';
+			action = 'removereminders';
 
 		TM.popup('loading', 96);
 

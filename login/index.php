@@ -1,4 +1,7 @@
 <?
+
+require 'config.lib.php';
+
 require '../local/detect.lib.php';
 
 $lang = detectLang();
@@ -43,7 +46,7 @@ $attempt = isset($_GET['login']) ? $_GET['login'] : null;
 						<?}
 					}
 					else{ ?>
-						<input type="hidden" name="uns" value="main">
+						<input type="hidden" name="uns" value="<?=AREA?>">
 					<? } ?>
 					<div id="keepme">
 						<input  id="keep-login" type="checkbox" name="keepme">
