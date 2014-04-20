@@ -1,12 +1,11 @@
 <?
 
-class Access{
+class Access extends Components {
 
 	private $actions;
 
 	function __construct(){
-		$this -> input = new DBInput;
-		$this -> output = new DBOutput;
+		parent:: __construct();
 		$this -> getActions();
 	}
 

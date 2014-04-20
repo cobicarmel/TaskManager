@@ -146,8 +146,6 @@ abstract class Database{
 
 	static function parseMultiWhere($column, $values){
 
-		$where = '';
-
 		if(gettype($values) == 'array'){
 
 			$stack = [];

@@ -6,6 +6,8 @@ require 'local/detect.lib.php';
 
 require 'Authorization.class.php';
 
+require 'Components.class.php';
+
 require 'Access.class.php';
 
 require 'Config.lib.php';

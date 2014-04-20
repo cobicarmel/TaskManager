@@ -1,6 +1,6 @@
-<?php
+<?
 
-class DTime{
+abstract class DTime{
 
 	static function timeToDB($time){
 

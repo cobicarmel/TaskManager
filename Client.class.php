@@ -1,9 +1,5 @@
 <?
-class Client{
-
-	private $input;
-
-	private $output;
+class Client extends Components {
 
 	private $query;
 
@@ -21,11 +17,6 @@ class Client{
 			'values' => []
 		]
 	];
-
-	function __construct(){
-		$this -> input = new DBInput;
-		$this -> output = new DBOutput;
-	}
 
 	/** PRIVATE METHODS **/
 

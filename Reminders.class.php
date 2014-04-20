@@ -1,19 +1,10 @@
 <?
 
-class Reminders{
+class Reminders extends Components {
 
 	private  $id;
 
-	private $input;
-
-	private $output;
-
 	private $data;
-
-	function __construct(){
-		$this -> input = new DBInput;
-		$this -> output = new DBOutput;
-	}
 
 	private function parseInData(){
 

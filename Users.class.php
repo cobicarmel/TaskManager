@@ -1,19 +1,10 @@
 <?
 
-class Users{
+class Users extends Components {
 
 	private $users;
 
-	private $input;
-
-	private $output;
-
 	private $userId;
-
-	function __construct(){
-		$this -> input = new DBInput;
-		$this -> output = new DBOutput;
-	}
 
 	private function getUsers(){
 		$query = $this -> output -> query('select * from users');

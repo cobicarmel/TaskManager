@@ -1,6 +1,6 @@
 <?
 
-class Payment{
+class Payment extends Components {
 
 	private $date;
 
@@ -21,8 +21,11 @@ class Payment{
 	private $table = 'payments';
 
 	function __construct(){
-		$this -> input = new DBInput;
-		$this -> output = new DBOutput;
+		parent::__construct();
+		$this -> init();
+	}
+
+	private function init(){
 
 		foreach($this -> globValues as $value)
 			if(isset($_POST[$value])){

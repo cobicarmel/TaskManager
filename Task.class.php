@@ -1,19 +1,10 @@
 <?
 
-class Task{
-
-	private $input;
-
-	private $output;
+class Task extends Components{
 
 	private $data;
 
 	private $currentDate;
-
-	function __construct(){
-		$this -> input = new DBInput;
-		$this -> output = new DBOutput;
-	}
 
 	private function prepareData(){
 

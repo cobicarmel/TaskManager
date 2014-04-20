@@ -1,10 +1,10 @@
 <?
 
-class Agenda{
+class Agenda extends Components {
 
 	function __construct(){
-		$this -> input = new DBInput;
-		$this -> output = new DBOutput;
+
+		parent::__construct();
 
 		if(isset($_POST['date'])){
 			$date = Dtime::clientToDB($_POST['date']);
