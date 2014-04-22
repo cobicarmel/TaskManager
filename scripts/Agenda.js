@@ -174,8 +174,8 @@ var Agenda = function(TABLE_TIME){
 
 		elem.show().appendTo(self.setTab).position({of: '#appcenter'});
 
-		form.off('submit').on('submit', function(e){
-			TM.submitForm.call(this, e, function(){
+		form.off('submit').on('submit', function(){
+			TM.submitForm.call(this, function(){
 				self.addAgenda.call(form, type, day, id);
 			})
 		})

@@ -1,12 +1,12 @@
 'use strict';
 
-var Task =  function(TABLE_TIME){
+var Task = function(TABLE_TIME){
 
 	var Mself = this;
 
 	this.addMeeting = function(date, id, meeting){
 
-		if(! Mself.meetings[date])
+		if(!Mself.meetings[date])
 			Mself.meetings[date] = {};
 
 		meeting.date = date;
@@ -25,7 +25,7 @@ var Task =  function(TABLE_TIME){
 
 		TABLE_TIME.VBoard.reset(TABLE_TIME.date, 'meeting');
 
-		if(! data)
+		if(!data)
 			return;
 
 		for(var day in data[0]){
@@ -44,7 +44,7 @@ var Task =  function(TABLE_TIME){
 				return ids.indexOf(key) + 1 && data.client_id ? data.client_id : null;
 			})
 
-		if(! sendSet || ! clients.length)
+		if(!sendSet || !clients.length)
 			return;
 
 		var params = {
@@ -67,10 +67,11 @@ var Task =  function(TABLE_TIME){
 			Api.confirm(null, 75, send);
 	}
 
-	this.changeTime = function(meetings){
+	this.changeTime = function(meetings, strDate){
 
-		var strDate = TABLE_TIME.strDate,
-			ids = Object.keys(meetings),
+		strDate = strDate || TABLE_TIME.strDate;
+
+		var ids = Object.keys(meetings),
 			isMulti = Object.keys(meetings).length > 1,
 			data = {
 				data: $.extend(true, {}, meetings),
@@ -93,9 +94,9 @@ var Task =  function(TABLE_TIME){
 		}
 
 		TABLE_TIME.validateTime(stack, ids, function(isFree){
-	
+
 			if(isFree != true){
-				if(! isMulti)
+				if(!isMulti)
 					Mself.meetings[strDate][ids[0]].reset();
 
 				return TABLE_TIME[isMulti ? 'typeCareGroup' : 'typeCare'](isFree, callback);
@@ -113,7 +114,28 @@ var Task =  function(TABLE_TIME){
 		})
 	}
 
+	this.changeMultiDate = function(ids, strDate){
+
+		var currentDate = TABLE_TIME.strDate,
+			all = Mself.meetings[currentDate],
+			arr = {};
+
+		for(var id in ids){
+			var key = ids[id],
+				meet = all[key],
+				param = {
+					starttime: strDate.toDate(meet.start.strTime),
+					endtime: strDate.toDate(meet.end.strTime)
+				};
+
+			arr[key] = param;
+		}
+
+		Mself.changeTime(arr);
+	}
+
 	this.changeMultiTime = function(ids, range){
+
 		var strDate = TABLE_TIME.strDate,
 			all = Mself.meetings[strDate],
 			arr = {};
@@ -154,13 +176,13 @@ var Task =  function(TABLE_TIME){
 		}
 
 		Api.confirm(title, LOCAL[content], function(){
-			Api.validate.confirm.taskTime = confirmer;
-			fn();
-		},
-		function(){
-			Api.validate.confirm.taskTime = null;
-		})
-		
+				Api.validate.confirm.taskTime = confirmer;
+				fn();
+			},
+			function(){
+				Api.validate.confirm.taskTime = null;
+			})
+
 	}
 
 	this.createMeeting = function(){
@@ -174,7 +196,9 @@ var Task =  function(TABLE_TIME){
 
 		delete(param.strdate);
 
-		TABLE_TIME.validateTime([{start: starttime, end: endtime, id: id}], null, function(isFree){
+		TABLE_TIME.validateTime([
+			{start: starttime, end: endtime, id: id}
+		], null, function(isFree){
 
 			if(isFree != true)
 				return TABLE_TIME.typeCare(isFree, function(){
@@ -206,7 +230,7 @@ var Task =  function(TABLE_TIME){
 
 		for(var m in Mself.meetings[strDate]){
 
-			if(! (ids.indexOf(+m) + 1))
+			if(!(ids.indexOf(+m) + 1))
 				continue;
 
 			var meeting = Mself.meetings[strDate][m],
@@ -235,225 +259,225 @@ var Task =  function(TABLE_TIME){
 		})
 	},
 
-	this.getDay = function(date){
-		var strDate = date.toLocaleDateString();
-		TABLE_TIME.apiRequest('Task', 'getday', {date: strDate}, function(res){
-			Mself.addDate(res);
-			TABLE_TIME.advanceReady();
-		})
-	},
+		this.getDay = function(date){
+			var strDate = date.toLocaleDateString();
+			TABLE_TIME.apiRequest('Task', 'getday', {date: strDate}, function(res){
+				Mself.addDate(res);
+				TABLE_TIME.advanceReady();
+			})
+		},
 
-	this.getMeeting = function(strDate, id, fn){
-	
-		var meet = TM.getMultiObj(Mself.meetings, [strDate, id]);
+		this.getMeeting = function(strDate, id, fn){
 
-		if(meet || strDate == TABLE_TIME.strDate)
-			return fn.call(meet);
+			var meet = TM.getMultiObj(Mself.meetings, [strDate, id]);
 
-		var current = new Date(TABLE_TIME.date);
+			if(meet || strDate == TABLE_TIME.strDate)
+				return fn.call(meet);
 
-		TABLE_TIME.setDay(strDate, function(){
+			var current = new Date(TABLE_TIME.date);
 
-			TABLE_TIME.setDay(current, null, true, true);
+			TABLE_TIME.setDay(strDate, function(){
 
-			fn.call(Mself.meetings[strDate][id]);
-		}, true)
-	},
+				TABLE_TIME.setDay(current, null, true, true);
 
-	this.meeting = function(){
+				fn.call(Mself.meetings[strDate][id]);
+			}, true)
+		},
 
-		var self = this;
+		this.meeting = function(){
 
-		this.addToTable = function(){
-			var startTop = TABLE_TIME.getPartTop(self.start.date),
-				endTop = TABLE_TIME.getPartTop(self.end.date, self.start.date),
-				height = endTop - startTop,
-				elem = self.elem;
+			var self = this;
 
-			elem.css({top: startTop, height: height})
-				.click(self.edit)
-				.data({meeting: {
-					starttime: self.start.date,
-					endtime: self.end.date,
-					id: self.id
-				}})
+			this.addToTable = function(){
+				var startTop = TABLE_TIME.getPartTop(self.start.date),
+					endTop = TABLE_TIME.getPartTop(self.end.date, self.start.date),
+					height = endTop - startTop,
+					elem = self.elem;
 
-			elem.find('.ttm-time').text([self.start.strTime, self.end.strTime].join(' - '));
-			elem.find('.ttm-title').text(self.title);
-			elem.find('.ttm-close').click(self.remove);
+				elem.css({top: startTop, height: height})
+					.click(self.edit)
+					.data({meeting: {
+						starttime: self.start.date,
+						endtime: self.end.date,
+						id: self.id
+					}})
 
-			if(self.client_id > 0 && Client.getClient(self.client_id)){
-				var link = Client.createLink(self.client_id);
+				elem.find('.ttm-time').text([self.start.strTime, self.end.strTime].join(' - '));
+				elem.find('.ttm-title').text(self.title);
+				elem.find('.ttm-close').click(self.remove);
 
-				elem
-					.find('.ttm-client')
-					.text(LOCAL[5] + ' ')
-					.append(link);
-			}
+				if(self.client_id > 0 && Client.getClient(self.client_id)){
+					var link = Client.createLink(self.client_id);
 
-			elem.appendTo(TABLE_TIME.ELEM.find('#tt-body-overlay'));
+					elem
+						.find('.ttm-client')
+						.text(LOCAL[5] + ' ')
+						.append(link);
+				}
 
-			if(self.start.strDate != self.end.strDate)
-				return;
+				elem.appendTo(TABLE_TIME.ELEM.find('#tt-body-overlay'));
 
-			if(Config.default.interactive_meet){
-				self.draggable();
-				self.resizable();
-			}
-		}
-
-		this.construct = function(data){
-
-			for(var key in data)
-				self[key] = data[key];
-
-			self.setTime();
-
-			return self;
-		}
-
-		this.changeTime = function(starttime, endtime){
-			var obj = {};
-
-			obj[self.id] = {
-				starttime: starttime,
-				endtime: endtime
-			}
-
-			Mself.changeTime(obj);
-		}
-
-		this.draggable = function(){
-
-			var options = {
-				cursorAt: 'top',
-				snap: '.tt-content-part',
-				timeRange: TABLE_TIME.getTimeByPosition
-			}
-
-			self.elem.draggable($.extend(options, self.interaction));
-
-		}
-
-		this.edit = function(e){
-
-			if($(this).data('interaction') || (e && $(e.target).is('.client-link, .ttm-close')))
-				return;
-
-			TM.changeTab.apply(TABLE_TIME.menuTab);
-
-			var param = {
-				button: 9,
-				id: self.id,
-				strdate: self.start.strDate,
-				starttime: self.start.strTime,
-				title: self.title,
-				type: 7,
-				content: self.content,
-				place: self.place,
-				client_id: self.client_id,
-				date: self.start.date
-			}
-
-			TABLE_TIME.meetingForm(param);
-		}
-
-		this.elem = $('#templates .tt-meeting').clone();
-
-		this.interaction = {
-			delay: 250,
-			start: function(){
-				$(this).data('interaction', true);
-			},
-			stop: function(event){
-	
-				setTimeout(function(){
-					$(event.target).removeData('interaction');
-				}, 10)
-
-				var data = $(this).data(),
-					options = data[event.type == 'dragstop' ? 'ui-draggable' : 'ui-resizable'].options,
-					timeRange = options.timeRange.apply(this),
-					starttime = timeRange.starttime,
-					endtime = timeRange.endtime;
-
-				if(data['meeting']['starttime'].toRealTime() == starttime.toRealTime() && data['meeting']['endtime'].toRealTime() == endtime.toRealTime())
+				if(self.start.strDate != self.end.strDate)
 					return;
 
-				if(Config.default.interactive_meet == 1)
-					return self.changeTime(starttime, endtime);
-
-				var message = $('<div>').append(
-					$('<div>').text(LOCAL[16]),
-					$('<div>').text(LOCAL[31] + ': ' + starttime.toRealTime()),
-					$('<div>').text(LOCAL[32] + ': ' + endtime.toRealTime())
-				)
-
-				Api.confirm(40, message, function(){
-					self.changeTime(starttime, endtime);
-				}, self.reset)
-			}
-		}
-
-		this.markReservedTime = function(){
-			TABLE_TIME.VBoard.setRangeData(self.start.date, self.end.date, {meeting: {id: self.id}});
-		}
-
-		this.remove = function(){
-			Mself.removeTask(self.id);
-		}
-
-		this.reset = function(){
-			var data = self.elem.data(),
-				topChanged = TM.getMultiObj(data, ['ui-draggable', 'originalPosition']) || TM.getMultiObj(data, ['ui-resizable', 'originalPosition']),
-				heightChanged = TM.getMultiObj(data, ['ui-resizable', 'originalSize']);
-
-			if(topChanged)
-				self.elem.css('top', topChanged.top);
-
-			if(heightChanged)
-				self.elem.height(heightChanged.height);
-
-		}
-
-		this.resizable = function(){
-
-			var options = {
-				grid: TABLE_TIME.pHeight,
-				handles: 'n, s',
-				timeRange: TABLE_TIME.getTimeBySize
+				if(Config.default.interactive_meet){
+					self.draggable();
+					self.resizable();
+				}
 			}
 
-			self.elem.resizable($.extend(options, self.interaction));
-		}
+			this.construct = function(data){
 
-		this.setTime = function(){
+				for(var key in data)
+					self[key] = data[key];
 
-			self.starttime = self.starttime.replace(/-/g, '/');
-			self.endtime = self.endtime.replace(/-/g, '/');
+				self.setTime();
 
-			var startDate = new Date(self.starttime),
-				endDate = new Date(self.endtime);
-
-			self.start = {
-				date: startDate,
-				strDate: startDate.toLocaleDateString(),
-				strTime: startDate.toRealTime()
+				return self;
 			}
 
-			self.end = {
-				date: endDate,
-				strDate: endDate.toLocaleDateString(),
-				strTime: endDate.toRealTime()
+			this.changeTime = function(starttime, endtime){
+				var obj = {};
+
+				obj[self.id] = {
+					starttime: starttime,
+					endtime: endtime
+				}
+
+				Mself.changeTime(obj);
 			}
 
-			self.duration = (self.end.date - self.start.date) / 60000;
+			this.draggable = function(){
 
-			self.markReservedTime();
+				var options = {
+					cursorAt: 'top',
+					snap: '.tt-content-part',
+					timeRange: TABLE_TIME.getTimeByPosition
+				}
+
+				self.elem.draggable($.extend(options, self.interaction));
+
+			}
+
+			this.edit = function(e){
+
+				if($(this).data('interaction') || (e && $(e.target).is('.client-link, .ttm-close')))
+					return;
+
+				TM.changeTab.apply(TABLE_TIME.menuTab);
+
+				var param = {
+					button: 9,
+					id: self.id,
+					strdate: self.start.strDate,
+					starttime: self.start.strTime,
+					title: self.title,
+					type: 7,
+					content: self.content,
+					place: self.place,
+					client_id: self.client_id,
+					date: self.start.date
+				}
+
+				TABLE_TIME.meetingForm(param);
+			}
+
+			this.elem = $('#templates .tt-meeting').clone();
+
+			this.interaction = {
+				delay: 250,
+				start: function(){
+					$(this).data('interaction', true);
+				},
+				stop: function(event){
+
+					setTimeout(function(){
+						$(event.target).removeData('interaction');
+					}, 10)
+
+					var data = $(this).data(),
+						options = data[event.type == 'dragstop' ? 'ui-draggable' : 'ui-resizable'].options,
+						timeRange = options.timeRange.apply(this),
+						starttime = timeRange.starttime,
+						endtime = timeRange.endtime;
+
+					if(data['meeting']['starttime'].toRealTime() == starttime.toRealTime() && data['meeting']['endtime'].toRealTime() == endtime.toRealTime())
+						return;
+
+					if(Config.default.interactive_meet == 1)
+						return self.changeTime(starttime, endtime);
+
+					var message = $('<div>').append(
+						$('<div>').text(LOCAL[16]),
+						$('<div>').text(LOCAL[31] + ': ' + starttime.toRealTime()),
+						$('<div>').text(LOCAL[32] + ': ' + endtime.toRealTime())
+					)
+
+					Api.confirm(40, message, function(){
+						self.changeTime(starttime, endtime);
+					}, self.reset)
+				}
+			}
+
+			this.markReservedTime = function(){
+				TABLE_TIME.VBoard.setRangeData(self.start.date, self.end.date, {meeting: {id: self.id}});
+			}
+
+			this.remove = function(){
+				Mself.removeTask(self.id);
+			}
+
+			this.reset = function(){
+				var data = self.elem.data(),
+					topChanged = TM.getMultiObj(data, ['ui-draggable', 'originalPosition']) || TM.getMultiObj(data, ['ui-resizable', 'originalPosition']),
+					heightChanged = TM.getMultiObj(data, ['ui-resizable', 'originalSize']);
+
+				if(topChanged)
+					self.elem.css('top', topChanged.top);
+
+				if(heightChanged)
+					self.elem.height(heightChanged.height);
+
+			}
+
+			this.resizable = function(){
+
+				var options = {
+					grid: TABLE_TIME.pHeight,
+					handles: 'n, s',
+					timeRange: TABLE_TIME.getTimeBySize
+				}
+
+				self.elem.resizable($.extend(options, self.interaction));
+			}
+
+			this.setTime = function(){
+
+				self.starttime = self.starttime.replace(/-/g, '/');
+				self.endtime = self.endtime.replace(/-/g, '/');
+
+				var startDate = new Date(self.starttime),
+					endDate = new Date(self.endtime);
+
+				self.start = {
+					date: startDate,
+					strDate: startDate.toLocaleDateString(),
+					strTime: startDate.toRealTime()
+				}
+
+				self.end = {
+					date: endDate,
+					strDate: endDate.toLocaleDateString(),
+					strTime: endDate.toRealTime()
+				}
+
+				self.duration = (self.end.date - self.start.date) / 60000;
+
+				self.markReservedTime();
+			}
+
+			return this;
 		}
-
-		return this;
-	}
 
 	this.meetings = {};
 

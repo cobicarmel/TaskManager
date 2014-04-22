@@ -79,8 +79,7 @@ var VBoard = function(TABLE_TIME){
 
 	this.reset = function(date, spec){
 
-		var strDate = date.toLocaleDateString(),
-			strTime = date.toRealTime();
+		var strDate = date.toLocaleDateString();
 
 		for(var time in self.days[strDate]){
 			if(! spec)

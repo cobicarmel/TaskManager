@@ -185,7 +185,7 @@ var TM = {
 			form.show().position({of: '#appcenter'});
 		}
 
-		this.submitForm = function(e){
+		this.submitForm = function(){
 
 			var form = self.form,
 				data = form.data(),
@@ -193,7 +193,7 @@ var TM = {
 
 			params.id = data.id;
 
-			TM.submitForm.call(this, e, function(){
+			TM.submitForm.call(this, function(){
 
 				TM.popup('loading', 85);
 
@@ -291,8 +291,9 @@ var TM = {
 				for(var p in item){
 
 					var trCopy = tr.clone(),
-						inputs = trCopy.find('input'),
-						td = inputs.parent();
+						inputs = trCopy.find('input');
+
+					td = inputs.parent();
 
 					insertRow(td, item[p]);
 
@@ -462,9 +463,7 @@ var TM = {
 		return array;
 	},
 
-	submitForm: function(event, callback){
-
-		event.preventDefault();
+	submitForm: function(callback){
 
 		var form = $(this),
 			valid = form.validate();

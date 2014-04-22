@@ -3,9 +3,7 @@
 abstract class DTime{
 
 	static function timeToDB($time){
-
 		return date('Y-m-d H:i:s', $time);
-
 	}
 
 	static function textToTime($datetime){

@@ -58,8 +58,8 @@ var tableTime = function(ELEM, INDEX){
 			TABLE_TIME.setEndTime();
 		})
 
-		ELEM.find('#new-meeting').on('submit', function(e){
-			TM.submitForm.call(this, e, TABLE_TIME.Task.createMeeting);
+		ELEM.find('#new-meeting').on('submit', function(){
+			TM.submitForm.call(this, TABLE_TIME.Task.createMeeting);
 		})
 
 		ELEM.find('#tt-toolbar .fa-calendar-o').on('click', function(){
@@ -127,7 +127,7 @@ var tableTime = function(ELEM, INDEX){
 
 		TABLE_TIME.Agenda.applyChanges();
 
-		if(! INDEX)
+		if(!INDEX)
 			TM.showSoonMeetings();
 
 		ELEM.find('.tt-content-part.now').removeClass('now');
@@ -151,8 +151,8 @@ var tableTime = function(ELEM, INDEX){
 		for(var i = 0; i < 12; i++)
 			tt_content.append(
 				$('<div>', {
-					'class': 'tt-content-part',
-					title: timeFormat(hour) + ':' + timeFormat(i * 5)
+						'class': 'tt-content-part',
+						title: timeFormat(hour) + ':' + timeFormat(i * 5)
 					}
 				)
 			);
@@ -216,21 +216,6 @@ var tableTime = function(ELEM, INDEX){
 			Ipart = TABLE_TIME.getHourPart(date).index();
 
 		return date.getHours() * hourHeight + Ipart * partHeight;
-	}
-
-	this.getPartsRange = function(start, end){
-		var parts = ELEM.find('.tt-content-part'),
-			Istart = TABLE_TIME.getHourPart(start).index('.tt-content-part'),
-			Iend = TABLE_TIME.getHourPart(end).index('.tt-content-part'),
-			stack = $([]);
-
-		if(Iend < Istart)
-			Iend = parts.last().index('.tt-content-part') + 1;
-
-		while(Istart < Iend)
-			stack.push(parts[Istart++]);
-
-		return stack;
 	}
 
 	this.getRangeTime = function(date, duration){
@@ -313,14 +298,14 @@ var tableTime = function(ELEM, INDEX){
 
 		clone.appendTo('body');
 
-		var height = clone.height();
+		height = clone.height();
 
 		return clone.remove(), height;
 	}
 
 	this.isToday = function(){
 		var date = new Date(TABLE_TIME.date);
-		return date.setHours(0,0,0,0) == new Date().setHours(0,0,0,0);
+		return date.setHours(0, 0, 0, 0) == new Date().setHours(0, 0, 0, 0);
 	}
 
 	this.meetingForm = function(params){
@@ -346,7 +331,19 @@ var tableTime = function(ELEM, INDEX){
 		form.show().position({of: '#appcenter'});
 	}
 
-	this.moveMeets = function(ids){
+	this.moveMeetsDate = function(ids){
+
+		var picker = TABLE_TIME.templates.mdPicker,
+			input = picker.find('input');
+
+		Api.confirm(63, picker, function(){
+			TABLE_TIME.Task.changeMultiDate(ids, input.val());
+		})
+
+		input.removeClass('hasDatepicker').datepicker();
+	}
+
+	this.moveMeetsTime = function(ids){
 
 		Api.confirm(63, TABLE_TIME.templates.mmPicker, function(){
 			TABLE_TIME.Task.changeMultiTime(ids, $('#mm-input').val());
@@ -378,7 +375,7 @@ var tableTime = function(ELEM, INDEX){
 					type: 6
 				}
 
-				if(! $.isEmptyObject(data)){
+				if(!$.isEmptyObject(data)){
 					var typeInfo = Config.tasktypes[data.tasktype];
 
 					param.place = typeInfo.place;
@@ -422,7 +419,7 @@ var tableTime = function(ELEM, INDEX){
 		TABLE_TIME.strDate = TABLE_TIME.date.toLocaleDateString();
 
 		if((dontUpdate) && TABLE_TIME.VBoard.hasDate(TABLE_TIME.date)){
-			if(! dontMove)
+			if(!dontMove)
 				TABLE_TIME.applyChanges();
 			return goReady && ready();
 		}
@@ -436,7 +433,7 @@ var tableTime = function(ELEM, INDEX){
 
 			goReady && ready();
 
-			if(! dontMove)
+			if(!dontMove)
 				TABLE_TIME.applyChanges();
 		}
 
@@ -464,7 +461,7 @@ var tableTime = function(ELEM, INDEX){
 			duration = TABLE_TIME.Task.meetings[strDate][id].duration;
 		}
 		catch(e){
-			duration =  typeInfo ? typeInfo.duration : Config.default.meeting_duration;
+			duration = typeInfo ? typeInfo.duration : Config.default.meeting_duration;
 		}
 
 		var endtime = TABLE_TIME.getRangeTime(date, duration).toRealTime();
@@ -473,19 +470,22 @@ var tableTime = function(ELEM, INDEX){
 	}
 
 	this.selectedMeets = function(){
+
 		var selected = ELEM.find('.tt-meeting.ui-selected'),
 			ids = $.map(selected, function(elem){
 				return $(elem).data('meeting').id;
 			});
 
-		if(! selected.length)
+		selected.removeClass('ui-selected');
+
+		if(!selected.length)
 			return;
 
 		Api.confirm(43, TABLE_TIME.templates.smMessage, function(){
-	
+
 			var action = $('.sm-option input:checked').attr('id');
 
-			if(! action){
+			if(!action){
 				TM.popup('error', 44);
 				return TABLE_TIME.selectedMeets();
 			}
@@ -493,8 +493,12 @@ var tableTime = function(ELEM, INDEX){
 			action = action.split('-')[1];
 
 			switch(action){
-				case '1': return TABLE_TIME.moveMeets(ids);
-				case '3': return TABLE_TIME.Task.removeTask(ids);
+				case '1':
+					return TABLE_TIME.moveMeetsTime(ids);
+				case '2':
+					return TABLE_TIME.moveMeetsDate(ids);
+				case '3':
+					return TABLE_TIME.Task.removeTask(ids);
 			}
 		})
 	}
@@ -512,6 +516,7 @@ var tableTime = function(ELEM, INDEX){
 	this.templates = {
 		smMessage: $('#sm-message'),
 		mmPicker: $('#mm-picker'),
+		mdPicker: $('#md-picker'),
 		fmTr: $('#fm-tr tr')
 	}
 
@@ -523,29 +528,29 @@ var tableTime = function(ELEM, INDEX){
 
 		switch1:
 
-		switch(type){
-			case 'different':
-				options.content = LOCAL[36];
-				break;
-			case 'reserved':
-				options.content = LOCAL[29];
-				break;
-			case 'blocked':
-				options.content = LOCAL[33];
-				break;
-			case 'free':
-				return fn();
-			default:
-				if(! type)
-					switch(Config.default.undefined_time){
-						case 0:
-							options.content = LOCAL[90];
-							break switch1;
-						case 1:
-							return fn();
-					}
-				return TABLE_TIME.Task.confirmCreate(type ? 'static' : 'undefined', fn);
-		}
+			switch(type){
+				case 'different':
+					options.content = LOCAL[36];
+					break;
+				case 'reserved':
+					options.content = LOCAL[29];
+					break;
+				case 'blocked':
+					options.content = LOCAL[33];
+					break;
+				case 'free':
+					return fn();
+				default:
+					if(!type)
+						switch(Config.default.undefined_time){
+							case 0:
+								options.content = LOCAL[90];
+								break switch1;
+							case 1:
+								return fn();
+						}
+					return TABLE_TIME.Task.confirmCreate(type ? 'static' : 'undefined', fn);
+			}
 
 		return TM.dialog.show(options);
 	}
@@ -556,8 +561,6 @@ var tableTime = function(ELEM, INDEX){
 			title: LOCAL[44],
 			content: LOCAL[45]
 		}
-
-		switch1:
 
 		switch(type){
 			case 'different':
@@ -570,14 +573,14 @@ var tableTime = function(ELEM, INDEX){
 				options.content += LOCAL[48];
 				break;
 			default:
-				if(! type)
-					switch(Config.default.undefined_time){
-						case 0:
-							options.content += LOCAL[90];
-							break switch1;
-						case 1:
-							return fn();
+				if(!type){
+					if(Config.default.undefined_time == 1)
+						return fn();
+					else{
+						options.content += LOCAL[90];
+						break;
 					}
+				}
 				return TABLE_TIME.Task.confirmCreate(type ? 'staticgroup' : 'undefinedgroup', fn);
 		}
 
@@ -597,7 +600,7 @@ var tableTime = function(ELEM, INDEX){
 		else if(TABLE_TIME.VBoard.hasDate(date))
 			return TABLE_TIME.getTimeType(date);
 		else
-			console.error('The date ' + date + ' has not been set');
+			throw 'The date ' + date + ' has not been set';
 	}
 
 	this.validateTime = function(objDate, group, callback){
@@ -632,10 +635,10 @@ var tableTime = function(ELEM, INDEX){
 
 						if(
 							otherId === objDate[o].id ||
-							(group && group.indexOf(otherId) + 1) ||
-							(type.type == undefined && confirmed == 'notset') ||
-							(type.type == 'static' && confirmed == 'static')
-						)
+								(group && group.indexOf(otherId) + 1) ||
+								(type.type == undefined && confirmed == 'notset') ||
+								(type.type == 'static' && confirmed == 'static')
+							)
 							return;
 
 						return isFree = false;

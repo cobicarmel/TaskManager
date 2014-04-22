@@ -2,13 +2,18 @@
 
 $(function(){
 
-	/** Scripts that starting after the page has been loaded **/
+	/* variables for duplicate jQuery selectors */
+
+	var $body = $('body'),
+		$generalSettings = $('#general-settings');
+
+	/* Scripts that starting after the page has been loaded */
 
 	setInterval(TM.showDateTime, 200);
 
 	if(Access.hasAction('Agenda'))
 
-		$($('.table-time').get().reverse()).each(function(index){
+		$($('.table-time').get().reverse()).each(function(){
 			var elem = $(this);
 			TM.tableTimes.unshift(new tableTime(elem, elem.index('.table-time')).init());
 		})
@@ -66,7 +71,7 @@ $(function(){
 	$('#calendar, .p-date, #cdp-reports input, #rf-date').datepicker();
 
 	if(Access.hasAction('Settings', 'changesettings')){
-		TM.fillEditForm($('#general-settings'), Config.default);
+		TM.fillEditForm($generalSettings, Config.default);
 		$('#sa-tables').accordion($.extend({}, Config.accordion, {active: 0}));
 		Access.writeSettings();
 	}
@@ -79,8 +84,8 @@ $(function(){
 
 	/** Attaching Events **/
 
-	$('#clients form, #cai-form').on('submit', function(e){
-		TM.submitForm.call(this, e, Client.apiActions(this.id));
+	$('#clients form, #cai-form').on('submit', function(){
+		TM.submitForm.call(this, Client.apiActions(this.id));
 	})
 
 	$('.number').on('keydown', function(event){
@@ -114,8 +119,6 @@ $(function(){
 
 	$('#cdd-remove').click(Client.remove);
 
-	$('#cdd-remove').click(Client.remove);
-	
 	$('#cdp-navigate .ui-icon').click(Client.browsePayment);
 
 	$('.cdc-right .cmd-icon').click(Client.addItem);
@@ -139,8 +142,8 @@ $(function(){
 		$(this).toggleClass('ui-state-hover');
 	})
 
-	$('#general-settings').on('submit', function(e){
-		TM.submitForm.call(this, e, Settings.submitSettings);
+	$generalSettings.on('submit', function(){
+		TM.submitForm.call(this, Settings.submitSettings);
 	})
 
 	$('#set-access').submit(Access.changeAccess);
@@ -163,9 +166,13 @@ $(function(){
 
 	/** Live events **/
 
-	$('#cd-basic tbody').on('click', 'tr', Client.details);
+	$('#cd-basic').on('click', 'tr', Client.details);
 
-	$(document).on('click', '.ui-dialog-buttonset button', TM.dialog.close);
+	$body.on('click', '.ui-dialog-buttonset button', TM.dialog.close);
+
+	$body.on('submit', 'form', function(e){
+		e.preventDefault();
+	});
 
 	$('form').on('keyup', '.area-phone', function(){
 		if(this.value.length == 3 || this.value.length == 2 && /^0[2-4,8-9]$/.test(this.value))

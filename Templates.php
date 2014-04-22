@@ -35,6 +35,12 @@
 		<label for="mm-input"><?=$LOCAL[38]?>:</label>
 		<input id="mm-input">
 	</div>
+	<div id="md-picker">
+		<form>
+			<label for="md-input"><?=$LOCAL[156]?>:</label>
+			<input id="md-input">
+		</form>
+	</div>
 	<table id="fm-tr">
 		<tr>
 			<td>
