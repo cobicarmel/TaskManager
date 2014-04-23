@@ -29,9 +29,10 @@ var Api = {
 		if(! Access.hasAction(subject, action))
 			throw new Error('The action ' + action + '@' + subject + ' denied for this user');
 
-		if(typeof params == 'function')
+		if(typeof params == 'function'){
 			success = params;
 			params = {};
+		}
 
 		params.action = action;
 		params.subject = subject;

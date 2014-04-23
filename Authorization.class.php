@@ -6,8 +6,7 @@ class Authorization{
 
 	private $cookies = [
 		'username' => 'uname',
-		'password' => 'upass',
-		'area' => 'uns'
+		'password' => 'upass'
 	];
 
 	private $data;
@@ -72,7 +71,7 @@ class Authorization{
 		if(! $this -> data)
 			return 'nocookies';
 
-		$db = Database::createSql(DB_AREA . $this -> data['area']);
+		$db = Database::createSql(DB_PREFIX . OWNER);
 
 		if(! $db)
 			return 'noarea';

@@ -1,5 +1,7 @@
 <?
 
+require 'Config.host.php';
+
 /** General config **/
 
 date_default_timezone_set('Asia/Jerusalem');
@@ -12,15 +14,7 @@ define('TIME_FORMAT', 'H:i:s');
 
 define('COMPANY_NAME', 'TaskManager');
 
-/** Database and user config **/
-
-define('DB_AREA', 'taskmanager_');
-
-define('DB_HOST', 'localhost');
-
-define('DB_USER', 'root');
-
-define('DB_PASS', '');
+/* User config */
 
 $author = new Authorization;
 

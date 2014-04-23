@@ -1,6 +1,6 @@
 <?
 
-require 'config.lib.php';
+require '../Config.host.php';
 
 require '../Authorization.class.php';
 

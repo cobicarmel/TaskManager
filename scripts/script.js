@@ -166,7 +166,7 @@ $(function(){
 
 	/** Live events **/
 
-	$('#cd-basic').on('click', 'tr', Client.details);
+	$('#cd-list tbody').on('click', 'tr', Client.details);
 
 	$body.on('click', '.ui-dialog-buttonset button', TM.dialog.close);
 
