@@ -1005,7 +1005,16 @@ table.data-table th.tablesorter-headerAsc:after {
 }
 
 #cd-basic tr.active td:first-child {
+	position: relative;
+}
+
+#cd-basic tr.active td:first-child:after {
 	border-right: 2px solid blue;
+	content: ' ';
+	position: absolute;
+	height: 100%;
+	top: 0;
+	right: 0;
 }
 
 .menu-tab.active {

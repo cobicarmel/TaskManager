@@ -214,10 +214,6 @@ var Client = {
 		},
 
 		get: function(fn){
-
-			if(Client.history.values[Client.id])
-				return fn();
-
 			Api.send('Task', 'clienthistory', {id: Client.id}, function(res){
 				Client.history.add(res);
 				res && fn();

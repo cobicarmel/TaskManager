@@ -88,10 +88,6 @@ $(function(){
 		TM.submitForm.call(this, Client.apiActions(this.id));
 	})
 
-	$('.number').on('keydown', function(event){
-		return Api.validate.isDigit(event);
-	})
-
 	$('.dec-number').on({
 		keydown: function(event){
 			return Api.validate.decValue.call(this, event);
@@ -173,6 +169,10 @@ $(function(){
 	$body.on('submit', 'form', function(e){
 		e.preventDefault();
 	});
+
+	$body.on('keydown', '.number', function(event){
+		return Api.validate.isDigit(event);
+	})
 
 	$('form').on('keyup', '.area-phone', function(){
 		if(this.value.length == 3 || this.value.length == 2 && /^0[2-4,8-9]$/.test(this.value))

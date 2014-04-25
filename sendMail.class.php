@@ -58,7 +58,7 @@ class sendMail{
 
 		$replacements = [
 			'%recipient%' => $client['first_name'],
-			'%company_name%' => COMPANY_NAME
+			'%sender_name%' => $this -> config['mail_sender_name']
 		];
 
 		$message = str_replace(

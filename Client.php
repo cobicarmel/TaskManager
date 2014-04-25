@@ -71,8 +71,8 @@
 			<table id="cd-list" class="data-table editable">
 				<thead>
 					<tr>
-						<th><?=$LOCAL[29]?></th>
-						<th><?=$LOCAL[30]?></th>
+						<th><?=$LOCAL[20]?></th>
+						<th><?=$LOCAL[21]?></th>
 					</tr>
 				</thead>
 				<tbody></tbody>
