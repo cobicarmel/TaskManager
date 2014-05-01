@@ -130,6 +130,11 @@ $(function(){
 
 	$('#rp-edit').click(Reminders.goToReminder);
 
+	$('[name=allow_desktop_notify]').on('change', function(){
+		if(this.value)
+			Reminders.desktopNotify.enable();
+	})
+
 	$('.f-close').on('click', function(){
 		$(this).parent().hide();
 	})
@@ -157,7 +162,7 @@ $(function(){
 	})
 
 	$('#rp-actions .fa, #rp-client').on('click', function(){
-		$('#reminder-popup').hide();
+		Reminders.$popup.hide();
 	})
 
 	/** Live events **/

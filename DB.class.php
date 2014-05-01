@@ -47,7 +47,7 @@ abstract class Database{
 		self::$response['error'][] = $error;
 	}
 
-	static function checkRequires($requires, $data){
+	static function checkRequires($requires, array $data){
 
 		$errors = 0;
 

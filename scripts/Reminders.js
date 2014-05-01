@@ -65,6 +65,37 @@ var Reminders = {
 		});
 	},
 
+	desktopNotify: {
+
+		create: function(id){
+
+			if(! window.Notification || ! Reminders.desktopNotify.isEnabled())
+				return;
+
+			var reminder = Config.reminders[id];
+
+			var notification = new Notification(reminder.title, {
+				icon: 'media/notification.ico',
+				body: reminder.content,
+				tag: 'rdn' + id
+			});
+
+			notification.onclick = function(){
+				window.focus();
+			}
+		},
+
+		enable: function(){
+			if(window.Notification && ! Reminders.desktopNotify.isEnabled())
+				Notification.requestPermission();
+		},
+
+		isEnabled: function(){
+			return Config.default.allow_desktop_notify == 1 && Notification.permission == 'granted';
+		}
+
+	},
+
 	getSoonReminders: function(){
 
 		var now = (new Date).getTime();
@@ -78,12 +109,13 @@ var Reminders = {
 		})
 	},
 
-	goToReminder: function(){
+	goToReminder: function(id){
 
-		var id = Reminders.$popup.data('id'),
-			$editButton = $('#group-reminders .group-list tbody tr').filter(function(){
-				return $(this).data('id') == id;
-			}).find('.fa-pencil');
+		id = typeof id == "number" ? id : Reminders.$popup.data('id');
+
+		var $editButton = $('#group-reminders .group-list tbody tr').filter(function(){
+			return $(this).data('id') == id;
+		}).find('.fa-pencil');
 
 		$editButton.click();
 	},
@@ -157,6 +189,8 @@ var Reminders = {
 		$popup.data('id', id)
 			.show()
 			.position({of: '#appcenter'});
+
+		Reminders.desktopNotify.create(id);
 	},
 
 	refresh: function(){

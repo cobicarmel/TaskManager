@@ -170,16 +170,15 @@ $.fn.selectOption = function(type, value){
 
 	var options = this.children('option');
 
-	options.filter('[selected]').removeAttr('selected');
-
 	if(type == 'reset')
-		return options.filter(':first-child').attr('selected', true), this;
+		value = options.first().val();
 
-	options.filter(function(){
-		return $(this)[type]() == value;
-	}).prop('selected', true);
+	if(type == 'text')
+		value =  options.filter(function(){
+			return $(this).text() == value;
+		}).val();
 
-	return this;
+	return this.val(value);
 }
 
 $.fn.multiCheck = function(selector){

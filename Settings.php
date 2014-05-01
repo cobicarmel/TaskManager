@@ -245,6 +245,22 @@
                                         </select>
                                     </td>
                                 </tr>
+								<tr>
+									<td><?=$LOCAL[157]?></td>
+									<td>
+									<?
+									$isWebkit = strpos($_SERVER['HTTP_USER_AGENT'], 'AppleWebKit');
+
+									if($isWebkit){ ?>
+										<select name="allow_desktop_notify">
+											<option value="0"><?=$LOCAL[146]?></option>
+											<option value="1"><?=$LOCAL[147]?></option>
+										</select>
+									<? } else
+											echo $LOCAL[158];
+									?>
+									</td>
+								</tr>
 							</table>
 						</div>
 					</div>

@@ -27,14 +27,12 @@ class Task extends Components{
 
 	private function toClient(){
 
-		$data = Database::groupArray('id', $this -> data);
+		if(! $this -> data)
+			return;
 
 		$result = [];
 
-		if(! $data)
-			return;
-
-		foreach($data as $key => $value){
+		foreach($this -> data as $key => $value){
 
 			$date = DTime::DBToClient($value['starttime'])[0];
 
@@ -108,11 +106,20 @@ class Task extends Components{
 		$this -> listTaskTypes();
 	}
 
-	function getTasks($column, $values){
+	function getTask($column, $values, $system = 0){
+
+		$system = isset($_POST['system']) ? $_POST['system'] : $system;
 
 		$where = Database::parseMultiWhere($column, $values);
 
-		$this -> data = $this -> output -> query("select * from tasks where ($where) && system = $_POST[system]");
+		$data = $this -> output -> query("select * from tasks where ($where) && system = $system");
+
+		return Database::groupArray('id', $data);
+	}
+
+	function getTasks($column, $values, $system = 0){
+
+		$this -> data = $this -> getTask($column, $values, $system);
 
 		$this -> toClient();
 	}
