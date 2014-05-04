@@ -2,18 +2,25 @@
 
 class Outlook{
 
-	private $data;
+	private $message;
 
 	private $name;
+
+	private $task;
+
+	function __construct(){
+		require 'Task.class.php';
+		$this -> task = new Task;
+	}
 
 	private function flush(){
 
 		header("Content-type:text/calendar");
 		header('Content-Disposition: attachment; filename="' . $this -> name . '.ics"');
-		Header('Content-Length: ' . strlen($this -> data));
+		Header('Content-Length: ' . strlen($this -> message));
 		Header('Connection: close');
 
-		echo $this -> data;
+		echo $this -> message;
 
 		exit;
 	}
@@ -24,7 +31,7 @@ class Outlook{
 			BEGIN: VCALENDAR
 			VERSION: 2.0
 			METHOD: PUBLISH
-			BEGIN: VEVENT
+			BEGIN:VEVENT
 			DTSTART: " . date("Ymd\THis\Z", strtotime($task['starttime'])) . "
 			DTEND: " . date("Ymd\THis\Z", strtotime($task['endtime'])) . "
 			LOCATION: $task[place]
@@ -36,7 +43,6 @@ class Outlook{
 			DESCRIPTION: $task[content]
 			PRIORITY: 1
 			TM_CLIENT: $task[client_id]
-			TM_SYSTEM:  $task[system]
 			CLASS: PUBLIC
 			BEGIN: VALARM
 			TRIGGER: -PT10080M
@@ -46,11 +52,56 @@ class Outlook{
 			END: VEVENT
 			END: VCALENDAR";
 
-		$this -> data = preg_replace('/\t/', '', $data);
+		$this -> message = preg_replace('/\t/', '', $data);
+	}
+
+	private function insertTask($data){
+
+		$assocData = [];
+
+		foreach($data as $row){
+			$row = preg_replace('/\r\n?/', '', $row);
+
+			$rowData = explode(':', $row);
+
+			if(count($rowData) < 2)
+				continue;
+
+			$key = explode(';', $rowData[0])[0];
+
+			$value = trim($rowData[1]);
+
+			if(! isset($assocData[$key]))
+				$assocData[$key] = $value;
+		}
+
+		$requires = ['DTSTART', 'DTEND', 'SUMMARY'];
+
+		Database::checkRequires(array_flip($requires), $assocData, false);
+
+		$taskData = [
+			'title' => $assocData['SUMMARY'],
+			'starttime' => DTime::timeToDB(strtotime($assocData['DTSTART'])),
+			'endtime' => DTime::timeToDB(strtotime($assocData['DTEND']))
+		];
+
+		$optionals = [
+			'DESCRIPTION' => 'content',
+			'LOCATION' => 'place',
+			'TM_CLIENT' => 'client_id'
+		];
+
+		foreach($optionals as $key => $value)
+			if(isset($assocData[$key]))
+				$taskData[$value] = $assocData[$key];
+
+		$taskData['system'] = $_POST['system'];
+
+		$this -> task -> addTask($taskData);
 	}
 
 	function exportTask($task_id){
-		$task = (new Task) -> getTask('id', $task_id)[$task_id];
+		$task = $this -> task -> getTask('id', $task_id)[$task_id];
 		$this -> name = $task['title'];
 		$this -> setMessage($task);
 		$this -> flush();
@@ -71,28 +122,17 @@ class Outlook{
 
 		$data = preg_split('/\r\n/', $fileContent);
 
-		$assocData = [];
+		$starts = array_keys($data, 'BEGIN:VEVENT');
 
-		foreach($data as $row){
-			$row = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $row);
-			if($row != ''){
-				$rowData = explode(':', $row);
-				$assocData[$rowData[0]] = trim($rowData[1]);
-			}
+		$ends = array_keys($data, 'END:VEVENT');
+
+		foreach($starts as $key => $value){
+			$endLength = $ends[$key] - $value;
+			$taskData = array_slice($data, $value, $endLength);
+
+			$this -> insertTask($taskData);
 		}
 
-		$requires = ['DTSTART', 'DTEND', 'SUMMARY', 'TM_SYSTEM'];
-
-		Database::checkRequires($requires, $assocData);
-
-		$taskData = [
-			'title' => $assocData['SUMMARY'],
-			'content' => $assocData['DESCRIPTION'],
-			'place' => $assocData['LOCATION'],
-			'starttime' => $assocData['DTSTART'],
-			'endtime' => $assocData['DTEND'],
-			'client_id' => $assocData['TM_CLIENT'],
-			'system' => $assocData['TM_SYSTEM']
-		];
+		$this -> task -> getDay();
 	}
 }

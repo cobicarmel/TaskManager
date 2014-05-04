@@ -99,7 +99,6 @@ var Api = {
 			'se-user': [{
 				type: ['re-password'],
 				check: function(){
-
 					var password = $(this).parents('form').find('[name=password]').val();
 
 					return password != this.value ? 87 : true;
@@ -109,11 +108,17 @@ var Api = {
 			'reminders-edit': [{
 				type: ['strdate'],
 				check: function(){
-
 					var date = this.value.toDate($('#rf-time').val()),
 						now = new Date;
 
 					return date <= now ? 91 : true;
+				}
+			}],
+
+			'tt-excel': [{
+				type: ['file'],
+				check: function(){
+					return this.files[0].type == 'text/calendar';
 				}
 			}]
 		},

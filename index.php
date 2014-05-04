@@ -111,6 +111,7 @@ $config = [
 <script src="scripts/Api.js"></script>
 <script src="scripts/Access.js"></script>
 <script src="scripts/jquery-plugins.js"></script>
+<script src="scripts/jquery.upload.js"></script>
 <script src="scripts/TaskManager.js"></script>
 <script src="scripts/script.js"></script>
 <script>

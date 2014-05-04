@@ -26,17 +26,25 @@
 	<?
 	if($db_access -> hasAction('Task')){
 		foreach($config['default']['table_times'] as $i => $title){ ?>
-			<div class="menu-tab" tab="table-time-<?=$i?>"><?=$title?></div>
+			<div class="menu-tab" tab="table-time-<?=$i?>">
+				<span class="auto-center"><?=$title?></span>
+			</div>
 	<? }
 	}
 	if($db_access -> hasAction('Client')){ ?>
-		<div class="menu-tab" tab="client"><?=$LOCAL[2]?></div>
+		<div class="menu-tab" tab="client">
+			<span class="auto-center"><?=$LOCAL[2]?></span>
+		</div>
 
 	<? }
 	if($db_access -> hasAction('Reminders')){ ?>
-		<div class="menu-tab" tab="reminders"><?=$LOCAL[50]?></div>
+		<div class="menu-tab" tab="reminders">
+			<span class="auto-center"><?=$LOCAL[50]?></span>
+		</div>
 	<? }
 	if($db_access -> hasAction('Settings')) {?>
-		<div class="menu-tab" tab="settings"><?=$LOCAL[3]?></div>
+		<div class="menu-tab" tab="settings">
+			<span class="auto-center"><?=$LOCAL[3]?></span>
+		</div>
 	<? } ?>
 </div>

@@ -98,7 +98,7 @@ form tbody tr {
 	font-size: 0.85em;
 }
 
-audio, #templates, #ac-dialog, .sm-option input, .group-temp {
+audio, #templates, #ac-dialog, .sm-option input, .group-temp, #te-file, #te-toggle {
 	display: none;
 }
 
@@ -254,21 +254,54 @@ audio, #templates, #ac-dialog, .sm-option input, .group-temp {
 	bottom: -4px;
 }
 
-#tt-toolbar .fa {
-	cursor: pointer;
-}
-
 #ttt-toggle {
 	font-size: 11px;
 	display: block;
 	height: 8px;
 	background-color: #FFF;
 	border-radius: 6px 6px 0 0;
+	cursor: pointer;
 }
 
 #tt-toolbar ul {
 	display: none;
 	margin-top: 3px;
+	list-style: none;
+}
+
+#tt-toolbar li {
+	display: inline-block;
+	height: 16px;
+	width: 16px;
+	vertical-align: middle;
+	font-size: 15px;
+	margin: 0 5px;
+	cursor: pointer;
+}
+
+#te-body {
+	margin: 0 5px;
+	font-size: 15px;
+	min-width: 140px;
+	color: gray;
+}
+
+#te-file-title {
+	margin: 5px 0;
+	overflow: hidden;
+}
+
+#te-file-title > * {
+	float: right;
+}
+
+#tft-label {
+	color: #8989E4;
+}
+
+label[for="te-file"] {
+	cursor: pointer;
+	text-decoration: underline;
 }
 
 #agenda-bar {
@@ -991,17 +1024,18 @@ table.data-table th.tablesorter-headerAsc:after {
 }
 
 .menu-tab {
-	width: 99.5%;
+	width: 100%;
 	color: #101066;
 	background-color: #E8EDF7;
-	border: 1px solid #F3F3F3;
+	box-shadow: inset 0px 0 0 1px #F3F3F3;
 	cursor: pointer;
 	position: relative;
-	padding: 4.8% 0;
+	height: 20%;
 }
 
 .menu-tab:hover, .menu-tab.active {
 	background-color: #B3C8FF;
+	box-shadow: inset -1px 0 0 1px #F3F3F3;
 }
 
 #cd-basic tr.active td:first-child {
@@ -1024,9 +1058,13 @@ table.data-table th.tablesorter-headerAsc:after {
 
 .menu-tab.active:before {
 	border-right-color: #B3C8FF;
-	margin: 1.6% 0 0 -8px;
-	left: 0;
+	left: -8px;
 	border-width: 8px 8px 8px 0;
+	top: 33%;
+}
+
+.menu-tab span {
+	top: 25%;
 }
 
 .loading {

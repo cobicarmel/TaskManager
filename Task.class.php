@@ -45,6 +45,10 @@ class Task extends Components{
 		Database::addResponse($result);
 	}
 
+	function addTask($data){
+		$this -> input -> query('insert', 'tasks', $data);
+	}
+
 	function addTaskTypes(){
 
 		$this -> input -> query('insert', 'tasktypes', $_POST);
@@ -81,7 +85,7 @@ class Task extends Components{
 
 		$this -> prepareData();
 
-		$this -> input -> query('insert', 'tasks', $_POST);
+		$this -> addTask($_POST);
 
 		$this -> getDay();
 	}

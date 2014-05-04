@@ -9,6 +9,7 @@
 	</div>
 	<div id="sm-message">
 		<p><?=$LOCAL[34]?></p>
+
 		<div class="sm-option">
 			<input type="radio" name="sm-action" id="sms-1">
 			<label for="sms-1">
@@ -76,11 +77,11 @@
 			<div id="crp-table-wrap">
 				<table id="crp-table" class="data-table">
 					<thead>
-						<tr>
-							<th style="width: 25%"><?=$LOCAL[32]?></th>
-							<th style="width: 25%"><?=$LOCAL[52]?></th>
-							<th><?=$LOCAL[45]?></th>
-						</tr>
+					<tr>
+						<th style="width: 25%"><?=$LOCAL[32]?></th>
+						<th style="width: 25%"><?=$LOCAL[52]?></th>
+						<th><?=$LOCAL[45]?></th>
+					</tr>
 					</thead>
 					<tbody></tbody>
 				</table>
@@ -130,5 +131,28 @@
 			</table>
 			<button class="ui-state-default"></button>
 		</form>
+	</div>
+	<form id="tt-excel" class="abs-form">
+		<div class="f-close ui-icon ui-icon-close" title=""></div>
+		<div id="te-body">
+			<input type="hidden" name="system">
+			<input type="hidden" name="date">
+			<input type="hidden" name="subject" value="Outlook">
+			<input type="hidden" name="action" value="importtask">
+			<label for="te-file"><?=$LOCAL[161]?></label>
+			<input id="te-file" type="file" name="file" accept="text/calendar" required="required">
+			<div id="te-toggle">
+				<div id="te-file-title">
+					<div id="tft-label"><?=$LOCAL[162]?>:&nbsp;</div>
+					<div id="tft-name"></div>
+				</div>
+				<button class="ui-state-default"><?=$LOCAL[160]?></button>
+			</div>
+		</div>
+	</form>
+	<div id="te-error">
+		<div><?=$LOCAL[163]?>.</div>
+		<br>
+		<div><?=$LOCAL[164]?></div>
 	</div>
 </div>

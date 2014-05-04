@@ -243,7 +243,7 @@ var Client = {
 					tr.on('click', function(meet, values){
 						return function(){
 							TM.popup('loading', 34);
-							TM.tableTimes[values.system].Task.getMeeting(values.date, meet, function(){
+							TM.tableTime.items[values.system].Task.getMeeting(values.date, meet, function(){
 								TM.popup();
 								this.edit();
 							})

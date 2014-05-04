@@ -12,9 +12,7 @@ var Task = function(TABLE_TIME){
 		meeting.date = date;
 		meeting.id = id;
 
-		var newMeet = new Mself.meeting().construct(meeting);
-
-		Mself.meetings[date][id] = newMeet;
+		Mself.meetings[date][id] = new Mself.meeting().construct(meeting);
 	}
 
 	this.addDate = function(data){
@@ -234,7 +232,7 @@ var Task = function(TABLE_TIME){
 				continue;
 
 			var meeting = Mself.meetings[strDate][m],
-				trTemp = TABLE_TIME.templates.fmTr;
+				trTemp = TM.tableTime.templates.fmTr;
 
 			trTemp.find('input').data('id', m);
 			trTemp.children('.fm-time').text([meeting.start.strTime, meeting.end.strTime].join(' - '));

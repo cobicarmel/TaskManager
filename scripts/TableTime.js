@@ -63,14 +63,18 @@ var tableTime = function(ELEM, INDEX){
 		})
 
 		ELEM.find('#tt-toolbar .fa-calendar-o').on('click', function(){
-			$('#calendar').datepicker('option', 'onSelect', TABLE_TIME.setDay);
+			var $calendar = $('#calendar');
+
+			$calendar.datepicker('option', 'onSelect', TABLE_TIME.setDay);
 			$('.ac-tab').hide().css('z-index', 0);
-			$('#calendar').parent().show().css('z-index', 1);
+			$calendar.parent().show().css('z-index', 1);
 		})
 
 		ELEM.find('#tt-toolbar li').on('click', function(){
 			ELEM.find('#ttt-toggle').trigger('click');
 		})
+
+		ELEM.find('.ttt-excel').click(TABLE_TIME.excel.showDialog);
 
 		ELEM.find('#nm-add-client').on('click', function(){
 			TM.changeTab.call($('.menu-tab[tab=client]'), TABLE_TIME);
@@ -173,6 +177,51 @@ var tableTime = function(ELEM, INDEX){
 		}
 
 		TABLE_TIME.setPartsHeight();
+	}
+
+	this.excel = {
+
+		load: function(){
+
+			var form = TM.tableTime.templates.ttExcel,
+				valid = form.validate();
+
+			form.find('[name=system]').val(INDEX);
+			form.find('[name=date]').val(TABLE_TIME.strDate);
+
+			if(valid != true)
+				return TM.dialog.show({title: LOCAL[23], content: TM.tableTime.templates.ttExcelError});
+
+			TM.popup('loading', 98);
+
+			var params = {
+				dataType: 'json',
+				success: function(res){
+					if(res.error)
+						return Api.error(24);
+
+					TM.popup('success', 61);
+
+					form.hide();
+
+					TABLE_TIME.Task.addDate(res.data);
+					TABLE_TIME.applyChanges();
+				}
+			};
+
+			form.upload('Api.php', params);
+		},
+
+		showDialog: function(){
+				var form = TM.tableTime.templates.ttExcel;
+
+				form[0].reset();
+				form[0].onsubmit = TABLE_TIME.excel.load;
+
+				TM.tableTime.excel.$toggle.hide();
+
+				form.appendTo(ELEM).show().position({of: '#appcenter', my: 'top'});
+		}
 	}
 
 	this.fillTable = function(){
@@ -333,7 +382,7 @@ var tableTime = function(ELEM, INDEX){
 
 	this.moveMeetsDate = function(ids){
 
-		var picker = TABLE_TIME.templates.mdPicker,
+		var picker = TM.tableTime.templates.mdPicker,
 			input = picker.find('input');
 
 		Api.confirm(63, picker, function(){
@@ -345,7 +394,7 @@ var tableTime = function(ELEM, INDEX){
 
 	this.moveMeetsTime = function(ids){
 
-		Api.confirm(63, TABLE_TIME.templates.mmPicker, function(){
+		Api.confirm(63, TM.tableTime.templates.mmPicker, function(){
 			TABLE_TIME.Task.changeMultiTime(ids, $('#mm-input').val());
 		})
 
@@ -481,7 +530,7 @@ var tableTime = function(ELEM, INDEX){
 		if(!selected.length)
 			return;
 
-		Api.confirm(43, TABLE_TIME.templates.smMessage, function(){
+		Api.confirm(43, TM.tableTime.templates.smMessage, function(){
 
 			var action = $('.sm-option input:checked').attr('id');
 
@@ -511,13 +560,6 @@ var tableTime = function(ELEM, INDEX){
 		TABLE_TIME.pHeight = TABLE_TIME.sHeight / partsLength;
 		ELEM.find('.tt-content-part').height(TABLE_TIME.pHeight);
 
-	}
-
-	this.templates = {
-		smMessage: $('#sm-message'),
-		mmPicker: $('#mm-picker'),
-		mdPicker: $('#md-picker'),
-		fmTr: $('#fm-tr tr')
 	}
 
 	this.typeCare = function(type, fn){

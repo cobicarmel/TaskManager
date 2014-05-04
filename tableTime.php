@@ -89,6 +89,9 @@
 			<div id="ttt-toggle" class="fa fa-angle-up"></div>
 			<ul>
 				<li class="fa fa-calendar-o" title="<?=$LOCAL[0]?>"></li>
+				<li class="ttt-excel" title="<?=$LOCAL[159]?>">
+					<img src="media/excel.png">
+				</li>
 			</ul>
 		</div>
 	</div>

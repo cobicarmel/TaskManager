@@ -44,15 +44,24 @@ abstract class Database{
 		if(empty(self::$response['error']))
 			self::$response['error'] = [];
 
-		self::$response['error'][] = $error;
+		if(gettype($error) == 'array'){
+			$key = key($error);
+
+			if(empty(self::$response['error'][$key]))
+				self::$response['error'][$key] = [];
+
+			self::$response['error'][$key][] = $error;
+		}
+		else
+			self::$response['error'][] = $error;
 	}
 
-	static function checkRequires($requires, array $data){
+	static function checkRequires(array $requires, array $data, $checkValue = true){
 
 		$errors = 0;
 
 		foreach($requires as $key => $value)
-			if(empty($data[$key]) || ! $data[$key]){
+			if((! isset($data[$key])) || ($checkValue && ! $data[$key])){
 				self::addError($value);
 				$errors++;
 			}

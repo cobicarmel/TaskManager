@@ -10,8 +10,8 @@ var Settings = {
 			onUpdate: function(){
 				Settings.listTasktypes();
 
-				for(var tt in TM.tableTimes){
-					var agenda = TM.tableTimes[tt].Agenda;
+				for(var tt in TM.tableTime.items){
+					var agenda = TM.tableTime.items[tt].Agenda;
 					agenda.getAll(agenda.rewrite);
 				}
 			}

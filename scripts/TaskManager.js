@@ -4,7 +4,36 @@ var TM = {
 
 	groups: {},
 
-	tableTimes: [],
+	tableTime: {
+
+		items: [],
+
+		excel: {
+
+			$fileName: $('#tft-name'),
+
+			$toggle: $('#te-toggle'),
+
+			displayFileName: function(){
+				var files = this.files,
+					excel = TM.tableTime.excel;
+
+				excel.$toggle.toggle(!! files.length);
+
+				if(files.length)
+					excel.$fileName.text(files[0].name);
+			}
+		},
+
+		templates: {
+			smMessage: $('#sm-message'),
+			mmPicker: $('#mm-picker'),
+			mdPicker: $('#md-picker'),
+			fmTr: $('#fm-tr tr'),
+			ttExcel: $('#tt-excel'),
+			ttExcelError: $('#te-error')
+		}
+	},
 
 	addMultiObj: function(obj, keys, value){
 
@@ -157,7 +186,7 @@ var TM = {
 
 			var data = self.getTrType.call(this);
 
-			Api.confirm(40, LOCAL[56].replace('%1', data.type.title), function(){
+			Api.confirm(40, LOCAL[97], function(){
 
 				TM.popup('loading', 83);
 
@@ -328,14 +357,14 @@ var TM = {
 	listAgenda: function(){
 
 		var board = $('#today-agenda').empty().clear(LOCAL[30]),
-			agenda = TM.tableTimes[0].Agenda.getDay();
+			agenda = TM.tableTime.items[0].Agenda.getDay();
 
 		if(agenda[0])
 			board.unClear();
 
 		for(var a in agenda){
 
-			var data = TM.tableTimes[0].Agenda.parseData(agenda[a]);
+			var data = TM.tableTime.items[0].Agenda.parseData(agenda[a]);
 
 			var tr = $('<tr>').append(
 				$('<td>', {'class': 'td-range tahoma'}).width('37%').text(data.starttime.toRealTime() + ' - ' + data.endtime.toRealTime()),
@@ -345,7 +374,7 @@ var TM = {
 
 			tr.click(function(starttime){
 				return function(){
-					TM.tableTimes[0].scrollToTime(starttime);
+					TM.tableTime.items[0].scrollToTime(starttime);
 				}
 			}(data.starttime))
 
@@ -385,7 +414,7 @@ var TM = {
 		var time = $('#dt-time');
 
 		if(time.text() == '23:59:59' && ! date.getHours())
-			TM.tableTimes[0].next();
+			TM.tableTime.items[0].next();
 
 		time.text(date.toLocaleTimeString());
 
@@ -396,7 +425,7 @@ var TM = {
 		var elem = $('#soon').empty().clear(LOCAL[19]),
 			now = new Date(),
 			strDate = now.toLocaleDateString(),
-			tasks = TM.tableTimes[0].Task.meetings[strDate];
+			tasks = TM.tableTime.items[0].Task.meetings[strDate];
 
 		if(! tasks)
 			return;
@@ -430,7 +459,7 @@ var TM = {
 			tr.click(function(meet){
 				return function(){
 					meet.edit();
-					TM.tableTimes[0].scrollToTime(meet.start.date);
+					TM.tableTime.items[0].scrollToTime(meet.start.date);
 				}
 			}(meet))
 

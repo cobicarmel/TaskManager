@@ -15,7 +15,7 @@ $(function(){
 
 		$($('.table-time').get().reverse()).each(function(){
 			var elem = $(this);
-			TM.tableTimes.unshift(new tableTime(elem, elem.index('.table-time')).init());
+			TM.tableTime.items.unshift(new tableTime(elem, elem.index('.table-time')).init());
 		})
 
 	if(Access.hasAction('Client'))
@@ -123,12 +123,14 @@ $(function(){
 
 	$('.nav-arrows-wrap div').click(Settings.navAgenda.navigate);
 
-	if(TM.tableTimes[0])
-		$('#as-datetime').click(TM.tableTimes[0].setDay);
+	if(TM.tableTime.items[0])
+		$('#as-datetime').click(TM.tableTime.items[0].setDay);
 
 	$('#rp-later').click(Reminders.changePreTime);
 
 	$('#rp-edit').click(Reminders.goToReminder);
+
+	$('#te-file').change(TM.tableTime.excel.displayFileName);
 
 	$('[name=allow_desktop_notify]').on('change', function(){
 		if(this.value)
