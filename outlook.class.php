@@ -102,12 +102,12 @@ class Outlook{
 
 	function exportTasks(){
 
-		$tasks = $this -> task -> getTask('id', $_REQUEST['id'], $_REQUEST['system']);
+		$tasks = $this -> task -> getTask('id', $_POST['id'], $_POST['system']);
 
 		foreach($tasks as $task)
 			$this -> addTask($task);
 
-		$this -> name = $_REQUEST['name'];
+		$this -> name = $_POST['name'];
 
 		$this -> flush();
 	}

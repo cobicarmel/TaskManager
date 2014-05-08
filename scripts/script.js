@@ -174,7 +174,8 @@ $(function(){
 	$body.on('click', '.ui-dialog-buttonset button', TM.dialog.close);
 
 	$body.on('submit', 'form', function(e){
-		e.preventDefault();
+		if(! $(this).attr('action'))
+			e.preventDefault();
 	});
 
 	$body.on('keydown', '.number', function(event){

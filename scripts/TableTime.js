@@ -207,7 +207,15 @@ var tableTime = function(ELEM, INDEX){
 					name: name
 				}
 
-				window.location = 'Api.php/?' + $.param(params)
+				var $form = $('<form>', {action: 'Api.php', method: 'post'});
+
+				for(var param in params)
+					$form.append($('<input>', {name: param, value: params[param]}));
+
+				$form
+					.appendTo('#templates')
+					.submit()
+					.remove();
 			});
 		},
 
