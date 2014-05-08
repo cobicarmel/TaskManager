@@ -11,6 +11,11 @@ $config = [
 	'tasktypes' => (new Task) -> getTaskTypes(),
 	'users' => $recognizedUsers
 ];
+
+$now = DTime::timeToDB(time());
+
+(new DBInput) -> query('update', 'users', ['last_logged' => $now], 'where id = ' . USER_ID);
+
 ?>
 
 <!DOCTYPE html>

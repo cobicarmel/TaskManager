@@ -31,6 +31,13 @@
 				<span><?=$LOCAL[35]?></span>
 			</label>
 		</div>
+		<div class="sm-option">
+			<input type="radio" name="sm-action" id="sms-4">
+			<label for="sms-4">
+				<div></div>
+				<span><?=$LOCAL[165]?></span>
+			</label>
+		</div>
 	</div>
 	<div id="mm-picker">
 		<label for="mm-input"><?=$LOCAL[38]?>:</label>

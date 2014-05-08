@@ -367,9 +367,9 @@ var TM = {
 			var data = TM.tableTime.items[0].Agenda.parseData(agenda[a]);
 
 			var tr = $('<tr>').append(
-				$('<td>', {'class': 'td-range tahoma'}).width('37%').text(data.starttime.toRealTime() + ' - ' + data.endtime.toRealTime()),
-				$('<td>').width('9%').html($('<span>', {'class': 'ui-icon ui-icon-arrowthick-1-w'})),
-				$('<td>', {'class': 'td-title'}).width('54%').text(data.title)
+				$('<td>', {'class': 'td-range tahoma'}).width('33%').text(data.starttime.toRealTime() + ' - ' + data.endtime.toRealTime()),
+				$('<td>').width('8%').html($('<span>', {'class': 'ui-icon ui-icon-arrowthick-1-w'})),
+				$('<td>', {'class': 'td-title'}).width('70%').text(data.title)
 			)
 
 			tr.click(function(starttime){

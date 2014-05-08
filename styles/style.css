@@ -1013,6 +1013,9 @@ table.data-table th.tablesorter-headerAsc:after {
 .td-title {
 	line-height: 1.7;
 	color: #6464C0;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 
 .td-range {

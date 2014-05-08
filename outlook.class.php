@@ -2,7 +2,7 @@
 
 class Outlook{
 
-	private $message;
+	private $message = '';
 
 	private $name;
 
@@ -25,7 +25,7 @@ class Outlook{
 		exit;
 	}
 
-	private function setMessage($task){
+	private function addTask($task){
 
 		$data = "
 			BEGIN: VCALENDAR
@@ -52,7 +52,7 @@ class Outlook{
 			END: VEVENT
 			END: VCALENDAR";
 
-		$this -> message = preg_replace('/\t/', '', $data);
+		$this -> message .= preg_replace('/\t/', '', $data);
 	}
 
 	private function insertTask($data){
@@ -100,10 +100,15 @@ class Outlook{
 		$this -> task -> addTask($taskData);
 	}
 
-	function exportTask($task_id){
-		$task = $this -> task -> getTask('id', $task_id)[$task_id];
-		$this -> name = $task['title'];
-		$this -> setMessage($task);
+	function exportTasks(){
+
+		$tasks = $this -> task -> getTask('id', $_REQUEST['id'], $_REQUEST['system']);
+
+		foreach($tasks as $task)
+			$this -> addTask($task);
+
+		$this -> name = $_REQUEST['name'];
+
 		$this -> flush();
 	}
 

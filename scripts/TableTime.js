@@ -181,6 +181,36 @@ var tableTime = function(ELEM, INDEX){
 
 	this.excel = {
 
+		exportTasks: function(ids){
+
+			var name = LOCAL[100];
+
+			if(ids.length == 1)
+				name = TABLE_TIME.Task.meetings[TABLE_TIME.strDate][ids[0]].title;
+
+			var $inputName = $('<input>').val(name);
+
+			Api.confirm(LOCAL[99], $inputName, function(){
+
+				name = $inputName.val();
+
+				if(! name){
+					TM.popup('error', 101);
+					return TABLE_TIME.excel.exportTasks(ids);
+				}
+
+				var params = {
+					subject: 'Outlook',
+					action: 'exporttasks',
+					id: ids,
+					system: INDEX,
+					name: name
+				}
+
+				window.location = 'Api.php/?' + $.param(params)
+			});
+		},
+
 		load: function(){
 
 			var form = TM.tableTime.templates.ttExcel,
@@ -548,6 +578,8 @@ var tableTime = function(ELEM, INDEX){
 					return TABLE_TIME.moveMeetsDate(ids);
 				case '3':
 					return TABLE_TIME.Task.removeTask(ids);
+				case '4':
+					return TABLE_TIME.excel.exportTasks(ids);
 			}
 		})
 	}

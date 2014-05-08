@@ -4,11 +4,11 @@ require 'Global.lib.php';
 
 /* getting the requested operation */
 
-$subject = $_POST['subject'];
+$subject = $_REQUEST['subject'];
 
-$action = $_POST['action'];
+$action = $_REQUEST['action'];
 
-unset($_POST['subject'], $_POST['action']);
+unset($_REQUEST['subject'], $_REQUEST['action']);
 
 /* checking user permissions for specify action */
 
@@ -19,7 +19,7 @@ if(! $db_access -> hasAction($subject, $action)){
 
 /* filtering input */
 
-Database::filterInput($_POST);
+Database::filterInput($_REQUEST);
 
 /* performing action */
 
