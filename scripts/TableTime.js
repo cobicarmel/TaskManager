@@ -183,20 +183,23 @@ var tableTime = function(ELEM, INDEX){
 
 		exportTasks: function(ids){
 
-			var name = LOCAL[100];
+			var fileName = LOCAL[100],
+				$form = TM.tableTime.templates.ttExcelName,
+				$inputName = $form.find('input');
 
 			if(ids.length == 1)
-				name = TABLE_TIME.Task.meetings[TABLE_TIME.strDate][ids[0]].title;
+				fileName = TABLE_TIME.Task.meetings[TABLE_TIME.strDate][ids[0]].title;
 
-			var $inputName = $('<input>').val(name);
+			$inputName.val(fileName);
 
-			Api.confirm(LOCAL[99], $inputName, function(){
+			Api.confirm(LOCAL[99], $form, function(){
 
-				name = $inputName.val();
+				fileName = $inputName.val();
 
-				if(! name){
+				if(! fileName){
 					TM.popup('error', 101);
-					return TABLE_TIME.excel.exportTasks(ids);
+					TABLE_TIME.excel.exportTasks(ids);
+					return $inputName.val('');
 				}
 
 				var params = {
@@ -204,10 +207,10 @@ var tableTime = function(ELEM, INDEX){
 					action: 'exporttasks',
 					id: ids,
 					system: INDEX,
-					name: name
+					name: fileName
 				}
 
-				var $form = $('<form>', {action: 'Api.php', method: 'post'});
+				$form = $('<form>', {action: 'Api.php', method: 'post'});
 
 				for(var param in params)
 					$form.append($('<input>', {name: param, value: params[param]}));
@@ -258,7 +261,7 @@ var tableTime = function(ELEM, INDEX){
 
 				TM.tableTime.excel.$toggle.hide();
 
-				form.appendTo(ELEM).show().position({of: '#appcenter', my: 'top'});
+				form.appendTo(ELEM).show().position({of: ELEM.find('#tt-toolbar'), at: 'top', my: 'bottom'});
 		}
 	}
 

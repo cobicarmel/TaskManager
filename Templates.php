@@ -157,6 +157,9 @@
 			</div>
 		</div>
 	</form>
+	<form id="te-name">
+		<input name="name">
+	</form>
 	<div id="te-error">
 		<div><?=$LOCAL[163]?>.</div>
 		<br>

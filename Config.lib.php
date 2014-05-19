@@ -4,6 +4,8 @@ require 'Config.host.php';
 
 /** General config **/
 
+error_reporting(isset($_SERVER['DEVELOPMENT']) ? E_ALL : 0);
+
 date_default_timezone_set('Asia/Jerusalem');
 
 define('LANG', detectLang());

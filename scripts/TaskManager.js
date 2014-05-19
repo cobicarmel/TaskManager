@@ -31,7 +31,8 @@ var TM = {
 			mdPicker: $('#md-picker'),
 			fmTr: $('#fm-tr tr'),
 			ttExcel: $('#tt-excel'),
-			ttExcelError: $('#te-error')
+			ttExcelError: $('#te-error'),
+			ttExcelName: $('#te-name')
 		}
 	},
 
