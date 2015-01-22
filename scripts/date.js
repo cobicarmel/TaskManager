@@ -6,23 +6,23 @@ Date.prototype.heDays = ['ראשון', 'שני', 'שלישי', 'רביעי', 'ח
 
 Date.prototype.getHeMonth = function(){
 	return this.heMonths[this.getMonth()];
-}
+};
 
 Date.prototype.getHeDay = function(){
 	return this.heDays[this.getDay()];
-}
+};
 
 Date.prototype.getFullHeDay = function(){
 	return 'יום ' + this.getHeDay();
-}
+};
 
 Date.prototype.getFullHeMonth = function(){
-	return this.getDate() + ' ב' + this.getHeMonth();
-}
+	return this.getDate() + ' ב' + this.getHeMonth()
+};
 
 Date.prototype.getFullHeDate = function(){
 	return this.getFullHeDay() + ', ' + this.getFullHeMonth() + ' ' + this.getFullYear();
-}
+};
 
 Date.prototype.toLocaleDateString = function(){
 	var date = timeFormat(this.getDate()),
@@ -30,17 +30,17 @@ Date.prototype.toLocaleDateString = function(){
 		year = this.getFullYear();
 
 	return [date, month, year].join('/');
-}
+};
 
 Date.prototype.toRealTime = function(){
 	var strTime = this.toLocaleTimeString().split(':');
 
 	return [strTime[0], strTime[1]].join(':');
-}
+};
 
 Date.prototype.toLocaleString = function(){
 	return this.toLocaleDateString() + ' ' + this.toLocaleTimeString();
-}
+};
 
 String.prototype.toDate = function(strTime, relative){
 
@@ -59,7 +59,7 @@ String.prototype.toDate = function(strTime, relative){
 	}
 
 	return date;
-}
+};
 
 Date.prototype.setTextTime = function(text){
 	var arrTime = text.split(':');
@@ -68,7 +68,7 @@ Date.prototype.setTextTime = function(text){
 	this.setMinutes(arrTime[1]);
 
 	return this;
-}
+};
 
 function timeFormat(digit){
 	var num = '00' + digit;
